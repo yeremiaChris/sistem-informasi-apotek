@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ObatHeader />
+    <ObatHeader :items="itemsSelect" label="Daftar Obat" />
     <ObatTable :headers="headers" :data="data" />
     <Pagination :data="pagination" />
   </div>
@@ -25,6 +25,16 @@ export default {
     });
     return {
       data,
+      itemsSelect: [
+        {
+          title: "Newest",
+          value: "newest",
+        },
+        {
+          title: "Type",
+          value: "type",
+        },
+      ],
     };
   },
   data() {

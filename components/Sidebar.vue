@@ -5,7 +5,7 @@
       class="flex flex-col flex-grow border-r border-gray-200 pt-5 bg-white overflow-y-auto"
     >
       <div class="flex items-center flex-shrink-0 px-4 gap-2">
-        <img src="" alt="logo" class="h-10 w-10 rounded-full bg-gray-400" />
+        <img src="" class="h-10 w-10 rounded-full bg-gray-400" />
         <h1 class="text-lg">Apotek Pontjol</h1>
       </div>
       <div class="mt-5 flex-grow flex flex-col">

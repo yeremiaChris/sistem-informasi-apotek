@@ -2,12 +2,12 @@
   <div>
     <div class="flex justify-between">
       <h1 class="text-xl">Daftar Obat</h1>
-      <button
-        type="button"
+      <NuxtLink
+        to="tambah"
         class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
       >
         Tambah Daftar Obat
-      </button>
+      </NuxtLink>
     </div>
     <div class="flex justify-end mt-8">
       <div>
@@ -31,5 +31,8 @@
 <script>
 export default {
   name: "HeaderObatTable",
+  mounted() {
+    console.log(this.$route);
+  },
 };
 </script>

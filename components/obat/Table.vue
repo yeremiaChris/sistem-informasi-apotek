@@ -10,28 +10,12 @@
             <thead class="bg-gray-50">
               <tr>
                 <th
+                  v-for="(header, index) in headers"
+                  :key="index"
                   scope="col"
                   class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
-                  Name
-                </th>
-                <th
-                  scope="col"
-                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Title
-                </th>
-                <th
-                  scope="col"
-                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Email
-                </th>
-                <th
-                  scope="col"
-                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Role
+                  {{ header }}
                 </th>
                 <th scope="col" class="relative px-6 py-3">
                   <span class="sr-only">Edit</span>
@@ -40,30 +24,28 @@
             </thead>
             <tbody>
               <tr
-                v-for="(person, personIdx) in people"
-                :key="person.email"
-                :class="personIdx % 2 === 0 ? 'bg-white' : 'bg-gray-50'"
+                v-for="(items, index) in data"
+                :key="index"
+                :class="index % 2 === 0 ? 'bg-white' : 'bg-gray-50'"
               >
                 <td
+                  v-for="(value, key, idx) in items"
+                  v-show="key !== 'id'"
+                  :key="idx"
                   class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
                 >
-                  {{ person.name }}
+                  {{
+                    key === "updatedAt" ? new Date(value).toDateString() : value
+                  }}
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {{ person.title }}
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {{ person.email }}
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {{ person.role }}
-                </td>
+
                 <td
-                  class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
+                  class="px-6 py-4 whitespace-nowrap flex gap-3 text-sm font-medium"
                 >
                   <a href="#" class="text-indigo-600 hover:text-indigo-900"
                     >Edit</a
                   >
+                  <a href="#" class="text-red-600 hover:text-red-900">Delete</a>
                 </td>
               </tr>
             </tbody>
@@ -75,27 +57,16 @@
 </template>
 
 <script>
-const people = [
-  {
-    name: "Jane Cooper",
-    title: "Regional Paradigm Technician",
-    role: "Admin",
-    email: "jane.cooper@example.com",
-  },
-  {
-    name: "Cody Fisher",
-    title: "Product Directives Officer",
-    role: "Owner",
-    email: "cody.fisher@example.com",
-  },
-  // More people...
-];
-
 export default {
-  data() {
-    return {
-      people,
-    };
+  props: {
+    headers: {
+      type: Array,
+      required: true,
+    },
+    data: {
+      type: Array,
+      required: true,
+    },
   },
 };
 </script>

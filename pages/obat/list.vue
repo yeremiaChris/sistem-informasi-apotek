@@ -11,7 +11,6 @@ export default {
   name: "SidebarComponent",
   async asyncData({ app }) {
     const res = await app.$axios.get("/medicine");
-    console.log(res.data);
     const data = res.data.map((item) => {
       return {
         id: item._id,

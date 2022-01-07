@@ -19,6 +19,8 @@
       class="mb-4"
       label="Price"
       name="price"
+      type="number"
+      :value="price"
       v-model="price"
       placeholder="0"
     />
@@ -27,6 +29,7 @@
     <FormsErrorMsg :msg="error.type" />
     <FormsSingleSelect
       v-model="type"
+      :value="type"
       class="mb-4"
       label="Jenis"
       :items="types"
@@ -36,6 +39,7 @@
     <FormsErrorMsg :msg="error.unit" />
     <FormsSingleSelect
       v-model="unit"
+      :value="unit"
       class="mb-4"
       label="Unit"
       :items="unitItems"
@@ -56,6 +60,11 @@
 
 <script>
 export default {
+  async asyncData({ app, params, store }) {
+    const res = await app.$axios.get("/medicine/" + params.slug);
+    console.log(res);
+    store.commit("obat/getDetail", res.data);
+  },
   data() {
     return {
       types: [
@@ -148,18 +157,16 @@ export default {
       return this.$store.state.obat.errorMedicine;
     },
   },
-
-  mounted() {
-    this.$store.commit("obat/emptyField");
-  },
-
   methods: {
     async submit() {
       try {
-        const res = await this.$axios.post("/medicine", {
-          ...this.data,
-          supply: 0,
-        });
+        const res = await this.$axios.put(
+          "/medicine/" + this.$route.params.slug,
+          {
+            ...this.data,
+            supply: 0,
+          }
+        );
         this.$router.push("/obat/list");
       } catch (error) {
         if (error.response.data.errors) {

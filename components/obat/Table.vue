@@ -42,10 +42,17 @@
                 <td
                   class="px-6 py-4 whitespace-nowrap flex gap-3 text-sm font-medium"
                 >
-                  <a href="#" class="text-indigo-600 hover:text-indigo-900"
-                    >Edit</a
+                  <NuxtLink
+                    :to="items.id.toString()"
+                    class="text-indigo-600 hover:text-indigo-900"
+                    >Edit
+                  </NuxtLink>
+                  <button
+                    @click="deleteModalTrue(items.id)"
+                    class="text-red-600 hover:text-red-900"
                   >
-                  <a href="#" class="text-red-600 hover:text-red-900">Delete</a>
+                    Delete
+                  </button>
                 </td>
               </tr>
             </tbody>
@@ -66,6 +73,12 @@ export default {
     data: {
       type: Array,
       required: true,
+    },
+  },
+  methods: {
+    deleteModalTrue(id) {
+      this.$store.commit("deleteModalTrue");
+      this.$store.commit("getDeleteId", id);
     },
   },
 };

@@ -3,7 +3,7 @@ export default () => ({
     name: "",
     type: "",
     unit: "",
-    price: "",
+    price: 0,
     supply: 0,
   },
   errorMedicine: {
@@ -11,6 +11,6 @@ export default () => ({
     type: "",
     unit: "",
     price: "",
-    supply: 0,
+    supply: "",
   },
 });

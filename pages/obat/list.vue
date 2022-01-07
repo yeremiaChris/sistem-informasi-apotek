@@ -1,5 +1,6 @@
 <template>
   <div>
+    <ModalDelete v-show="open" @delete="deleteData" />
     <ObatHeader :items="itemsSelect" label="Daftar Obat" />
     <ObatTable :headers="headers" :data="data" />
     <Pagination :data="pagination" />
@@ -44,6 +45,28 @@ export default {
       },
       headers: ["Name", "Price", "Supply", "Type", "Unit", "Updated At"],
     };
+  },
+  computed: {
+    open() {
+      return this.$store.state.deleteModal;
+    },
+    deleteId() {
+      return this.$store.state.deleteId;
+    },
+  },
+  methods: {
+    async deleteData() {
+      try {
+        await this.$axios.delete("/medicine/" + parseInt(this.deleteId));
+        this.$store.commit("deleteModalFalse");
+        this.$nuxt.refresh();
+      } catch (error) {
+        this.$nuxt.error({
+          statusCode: error.response.status,
+          message: "Delete data was fail.",
+        });
+      }
+    },
   },
 };
 </script>

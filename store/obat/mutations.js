@@ -10,8 +10,13 @@ export default {
 
   emptyField(state) {
     for (const property in state.formsMedicine) {
-      state.formsMedicine[property] = "";
+      state.formsMedicine[property] =
+        property === "supply" || property === "price" ? 0 : "";
       state.errorMedicine[property] = "";
     }
+  },
+
+  getDetail(state, payload) {
+    state.formsMedicine = payload;
   },
 };

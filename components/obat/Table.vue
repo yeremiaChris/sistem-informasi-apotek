@@ -10,6 +10,12 @@
             <thead class="bg-gray-50">
               <tr>
                 <th
+                  scope="col"
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  No.
+                </th>
+                <th
                   v-for="(header, index) in headers"
                   :key="index"
                   scope="col"
@@ -29,14 +35,28 @@
                 :class="index % 2 === 0 ? 'bg-white' : 'bg-gray-50'"
               >
                 <td
+                  class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                >
+                  {{ index + 1 }}
+                </td>
+                <td
                   v-for="(value, key, idx) in items"
-                  v-show="key !== 'id'"
+                  v-show="key !== 'id' && key !== 'media'"
                   :key="idx"
                   class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
                 >
                   {{
                     key === "updatedAt" ? new Date(value).toDateString() : value
                   }}
+                </td>
+                <td
+                  v-for="(value, key, idx) in items"
+                  v-show="key === 'media'"
+                  :key="idx + 'media'"
+                  class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                >
+                  {{ value.defaultImage }}
+                  <img :src="value.defaultImage" :alt="value.defaultImage" />
                 </td>
 
                 <td

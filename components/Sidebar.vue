@@ -41,7 +41,7 @@
 const navigation = [
   { name: "Dashboard", href: "/", icon: "icon", current: false },
   { name: "Obat", href: "/obat/list", icon: "icon", current: false },
-  { name: "Supplier", href: "#", icon: "icon", current: false },
+  { name: "Supplier", href: "/supplier/list", icon: "icon", current: false },
   { name: "Transaksi", href: "#", icon: "icon", current: false },
   { name: "Laporan", href: "#", icon: "icon", current: false },
   { name: "Retur", href: "#", icon: "icon", current: false },

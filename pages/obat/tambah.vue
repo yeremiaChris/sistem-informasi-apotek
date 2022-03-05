@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Breadcrumbs url="Obat / Tambah" class="mb-7" />
     <!-- title -->
     <FormsTitle title="Form Tambah obat" />
 
@@ -55,37 +56,12 @@
 </template>
 
 <script>
+import { types, unitItems } from "@/helpers/fields/obat";
 export default {
   data() {
     return {
-      types: [
-        {
-          title: "Tablet",
-          value: "tablet",
-        },
-        {
-          title: "Pil",
-          value: "pil",
-        },
-        {
-          title: "Bubuk",
-          value: "bubuk",
-        },
-      ],
-      unitItems: [
-        {
-          title: "Pack",
-          value: "pack",
-        },
-        {
-          title: "Pcs",
-          value: "pcs",
-        },
-        {
-          title: "Botol",
-          value: "botol",
-        },
-      ],
+      types,
+      unitItems,
     };
   },
 

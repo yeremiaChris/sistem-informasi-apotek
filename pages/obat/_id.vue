@@ -1,7 +1,8 @@
 <template>
   <div>
+    <Breadcrumbs url="Obat / Edit" class="mb-7" />
     <!-- title -->
-    <FormsTitle title="Form Tambah obat" />
+    <FormsTitle title="Form Edit obat" />
 
     <!-- field name -->
     <FormsErrorMsg :msg="error.name" />
@@ -59,42 +60,17 @@
 </template>
 
 <script>
+import { types, unitItems } from "@/helpers/fields/obat";
 export default {
   async asyncData({ app, params, store }) {
-    const res = await app.$axios.get("/medicine/" + params.slug);
+    const res = await app.$axios.get("/medicine/" + params.id);
     console.log(res);
     store.commit("obat/getDetail", res.data);
   },
   data() {
     return {
-      types: [
-        {
-          title: "Tablet",
-          value: "tablet",
-        },
-        {
-          title: "Pil",
-          value: "pil",
-        },
-        {
-          title: "Bubuk",
-          value: "bubuk",
-        },
-      ],
-      unitItems: [
-        {
-          title: "Pack",
-          value: "pack",
-        },
-        {
-          title: "Pcs",
-          value: "pcs",
-        },
-        {
-          title: "Botol",
-          value: "botol",
-        },
-      ],
+      types,
+      unitItems,
     };
   },
 
@@ -157,6 +133,7 @@ export default {
       return this.$store.state.obat.errorMedicine;
     },
   },
+
   methods: {
     async submit() {
       try {
@@ -180,6 +157,7 @@ export default {
         }
       }
     },
+
     back() {
       this.$router.back();
     },

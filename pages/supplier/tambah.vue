@@ -24,6 +24,9 @@
       v-model="image"
       @setFile="setFile($event, 'imageField')"
     />
+    <div style=""></div>
+    <img v-if="src" :src="src" alt="image" class="" />
+    <button></button>
   </div>
 </template>
 

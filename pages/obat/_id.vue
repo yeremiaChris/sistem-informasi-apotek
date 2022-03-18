@@ -62,16 +62,17 @@
 <script>
 import { types, unitItems } from "@/helpers/fields/obat";
 export default {
-  async asyncData({ app, params, store }) {
-    const res = await app.$axios.get("/medicine/" + params.id);
-    console.log(res);
-    store.commit("obat/getDetail", res.data);
-  },
   data() {
     return {
       types,
       unitItems,
     };
+  },
+
+  async fetch() {
+    const res = await this.$axios.get("/medicine/" + this.$route.params.id);
+    console.log(res);
+    this.$store.commit("obat/getDetail", res.data);
   },
 
   computed: {

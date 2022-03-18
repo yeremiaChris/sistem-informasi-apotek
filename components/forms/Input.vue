@@ -30,7 +30,7 @@ export default {
     },
     placeholder: {
       type: String,
-      required: true,
+      default: () => "",
     },
     type: {
       type: String,
@@ -43,7 +43,11 @@ export default {
   },
   methods: {
     handleChange(e) {
-      this.$emit("input", e.target.value);
+      if (this.type === "file") {
+        this.$emit("setFile", e);
+      } else {
+        this.$emit("input", e.target.value);
+      }
     },
   },
 };

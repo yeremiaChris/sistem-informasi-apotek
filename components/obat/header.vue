@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Breadcrumbs url="Obat  / Daftar" class="mb-7" />
+    <Breadcrumbs :url="breadcrumbs" class="mb-7" />
     <div class="flex justify-between">
       <h1 class="text-xl font-bold uppercase">{{ label }}</h1>
       <NuxtLink
@@ -27,6 +27,10 @@ export default {
     label: {
       type: String,
       required: true,
+    },
+    breadcrumbs: {
+      type: String,
+      default: () => "Obat  / Daftar",
     },
   },
 };

@@ -1,15 +1,15 @@
 const types = [
   {
     title: "Tablet",
-    value: "tablet",
+    value: "Tablet",
   },
   {
     title: "Pil",
-    value: "pil",
+    value: "Pil",
   },
   {
     title: "Bubuk",
-    value: "bubuk",
+    value: "Bubuk",
   },
 ];
 
@@ -25,6 +25,10 @@ const unitItems = [
   {
     title: "Botol",
     value: "botol",
+  },
+  {
+    title: "Kg",
+    value: "kg",
   },
 ];
 

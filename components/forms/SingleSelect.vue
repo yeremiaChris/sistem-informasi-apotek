@@ -1,8 +1,8 @@
 <template>
   <div>
-    <label for="urutkan" class="block text-sm font-medium text-gray-700">{{
-      label
-    }}</label>
+    <label for="urutkan" class="block text-sm font-medium text-gray-700"
+      >{{ label }} {{ value }}
+    </label>
     <select
       id="urutkan"
       @change="handleChange"

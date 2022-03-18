@@ -1,7 +1,11 @@
 <template>
   <div>
     <ModalDelete v-show="open" @delete="deleteData" />
-    <ObatHeader :items="itemsSelect" label="Daftar Obat" />
+    <ObatHeader
+      :items="itemsSelect"
+      label="Daftar Supplier"
+      breadcrumbs="Supplier / Daftar"
+    />
     <ObatTable :headers="headers" :data="data" />
     <Pagination :data="pagination" />
   </div>
@@ -10,19 +14,23 @@
 <script>
 export default {
   name: "SidebarComponent",
-  async asyncData({ app }) {
-    const res = await app.$axios.get("/medicine");
-    const test = await app.$axios.get("/supplier");
-    console.log(test.data);
-    const data = test.data.map((item) => {
+  async asyncData({ app }) {},
+
+  async fetch() {
+    const res = await this.$axios.get("/supplier");
+    const data = res.data.map((item) => {
       return {
         id: item._id,
         name: item.name,
         media: item.media,
       };
     });
+    this.data = data;
+  },
+
+  data() {
     return {
-      data,
+      data: [],
       itemsSelect: [
         {
           title: "Newest",
@@ -33,14 +41,12 @@ export default {
           value: "type",
         },
       ],
-    };
-  },
-  data() {
-    return {
+
       pagination: {
         page: 1,
         totalPage: 2,
       },
+
       headers: ["Name", "Image"],
     };
   },
@@ -48,6 +54,7 @@ export default {
     open() {
       return this.$store.state.deleteModal;
     },
+
     deleteId() {
       return this.$store.state.deleteId;
     },

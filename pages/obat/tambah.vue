@@ -86,7 +86,7 @@ export default {
       set(value) {
         const payload = {
           key: "price",
-          value,
+          value: parseInt(value),
         };
         this.$store.commit("obat/changeData", payload);
       },

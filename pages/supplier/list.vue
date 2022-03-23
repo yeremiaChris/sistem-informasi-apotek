@@ -62,7 +62,7 @@ export default {
   methods: {
     async deleteData() {
       try {
-        await this.$axios.delete("/medicine/" + parseInt(this.deleteId));
+        await this.$axios.delete("/supplier/" + parseInt(this.deleteId));
         this.$store.commit("deleteModalFalse");
         this.$nuxt.refresh();
       } catch (error) {

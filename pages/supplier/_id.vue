@@ -25,8 +25,10 @@
       @setFile="setFile($event, 'imageField')"
     />
     <div style=""></div>
-    <img v-if="src" :src="src" alt="image" class="" />
-    <button></button>
+    <img v-if="src" :src="src" alt="image" class="w-32 h-32" />
+    <div class="flex justify-end">
+      <FormsButton @submit="submit" label="Submit" type="submit" />
+    </div>
   </div>
 </template>
 
@@ -42,13 +44,53 @@ export default {
     };
   },
 
+  fetch() {
+    this.fetchData();
+  },
+
   methods: {
+    async fetchData() {
+      const res = await this.$axios.get("/supplier/" + this.$route.params.id);
+      const object = res.data;
+      for (const property in object) {
+        if (property === "media") {
+          this.imageField = object[property];
+          this.src = this.$config.imageURL + object[property].defaultImage;
+        } else if (property === "name") {
+          this[property] = object[property];
+        }
+      }
+    },
+
     back() {
       this.$router.back();
     },
+
     setFile(event, prop) {
-      this[prop] = event.target.files;
+      console.log(event.target.files[0]);
+      this[prop] = event.target.files[0];
       this.src = URL.createObjectURL(event.target.files[0]);
+    },
+
+    async submit() {
+      try {
+        const formData = new FormData();
+        formData.append("name", this.name);
+        formData.append("image", this.imageField);
+        const config = {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        };
+        await this.$axios.put(
+          "/supplier/" + this.$route.params.id,
+          formData,
+          config
+        );
+        this.$router.push("/supplier/list");
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };

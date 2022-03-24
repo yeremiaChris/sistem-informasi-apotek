@@ -14,7 +14,6 @@
 <script>
 export default {
   name: "SidebarComponent",
-  async asyncData({ app }) {},
 
   async fetch() {
     const res = await this.$axios.get("/supplier");

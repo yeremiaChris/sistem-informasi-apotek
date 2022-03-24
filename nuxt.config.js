@@ -39,7 +39,7 @@ export default {
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    baseURL: "http://localhost:4000/api", // Used as fallback if no runtime config is provided
+    baseURL: process.env.API_BASE_URL || "http://localhost:4000/api", // Used as fallback if no runtime config is provided
   },
 
   publicRuntimeConfig: {
@@ -47,5 +47,6 @@ export default {
     axios: {
       baseURL: process.env.API_BASE_URL || "http://localhost:4000/api",
     },
+    imageURL: process.env.IMAGE_BASE_URL,
   },
 };

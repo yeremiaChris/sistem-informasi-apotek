@@ -55,8 +55,11 @@
                   :key="idx + 'media'"
                   class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
                 >
-                  {{ value.defaultImage }}
-                  <img :src="value.defaultImage" :alt="value.defaultImage" />
+                  <img
+                    :src="$config.imageURL + value.defaultImage"
+                    :alt="value.defaultImage"
+                    style="width: 150px"
+                  />
                 </td>
 
                 <td

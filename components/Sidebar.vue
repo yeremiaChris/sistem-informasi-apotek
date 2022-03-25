@@ -5,8 +5,8 @@
       class="flex flex-col flex-grow border-r border-gray-200 pt-5 bg-white overflow-y-auto"
     >
       <div class="flex items-center flex-shrink-0 px-4 gap-2">
-        <img src="" class="h-10 w-10 rounded-full bg-gray-400" />
-        <h1 class="text-lg">Apotek Pontjol</h1>
+        <img src="/apotek.png" class="h-10 w-10 rounded-full bg-gray-400" />
+        <h1 class="text-xl">Apotek Pontjol</h1>
       </div>
       <div class="mt-5 flex-grow flex flex-col">
         <nav class="flex-1 px-2 pb-4 space-y-1">
@@ -21,19 +21,33 @@
               'group flex items-center px-2 py-2 text-sm font-medium rounded-md',
             ]"
           >
-            <div
-              :class="[
-                item.current
-                  ? 'text-gray-500'
-                  : 'text-gray-400 group-hover:text-gray-500',
-                'mr-3 flex-shrink-0 h-6 w-6',
-              ]"
-            />
-            {{ item.name }}
+            <div class="flex gap-4">
+              <img
+                class="w-5"
+                :src="'/sidebar/' + item.name.toLowerCase() + '.svg'"
+                alt="logo"
+              />
+              <!-- <div
+                :class="[
+                  item.current
+                    ? 'text-gray-500'
+                    : 'text-gray-400 group-hover:text-gray-500',
+                  'mr-3 flex-shrink-0 h-6 w-6',
+                ]"
+              /> -->
+              {{ item.name }}
+            </div>
           </NuxtLink>
         </nav>
       </div>
     </div>
+
+    <button
+      class="shadow flex bg-white justify-center items-center gap-4 border py-3 text-lg font-bold"
+    >
+      <img class="w-6" src="/sidebar/logout.svg" alt="logout" />
+      LOGOUT
+    </button>
   </div>
 </template>
 

@@ -27,14 +27,6 @@
                 :src="'/sidebar/' + item.name.toLowerCase() + '.svg'"
                 alt="logo"
               />
-              <!-- <div
-                :class="[
-                  item.current
-                    ? 'text-gray-500'
-                    : 'text-gray-400 group-hover:text-gray-500',
-                  'mr-3 flex-shrink-0 h-6 w-6',
-                ]"
-              /> -->
               {{ item.name }}
             </div>
           </NuxtLink>

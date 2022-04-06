@@ -10,26 +10,97 @@
       </div>
       <div class="mt-5 flex-grow flex flex-col">
         <nav class="flex-1 px-2 pb-4 space-y-1">
-          <NuxtLink
-            v-for="item in navigation"
-            :key="item.name"
-            :to="item.href"
-            :class="[
-              $route.path === item.href
-                ? 'bg-gray-100 text-gray-900'
-                : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-              'group flex items-center px-2 py-2 text-sm font-medium rounded-md',
-            ]"
-          >
-            <div class="flex gap-4">
-              <img
-                class="w-5"
-                :src="'/sidebar/' + item.name.toLowerCase() + '.svg'"
-                alt="logo"
-              />
-              {{ item.name }}
+          <div v-for="item in navigation" :key="item.name">
+            <NuxtLink
+              v-if="item.href"
+              :to="item.href"
+              :class="[
+                $route.path === item.href
+                  ? 'bg-gray-100 text-gray-900'
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                'group flex items-center px-2 py-2 text-sm font-medium rounded-md',
+              ]"
+            >
+              <div class="flex gap-4">
+                <img
+                  class="w-5"
+                  :src="'/sidebar/' + item.name.toLowerCase() + '.svg'"
+                  alt="logo"
+                />
+                {{ item.name }}
+              </div>
+            </NuxtLink>
+            <button
+              v-else
+              :class="[
+                $route.path === item.href
+                  ? 'bg-gray-100 text-gray-900'
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                'group flex items-center px-2 py-2 text-sm font-medium rounded-md',
+              ]"
+              @click="showDropdown(item.name)"
+            >
+              <div class="flex gap-4">
+                <img
+                  class="w-5"
+                  :src="'/sidebar/' + item.name.toLowerCase() + '.svg'"
+                  alt="logo"
+                />
+                {{ item.name }}
+              </div>
+            </button>
+
+            <div v-if="item.isActive" class="pl-10 text-sm grid gap-2">
+              <NuxtLink
+                v-for="(menu, index) in item.subMenu"
+                :key="index"
+                :to="menu.href"
+                class="flex items-center gap-2 py-1"
+                :class="{ 'bg-gray-100 shadow': $route.path === menu.href }"
+              >
+                <div class="w-5">
+                  <svg
+                    class="ml-2"
+                    width="12"
+                    height="12"
+                    viewBox="0 0 12 12"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <circle
+                      cx="6"
+                      cy="6"
+                      r="5"
+                      stroke="gray"
+                      stroke-width="2"
+                    />
+                  </svg>
+                </div>
+                <p>{{ menu.name }}</p>
+              </NuxtLink>
+              <!-- <div class="flex items-center gap-2">
+                <div class="w-5">
+                  <svg
+                    class="ml-2"
+                    width="12"
+                    height="12"
+                    viewBox="0 0 12 12"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <circle
+                      cx="6"
+                      cy="6"
+                      r="5"
+                      stroke="gray"
+                      stroke-width="2"
+                    />
+                  </svg>
+                </div>
+                <p>Penjualan</p>
+              </div> -->
             </div>
-          </NuxtLink>
+          </div>
         </nav>
       </div>
     </div>
@@ -45,12 +116,21 @@
 
 <script>
 const navigation = [
-  { name: "Dashboard", href: "/", icon: "icon", current: false },
-  { name: "Obat", href: "/obat/list", icon: "icon", current: false },
-  { name: "Supplier", href: "/supplier/list", icon: "icon", current: false },
-  { name: "Transaksi", href: "#", icon: "icon", current: false },
-  { name: "Laporan", href: "#", icon: "icon", current: false },
-  { name: "Retur", href: "#", icon: "icon", current: false },
+  { name: "Dashboard", href: "/", icon: "icon", isActive: false },
+  { name: "Obat", href: "/obat/list", icon: "icon", isActive: false },
+  { name: "Supplier", href: "/supplier/list", icon: "icon", isActive: false },
+  {
+    name: "Transaksi",
+    href: "",
+    icon: "icon",
+    isActive: false,
+    subMenu: [
+      { name: "Pembelian", href: "/transaksi/pembelian" },
+      { name: "Penjualan", href: "/transaksi/penjualan" },
+    ],
+  },
+  { name: "Laporan", href: "#", icon: "icon", isActive: false },
+  { name: "Retur", href: "#", icon: "icon", isActive: false },
 ];
 export default {
   name: "IndexPage",
@@ -58,6 +138,15 @@ export default {
     return {
       navigation,
     };
+  },
+  methods: {
+    showDropdown(name) {
+      this.navigation = this.navigation.map((item) =>
+        item.name === name
+          ? { ...item, isActive: !item.isActive }
+          : { ...item, isActive: false }
+      );
+    },
   },
 };
 </script>

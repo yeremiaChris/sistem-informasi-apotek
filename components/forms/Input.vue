@@ -30,7 +30,7 @@ export default {
     },
     placeholder: {
       type: String,
-      default: () => "",
+      default: () => "text",
     },
     type: {
       type: String,

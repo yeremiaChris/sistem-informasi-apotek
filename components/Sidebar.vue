@@ -32,6 +32,7 @@
             </NuxtLink>
             <button
               v-else
+              class="w-full"
               :class="[
                 $route.path === item.href
                   ? 'bg-gray-100 text-gray-900'
@@ -40,13 +41,20 @@
               ]"
               @click="showDropdown(item.name)"
             >
-              <div class="flex gap-4">
-                <img
-                  class="w-5"
-                  :src="'/sidebar/' + item.name.toLowerCase() + '.svg'"
-                  alt="logo"
-                />
-                {{ item.name }}
+              <div class="flex w-full justify-between">
+                <div class="flex gap-4">
+                  <img
+                    class="w-5"
+                    :src="'/sidebar/' + item.name.toLowerCase() + '.svg'"
+                    alt="logo"
+                  />
+                  <p>
+                    {{ item.name }}
+                  </p>
+                </div>
+                <div class="transform" :class="{ 'rotate-90': !item.isActive }">
+                  <img src="/arrow.svg" class="w-3" alt="arrow" />
+                </div>
               </div>
             </button>
 

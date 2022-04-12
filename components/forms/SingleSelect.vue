@@ -1,7 +1,7 @@
 <template>
   <div>
     <label for="urutkan" class="block text-sm font-medium text-gray-700"
-      >{{ label }} {{ value }}
+      >{{ label }}
     </label>
     <select
       id="urutkan"

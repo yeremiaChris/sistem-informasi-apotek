@@ -86,27 +86,6 @@
                 </div>
                 <p>{{ menu.name }}</p>
               </NuxtLink>
-              <!-- <div class="flex items-center gap-2">
-                <div class="w-5">
-                  <svg
-                    class="ml-2"
-                    width="12"
-                    height="12"
-                    viewBox="0 0 12 12"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <circle
-                      cx="6"
-                      cy="6"
-                      r="5"
-                      stroke="gray"
-                      stroke-width="2"
-                    />
-                  </svg>
-                </div>
-                <p>Penjualan</p>
-              </div> -->
             </div>
           </div>
         </nav>
@@ -114,7 +93,7 @@
     </div>
 
     <button
-      class="shadow flex bg-white justify-center items-center gap-4 border py-3 text-lg font-bold"
+      class="shadow flex bg-white items-center gap-4 border px-3 py-3 text-sm"
     >
       <img class="w-6" src="/sidebar/logout.svg" alt="logout" />
       LOGOUT
@@ -123,23 +102,7 @@
 </template>
 
 <script>
-const navigation = [
-  { name: "Dashboard", href: "/", icon: "icon", isActive: false },
-  { name: "Obat", href: "/obat/list", icon: "icon", isActive: false },
-  { name: "Supplier", href: "/supplier/list", icon: "icon", isActive: false },
-  {
-    name: "Transaksi",
-    href: "",
-    icon: "icon",
-    isActive: false,
-    subMenu: [
-      { name: "Pembelian", href: "/transaksi/pembelian" },
-      { name: "Penjualan", href: "/transaksi/penjualan" },
-    ],
-  },
-  { name: "Laporan", href: "#", icon: "icon", isActive: false },
-  { name: "Retur", href: "#", icon: "icon", isActive: false },
-];
+import navigation from "@/helpers/fields/navigation";
 export default {
   name: "IndexPage",
   data() {

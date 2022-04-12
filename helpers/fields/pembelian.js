@@ -1,11 +1,16 @@
 const fields = [
   {
-    title: "Tanggal Bayar",
+    title: "Tanggal bayar",
     id: "payDate",
     type: "date",
   },
   {
-    title: "Jumlah Bayar",
+    title: "Jumlah pembelian",
+    id: "amount",
+    type: "number",
+  },
+  {
+    title: "Jumlah bayar",
     id: "amount",
     type: "number",
   },

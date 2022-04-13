@@ -2,7 +2,15 @@
   <div>
     <h1 class="text-3xl font-bold mb-6">Transaksi Pembelian</h1>
     <FormsSingleSelect label="Pilih produk" class="mb-3" :items="products" />
+    <p class="mb-3">Detail produk :</p>
+    <div class="mb-3">
+      <p>-</p>
+    </div>
     <FormsSingleSelect label="Pilih supplier" class="mb-3" :items="supplier" />
+    <p class="mb-3">Detail supplier :</p>
+    <div class="mb-3">
+      <p>-</p>
+    </div>
     <FormsInput
       v-for="(item, index) in fields"
       :key="index"
@@ -13,7 +21,7 @@
       v-model="fieldState[item.id]"
       :placeholder="item.title + '...'"
     />
-
+    {{ fieldState.payDate }}
     <p class="mt-8">Kembalian</p>
     <p class="text-5xl">Rp. 0</p>
     <div class="flex gap-3 justify-end">

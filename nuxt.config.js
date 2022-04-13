@@ -32,7 +32,7 @@ export default {
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: ["@nuxtjs/axios"],
+  modules: ["@nuxtjs/axios", "@nuxtjs/dayjs"],
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
@@ -48,5 +48,15 @@ export default {
       baseURL: process.env.API_BASE_URL || "http://localhost:4000/api",
     },
     imageURL: process.env.IMAGE_BASE_URL,
+  },
+
+  dayjs: {
+    locales: ["en", "ja"],
+    defaultLocale: "en",
+    defaultTimeZone: "Asia/Tokyo",
+    plugins: [
+      "utc", // import 'dayjs/plugin/utc'
+      "timezone", // import 'dayjs/plugin/timezone'
+    ], // Your Day.js plugin
   },
 };

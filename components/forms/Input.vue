@@ -10,7 +10,7 @@
         :id="name"
         class="shadow-sm border px-2 py-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
         :placeholder="placeholder"
-        :value="type === 'date' ? new Date(value) : value"
+        :value="type === 'date' ? date : value"
         @input="handleChange"
       />
     </div>
@@ -41,6 +41,12 @@ export default {
       default: () => "",
     },
   },
+  computed: {
+    date() {
+      return this.$dayjs(this.value).format("YYYY-MM-DD");
+    },
+  },
+
   methods: {
     handleChange(e) {
       if (this.type === "file") {

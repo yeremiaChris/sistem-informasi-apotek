@@ -6,7 +6,7 @@
     :class="className"
     :disabled="disabled"
   >
-    {{ label }} {{ disabled }}
+    {{ label }}
   </button>
 </template>
 

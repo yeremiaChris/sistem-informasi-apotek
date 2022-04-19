@@ -9,13 +9,7 @@
     />
     <DisplayDetail title="produk" :data="detailProduct" />
 
-    <FormsSingleSelect
-      label="Pilih supplier"
-      class="mb-3"
-      :items="supplier"
-      @input="handleChangeSelect($event, '/supplier/', 'detailProduct')"
-    />
-    <DisplayDetail title="supplier" :data="detailSupplier" />
+    <FormsSingleSelect label="Pilih supplier" class="mb-3" :items="supplier" />
     <FormsInput
       v-for="(item, index) in fields"
       :key="index"
@@ -93,6 +87,8 @@ export default {
           const res = await this.$axios.get(url + id);
           this[props] = res.data;
         } catch (error) {}
+      } else {
+        this.detailProduct = {};
       }
     },
   },

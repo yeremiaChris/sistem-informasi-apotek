@@ -13,7 +13,6 @@
         :value="type === 'date' ? new Date(value) : value"
         @input="handleChange"
       />
-      {{ value }}
     </div>
   </div>
 </template>

@@ -1,16 +1,21 @@
 <template>
   <div>
     <h1 class="text-3xl font-bold mb-6">Transaksi Pembelian</h1>
-    <FormsSingleSelect label="Pilih produk" class="mb-3" :items="products" />
-    <p class="mb-3">Detail produk :</p>
-    <div class="mb-3">
-      <p>-</p>
-    </div>
-    <FormsSingleSelect label="Pilih supplier" class="mb-3" :items="supplier" />
-    <p class="mb-3">Detail supplier :</p>
-    <div class="mb-3">
-      <p>-</p>
-    </div>
+    <FormsSingleSelect
+      label="Pilih produk"
+      class="mb-3"
+      :items="products"
+      @input="handleChangeSelect"
+    />
+    <DisplayDetail title="produk" :data="detailProduct" />
+
+    <FormsSingleSelect
+      label="Pilih supplier"
+      class="mb-3"
+      :items="supplier"
+      @input="handleChangeSelectSupplier"
+    />
+    <DisplayDetail title="supplier" :data="detailSupplier" />
     <FormsInput
       v-for="(item, index) in fields"
       :key="index"
@@ -21,7 +26,6 @@
       v-model="fieldState[item.id]"
       :placeholder="item.title + '...'"
     />
-    {{ fieldState.payDate }}
     <p class="mt-8">Kembalian</p>
     <p class="text-5xl">Rp. 0</p>
     <div class="flex gap-3 justify-end">
@@ -43,6 +47,8 @@
 
 <script>
 import { fields, fieldState } from "@/helpers/fields/pembelian";
+import isEmptyObject from "@/helpers/isEmptyObject.js";
+
 export default {
   name: "TransaksiComponent",
   data() {
@@ -52,18 +58,50 @@ export default {
       fieldState,
       products: [],
       supplier: [],
+      detailProduct: {},
+      detailSupplier: {},
     };
   },
   async fetch() {
     const res = await this.$axios.get("/medicine/select-data");
     const res2 = await this.$axios.get("/supplier/select-data");
-    console.log(res2.data);
-    this.products = res.data;
-    this.supplier = res2.data;
+    this.products = res.data.map((item) => {
+      return {
+        ...item,
+        value: item._id,
+      };
+    });
+    this.supplier = res2.data.map((item) => {
+      return {
+        ...item,
+        value: item._id,
+      };
+    });
   },
   methods: {
     submit() {
       //
+    },
+    async handleChangeSelect(id) {
+      if (id) {
+        const res = await this.$axios.get("/medicine/" + id);
+        this.detailProduct = res.data;
+      }
+    },
+    async handleChangeSelectSupplier(id) {
+      if (id) {
+        const res = await this.$axios.get("/supplier/" + id);
+        this.detailSupplier = res.data;
+      }
+    },
+  },
+
+  computed: {
+    isEmptyObject() {
+      return isEmptyObject(this.detailProduct);
+    },
+    isEmptyObjectSupplier() {
+      return isEmptyObject(this.detailSupplier);
     },
   },
 };

@@ -1,9 +1,13 @@
 export const state = () => ({
   deleteModal: false,
   deleteId: null,
+  isRequesting: false,
 });
 
 export const mutations = {
+  setProps(state, payload) {
+    state[payload.props] = payload.value;
+  },
   deleteModalFalse(state) {
     state.deleteModal = false;
   },

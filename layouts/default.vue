@@ -11,6 +11,8 @@
       <main class="flex-1">
         <div class="py-6">
           <div class="mx-10 px-4 sm:px-6 md:px-8 bg-white pb-3 pt-8">
+            <Spinner v-if="onRequesting" />
+
             <Nuxt />
           </div>
         </div>
@@ -20,5 +22,11 @@
 </template>
 
 <script>
-export default {};
+export default {
+  computed: {
+    onRequesting() {
+      return this.$store.state.isRequesting;
+    },
+  },
+};
 </script>

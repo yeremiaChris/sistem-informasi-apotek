@@ -40,6 +40,9 @@ export default {
       if (e.target.value === "Pilih") {
         this.$emit("input", "");
       } else {
+        const data = {
+          url: "",
+        };
         this.$emit("input", e.target.value);
       }
     },

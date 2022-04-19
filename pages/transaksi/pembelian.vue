@@ -5,7 +5,7 @@
       label="Pilih produk"
       class="mb-3"
       :items="products"
-      @input="handleChangeSelect"
+      @input="handleChangeSelect($event, '/medicine/', 'detailProduct')"
     />
     <DisplayDetail title="produk" :data="detailProduct" />
 
@@ -13,7 +13,7 @@
       label="Pilih supplier"
       class="mb-3"
       :items="supplier"
-      @input="handleChangeSelectSupplier"
+      @input="handleChangeSelect($event, '/supplier/', 'detailProduct')"
     />
     <DisplayDetail title="supplier" :data="detailSupplier" />
     <FormsInput
@@ -63,35 +63,36 @@ export default {
     };
   },
   async fetch() {
-    const res = await this.$axios.get("/medicine/select-data");
-    const res2 = await this.$axios.get("/supplier/select-data");
-    this.products = res.data.map((item) => {
-      return {
-        ...item,
-        value: item._id,
-      };
-    });
-    this.supplier = res2.data.map((item) => {
-      return {
-        ...item,
-        value: item._id,
-      };
-    });
+    this.getSelectData();
   },
   methods: {
+    async getSelectData() {
+      try {
+        const res = await this.$axios.get("/medicine/select-data");
+        const res2 = await this.$axios.get("/supplier/select-data");
+        this.products = res.data.map((item) => {
+          return {
+            ...item,
+            value: item._id,
+          };
+        });
+        this.supplier = res2.data.map((item) => {
+          return {
+            ...item,
+            value: item._id,
+          };
+        });
+      } catch {}
+    },
     submit() {
       //
     },
-    async handleChangeSelect(id) {
+    async handleChangeSelect(id, url, props) {
       if (id) {
-        const res = await this.$axios.get("/medicine/" + id);
-        this.detailProduct = res.data;
-      }
-    },
-    async handleChangeSelectSupplier(id) {
-      if (id) {
-        const res = await this.$axios.get("/supplier/" + id);
-        this.detailSupplier = res.data;
+        try {
+          const res = await this.$axios.get(url + id);
+          this[props] = res.data;
+        } catch (error) {}
       }
     },
   },

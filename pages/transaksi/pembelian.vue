@@ -4,7 +4,7 @@
 
     <div class="px-6 py-6 mb-16 border-2">
       <p>Total</p>
-      <p class="text-5xl mb-8">Rp. 0</p>
+      <p class="text-3xl mb-8">Rp. 0</p>
       <FormsInput
         v-for="(item, index) in fields2"
         :key="index"
@@ -17,7 +17,7 @@
         :placeholder="item.title + '...'"
       />
       <p class="mt-8">Kembalian</p>
-      <p class="text-5xl">Rp. 0</p>
+      <p class="text-3xl">Rp. 0</p>
       <div class="flex gap-3 justify-end">
         <FormsButton
           @submit="submit"
@@ -34,25 +34,34 @@
       </div>
     </div>
     <div class="flex justify-end">
-      <button class="text-gray-600 hover:underline">
+      <button class="text-gray-600 hover:underline" @click="addForm">
         + Tambah produk beli.
       </button>
     </div>
-    <div v-for="(item, index) in fields" :key="index">
-      <FormsSingleSelect
-        v-if="item.type === 'select'"
-        :label="item.title"
-        class="mb-3"
-        :items="supplier"
-      />
-      <FormsInput
-        v-else
-        :type="item.type"
-        class="mb-4"
-        :label="item.title"
-        name="name"
-        v-model="fieldState[item.id]"
-        :placeholder="item.title + '...'"
+    <div v-for="(items, index) in fields" :key="index">
+      <form v-for="(item, idx) in items" :key="idx">
+        <FormsSingleSelect
+          v-if="item.type === 'select'"
+          :label="item.title"
+          v-model="item.value"
+          class="mb-3"
+          :items="supplier"
+        />
+        <FormsInput
+          v-else
+          :type="item.type"
+          :label="item.title"
+          name="name"
+          v-model="item.value"
+          :placeholder="item.title + '...'"
+        />
+      </form>
+      <FormsButton
+        v-if="fields.length > 1"
+        @submit="deleteForm(index)"
+        className="mt-3 mb-4 self-end bg-red-300 hover:bg-red-400 text-red-700"
+        label="Delete"
+        type="button"
       />
     </div>
   </div>
@@ -116,18 +125,17 @@ export default {
     submit() {
       //
     },
-    // async handleChangeSelect(id, url, props, type) {
-    //   if (type === "product") {
-    //     if (id) {
-    //       try {
-    //         const res = await this.$axios.get(url + id);
-    //         this[props] = res.data;
-    //       } catch (error) {}
-    //     } else {
-    //       this.detailProduct = {};
-    //     }
-    //   }
-    // },
+    addForm() {
+      const main = window.document.querySelector("#content");
+      window.scrollTo({
+        top: main.scrollHeight,
+        behavior: "smooth",
+      });
+      this.fields = this.fields = [fields[0], ...this.fields];
+    },
+    deleteForm(index) {
+      this.fields = this.fields.filter((item, idx) => idx !== index);
+    },
   },
 };
 </script>

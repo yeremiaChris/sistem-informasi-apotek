@@ -12,7 +12,7 @@
         <div class="px-4 pt-10 sm:px-6 md:px-8 bg-white pb-3">
           <Spinner v-if="onRequesting" />
 
-          <Nuxt />
+          <Nuxt id="content" />
         </div>
       </main>
     </div>

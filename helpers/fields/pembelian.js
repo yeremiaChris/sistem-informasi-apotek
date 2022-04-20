@@ -1,19 +1,24 @@
 const fields = [
-  {
-    title: "Pilih produk",
-    id: "product",
-    type: "select",
-  },
-  {
-    title: "Pilih supplier",
-    id: "supplier",
-    type: "select",
-  },
-  {
-    title: "Jumlah pembelian",
-    id: "purchaseAmount",
-    type: "number",
-  },
+  [
+    {
+      title: "Pilih produk",
+      id: "product",
+      value: "",
+      type: "select",
+    },
+    {
+      title: "Pilih supplier",
+      id: "supplier",
+      value: "",
+      type: "select",
+    },
+    {
+      title: "Jumlah pembelian",
+      value: "0",
+      id: "purchaseAmount",
+      type: "number",
+    },
+  ],
 ];
 
 const fieldState = {};

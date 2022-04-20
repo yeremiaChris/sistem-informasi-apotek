@@ -84,7 +84,7 @@
                     />
                   </svg>
                 </div>
-                <p>{{ menu.name }}</p>
+                <p class="text-gray-600">{{ menu.name }}</p>
               </NuxtLink>
             </div>
           </div>

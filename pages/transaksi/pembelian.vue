@@ -4,7 +4,7 @@
 
     <div class="px-6 py-6 mb-16 border-2">
       <p>Total</p>
-      <p class="text-3xl mb-8">Rp. 0</p>
+      <p class="text-3xl mb-8">Rp. {{ total.toLocaleString() }}</p>
       <FormsInput
         v-for="(item, index) in fields2"
         :key="index"
@@ -20,7 +20,7 @@
       <p class="text-3xl">Rp. 0</p>
       <div class="flex gap-3 justify-end">
         <FormsButton
-          @submit="submit"
+          @submit="reset"
           className="mt-10 self-end bg-red-300 hover:bg-red-400 text-red-700"
           label="Reset"
           type="button"
@@ -40,21 +40,30 @@
     </div>
     <div v-for="(items, index) in fields" :key="index">
       <form v-for="(item, idx) in items" :key="idx">
-        <FormsSingleSelect
-          v-if="item.type === 'select'"
-          :label="item.title"
-          v-model="item.value"
-          class="mb-3"
-          :items="supplier"
-        />
-        <FormsInput
-          v-else
-          :type="item.type"
-          :label="item.title"
-          name="name"
-          v-model="item.value"
-          :placeholder="item.title + '...'"
-        />
+        <div v-if="item.type === 'select'">
+          <FormsSingleSelect
+            :label="item.title"
+            v-model="item.value"
+            class="mb-3"
+            :items="item.title.includes('produk') ? products : supplier"
+          />
+          <p>{{ item.error }}</p>
+        </div>
+        <div v-else>
+          <FormsInput
+            :type="item.type"
+            :label="item.title"
+            name="name"
+            v-model="item.value"
+            :placeholder="item.title + '...'"
+          />
+          <p
+            v-if="item.error && item.value === '0'"
+            class="text-sm text-red-700"
+          >
+            {{ item.error }}
+          </p>
+        </div>
       </form>
       <FormsButton
         v-if="fields.length > 1"
@@ -75,7 +84,6 @@ import {
   fields2,
 } from "@/helpers/fields/pembelian";
 import isEmptyObject from "@/helpers/isEmptyObject.js";
-
 export default {
   name: "TransaksiComponent",
   data() {
@@ -101,40 +109,114 @@ export default {
     isEmptyObjectSupplier() {
       return isEmptyObject(this.detailSupplier);
     },
+    total() {
+      const sum = this.fields.reduce((accumulator, object) => {
+        return accumulator + object[0].value * object[2].value;
+      }, 0);
+      return sum;
+    },
   },
 
   methods: {
     async getSelectData() {
       try {
         const res = await this.$axios.get("/medicine/select-data");
+
         const res2 = await this.$axios.get("/supplier/select-data");
+
         this.products = res.data.map((item) => {
           return {
             ...item,
-            value: item._id,
+            value: item.price.toString(),
           };
         });
+
         this.supplier = res2.data.map((item) => {
           return {
             ...item,
-            value: item._id,
+            value: item._id.toString(),
           };
         });
+
+        // set default value for the first form
+        this.fields = this.fields.map((item, index) =>
+          index === 0
+            ? [
+                {
+                  title: "Pilih produk",
+                  id: "product",
+                  error: "",
+                  value: this.products[0].value,
+                  type: "select",
+                },
+                {
+                  title: "Pilih supplier",
+                  id: "supplier",
+                  error: "",
+                  value: this.supplier[0].value,
+                  type: "select",
+                },
+                {
+                  title: "Jumlah pembelian",
+                  value: "0",
+                  error: "",
+                  id: "purchaseAmount",
+                  type: "number",
+                },
+              ]
+            : item
+        );
       } catch {}
     },
+
     submit() {
       //
     },
-    addForm() {
+
+    addForm(id) {
       const main = window.document.querySelector("#content");
       window.scrollTo({
         top: main.scrollHeight,
         behavior: "smooth",
       });
-      this.fields = this.fields = [fields[0], ...this.fields];
+      if (parseInt(this.fields[0][2].value) > 0) {
+        const { products, supplier } = this;
+        const newEl = [
+          {
+            title: "Pilih produk",
+            id: "product",
+            value: this.products[0].value,
+            error: "",
+            type: "select",
+          },
+          {
+            title: "Pilih supplier",
+            id: "supplier",
+            error: "",
+            value: this.supplier[0].value,
+            type: "select",
+          },
+          {
+            title: "Jumlah pembelian",
+            value: "0",
+            error: "",
+            id: "purchaseAmount",
+            type: "number",
+          },
+        ];
+        this.fields = this.fields = [newEl, ...this.fields];
+      } else {
+        this.fields[0][2].error = this.fields[0][2].error =
+          "This field is required.";
+      }
     },
+
     deleteForm(index) {
       this.fields = this.fields.filter((item, idx) => idx !== index);
+    },
+
+    reset() {
+      this.$nuxt.refresh();
     },
   },
 };

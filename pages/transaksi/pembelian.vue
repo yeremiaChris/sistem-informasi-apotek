@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 class="text-3xl font-bold mb-6">Transaksi Pembelian</h1>
-
+    <FormsFloatButton />
     <div class="px-6 py-6 mb-16 border-2">
       <p>Total</p>
       <p class="text-3xl mb-8">Rp. {{ total.toLocaleString() }}</p>
@@ -17,7 +17,7 @@
         :placeholder="item.title + '...'"
       />
       <p class="mt-8">Kembalian</p>
-      <p class="text-3xl">Rp. 0</p>
+      <p class="text-3xl">Rp. {{ change.toLocaleString() }}</p>
       <div class="flex gap-3 justify-end">
         <FormsButton
           @submit="reset"
@@ -65,6 +65,7 @@
           </p>
         </div>
       </form>
+
       <FormsButton
         v-if="fields.length > 1"
         @submit="deleteForm(index)"
@@ -114,6 +115,11 @@ export default {
         return accumulator + object[0].value * object[2].value;
       }, 0);
       return sum;
+    },
+    change() {
+      const change = this.fieldState2.amount - this.total;
+
+      return this.fieldState2.amount === 0 ? 0 : change;
     },
   },
 
@@ -185,7 +191,7 @@ export default {
           {
             title: "Pilih produk",
             id: "product",
-            value: this.products[0].value,
+            value: products[0].value,
             error: "",
             type: "select",
           },
@@ -193,7 +199,7 @@ export default {
             title: "Pilih supplier",
             id: "supplier",
             error: "",
-            value: this.supplier[0].value,
+            value: supplier[0].value,
             type: "select",
           },
           {

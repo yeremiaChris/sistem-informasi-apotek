@@ -20,6 +20,7 @@
         type="number"
         :name="name"
         :id="name"
+        min="0"
         class="shadow-sm border px-2 py-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full border-gray-300 rounded-md"
         :class="customClass"
         :placeholder="placeholder"

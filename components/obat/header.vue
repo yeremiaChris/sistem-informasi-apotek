@@ -20,7 +20,7 @@
       </div>
     </div>
     <div class="flex justify-end mt-8">
-      <FormsSingleSelect label="Urutkan" :items="items" />
+      <FormsSingleSelect label="Urutkan" :items="items" v-model="order" />
     </div>
   </div>
 </template>
@@ -41,6 +41,11 @@ export default {
       type: String,
       default: () => "Obat  / Daftar",
     },
+  },
+  data() {
+    return {
+      order: "",
+    };
   },
 };
 </script>

@@ -67,7 +67,6 @@ export default {
     },
 
     setFile(event, prop) {
-      console.log(event.target.files[0]);
       this[prop] = event.target.files[0];
       this.src = URL.createObjectURL(event.target.files[0]);
     },
@@ -88,9 +87,7 @@ export default {
           config
         );
         this.$router.push("/supplier/list");
-      } catch (error) {
-        console.log(error);
-      }
+      } catch {}
     },
   },
 };

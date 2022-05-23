@@ -9,7 +9,7 @@
 
       <!-- content -->
       <main class="flex-1">
-        <div class="px-4 pt-10 sm:px-6 md:px-8 bg-white pb-3">
+        <div class="px-4 pt-10 sm:px-6 md:px-8 bg-white h-full pb-3">
           <Spinner v-if="onRequesting" />
 
           <Nuxt id="content" />

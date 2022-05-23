@@ -71,7 +71,6 @@ export default {
 
   async fetch() {
     const res = await this.$axios.get("/medicine/" + this.$route.params.id);
-    console.log(res);
     this.$store.commit("obat/getDetail", res.data);
   },
 

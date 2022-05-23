@@ -2,6 +2,7 @@ export const state = () => ({
   deleteModal: false,
   deleteId: null,
   isRequesting: false,
+  dataTable: [],
 });
 
 export const mutations = {

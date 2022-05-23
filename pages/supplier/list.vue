@@ -19,7 +19,7 @@ export default {
     const res = await this.$axios.get("/supplier");
     const data = res.data.map((item) => {
       return {
-        id: item._id,
+        _id: item._id,
         name: item.name,
         media: item.media,
       };

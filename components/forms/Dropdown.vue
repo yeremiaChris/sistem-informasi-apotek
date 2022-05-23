@@ -64,6 +64,7 @@ export default {
 
     handleClick(item) {
       this.$emit("input", item.title);
+      this.$emit("getDetail", "/medicine/" + item._id);
       this.hideDropdown();
     },
 

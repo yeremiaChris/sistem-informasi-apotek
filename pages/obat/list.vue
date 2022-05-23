@@ -14,7 +14,7 @@ export default {
     const res = await app.$axios.get("/medicine");
     const data = res.data.map((item) => {
       return {
-        id: item._id,
+        _id: item._id,
         name: item.name,
         price: item.price,
         supply: item.supply,

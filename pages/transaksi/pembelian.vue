@@ -14,10 +14,10 @@
       v-model="product"
       title="Produk"
       @search="search('product', 'products', $event)"
-      @getDetail="getDetail"
+      @getDetail="getData($event, 'detail')"
     />
-    <ObatDetail class="mt-4" />
-    <ObatTable class="mt-5" :headers="headers" :data="[]" />
+    <ObatDetail class="mt-4" :data="detail" />
+    <ObatTable class="mt-10" :headers="headers" :data="dataTable" />
   </div>
 </template>
 
@@ -37,13 +37,31 @@ export default {
         "Stok awal",
         "Harga per satuan",
         "Jumlah beli",
+        "Total harga",
       ],
+      detail: {},
     };
   },
 
   mounted() {
     this.getData("/medicine/select-data", "products");
     this.getData("/supplier/select-data", "suppliers");
+  },
+
+  computed: {
+    dataTable() {
+      return this.$store.state.dataTable.map(item, (i) => {
+        return {
+          _id: item._id,
+          name: item.name,
+          price: item.price,
+          supply: item.supply,
+          type: item.type,
+          unit: item.unit,
+          updatedAt: item.updatedAt,
+        };
+      });
+    },
   },
 
   methods: {
@@ -62,10 +80,6 @@ export default {
         );
       }
       this[props2] = key;
-    },
-
-    getDetail() {
-      //
     },
   },
 };

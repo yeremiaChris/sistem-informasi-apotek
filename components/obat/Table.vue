@@ -28,7 +28,7 @@
                 </th>
               </tr>
             </thead>
-            <tbody>
+            <tbody v-if="data.length">
               <tr
                 v-for="(items, index) in data"
                 :key="index"
@@ -66,7 +66,7 @@
                   class="px-6 py-4 whitespace-nowrap flex gap-3 text-sm font-medium"
                 >
                   <NuxtLink
-                    :to="items.id.toString()"
+                    :to="items._id.toString()"
                     class="text-indigo-600 hover:text-indigo-900"
                     >Edit
                   </NuxtLink>
@@ -79,6 +79,7 @@
                 </td>
               </tr>
             </tbody>
+            <p v-else class="px-4 py-4">Data is emtpy.</p>
           </table>
         </div>
       </div>

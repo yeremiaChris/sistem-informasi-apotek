@@ -3,10 +3,13 @@ export const state = () => ({
   deleteId: null,
   isRequesting: false,
   dataTable: [],
+  supplier: "",
+  produk: "",
 });
 
 export const mutations = {
   setProps(state, payload) {
+    console.log(payload);
     state[payload.props] = payload.value;
   },
   deleteModalFalse(state) {

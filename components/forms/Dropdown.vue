@@ -13,6 +13,7 @@
       @focus="showDropdown"
       @input="search"
     />
+
     <div
       v-if="isDropdown"
       class="absolute z-40 w-full text-gray-600 bg-white border border-b-0 border-gray-400 mt-1"
@@ -27,6 +28,8 @@
         {{ item.title }}
       </p>
     </div>
+
+    <p v-if="error.length" class="text-red-500 mt-3">{{ error }}</p>
   </div>
 </template>
 
@@ -37,11 +40,18 @@ export default {
       type: Array,
       required: true,
     },
+
     title: {
       type: String,
       required: true,
     },
+
     value: {
+      type: String,
+      required: true,
+    },
+
+    error: {
       type: String,
       required: true,
     },
@@ -65,6 +75,12 @@ export default {
     handleClick(item) {
       this.$emit("input", item.title);
       this.$emit("getDetail", "/medicine/" + item._id);
+      this.$emit("setProps", item);
+      const payload = {
+        props: this.title.toLowerCase(),
+        value: "",
+      };
+      this.$store.commit("setProps", payload);
       this.hideDropdown();
     },
 

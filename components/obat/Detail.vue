@@ -12,6 +12,7 @@
         {{ data.price ? data.price.toLocaleString() : "-" }}
       </p>
     </div>
+
     <div>
       <input
         v-model="value"
@@ -41,6 +42,11 @@ export default {
     data: {
       type: Object,
       required: true,
+    },
+
+    supplier: {
+      type: Object,
+      default: () => {},
     },
   },
 
@@ -78,9 +84,9 @@ export default {
 
   methods: {
     add() {
-      if (!this.isEmptyObject) {
-        const { total } = this;
-        const obj = { ...this.data, total, jumlahBeli: this.value };
+      if (!this.isEmptyObject && !isEmptyObject(this.supplier)) {
+        const { total, supplier } = this;
+        const obj = { ...this.data, total, jumlahBeli: this.value, supplier };
         const value = [obj, ...this.dataTable];
         const payload = {
           value,
@@ -88,7 +94,21 @@ export default {
         };
         this.$store.commit("setProps", payload);
       } else {
-        console.log("kosong");
+        console.log("masuk", !this.isEmptyObject);
+        if (this.isEmptyObject) {
+          const payload = {
+            value: "This field is required",
+            props: "produk",
+          };
+          this.$store.commit("setProps", payload);
+        }
+        if (isEmptyObject(this.supplier)) {
+          const payload = {
+            value: "This field is required",
+            props: "supplier",
+          };
+          this.$store.commit("setProps", payload);
+        }
       }
     },
   },

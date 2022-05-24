@@ -5,18 +5,21 @@
       :data="suppliers"
       :value="supplier"
       v-model="supplier"
+      :error="supplierError"
       title="Supplier"
       @search="search('supplier', 'suppliers', $event)"
+      @setProps="setProps($event, 'supplierData')"
     />
     <FormsDropdown
       :data="products"
       :value="product"
+      :error="produkError"
       v-model="product"
       title="Produk"
       @search="search('product', 'products', $event)"
       @getDetail="getData($event, 'detail')"
     />
-    <ObatDetail class="mt-4" :data="detail" />
+    <ObatDetail class="mt-4" :data="detail" :supplier="supplierData" />
     <ObatTable class="mt-10" :headers="headers" :data="dataTable" />
   </div>
 </template>
@@ -40,6 +43,7 @@ export default {
         "Total harga",
       ],
       detail: {},
+      supplierData: {},
     };
   },
 
@@ -50,7 +54,7 @@ export default {
 
   computed: {
     dataTable() {
-      return this.$store.state.dataTable.map(item, (i) => {
+      return this.$store.state.dataTable.map((item) => {
         return {
           _id: item._id,
           name: item.name,
@@ -62,9 +66,21 @@ export default {
         };
       });
     },
+
+    supplierError() {
+      return this.$store.state.supplier;
+    },
+
+    produkError() {
+      return this.$store.state.produk;
+    },
   },
 
   methods: {
+    setProps(data, props) {
+      this[props] = data;
+    },
+
     async getData(endpoint, props) {
       const res = await this.$axios.get(endpoint);
       this[props] = res.data;

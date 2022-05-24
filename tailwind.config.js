@@ -6,6 +6,9 @@ module.exports = {
       colors: {
         brand: "#f1f2f2",
       },
+      maxWidth: {
+        "1020px": "1020px",
+      },
     },
   },
   variants: {

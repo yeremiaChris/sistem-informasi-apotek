@@ -9,7 +9,6 @@ export const state = () => ({
 
 export const mutations = {
   setProps(state, payload) {
-    console.log(payload);
     state[payload.props] = payload.value;
   },
   deleteModalFalse(state) {

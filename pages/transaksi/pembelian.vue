@@ -57,12 +57,12 @@ export default {
       return this.$store.state.dataTable.map((item) => {
         return {
           _id: item._id,
-          name: item.name,
-          price: item.price,
+          nameSupplier: item.supplier.title,
+          nameMedicine: item.name,
           supply: item.supply,
-          type: item.type,
-          unit: item.unit,
-          updatedAt: item.updatedAt,
+          price: item.price,
+          jumlahBeli: item.jumlahBeli,
+          total: item.total,
         };
       });
     },

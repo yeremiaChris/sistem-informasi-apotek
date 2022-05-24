@@ -41,7 +41,7 @@
                 </td>
                 <td
                   v-for="(value, key, idx) in items"
-                  v-show="key !== 'id' && key !== 'media'"
+                  v-show="key !== '_id' && key !== 'media'"
                   :key="idx"
                   class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
                 >

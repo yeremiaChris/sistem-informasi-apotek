@@ -11,8 +11,9 @@
       <main class="flex-1">
         <div class="px-4 pt-10 sm:px-6 md:px-8 bg-white h-full pb-3">
           <Spinner v-if="onRequesting" />
-
-          <Nuxt id="content" />
+          <div class="max-w-1020px m-auto">
+            <Nuxt id="content" />
+          </div>
         </div>
       </main>
     </div>

@@ -87,7 +87,15 @@ export default {
       if (!this.isEmptyObject && !isEmptyObject(this.supplier)) {
         const { total, supplier } = this;
         const obj = { ...this.data, total, jumlahBeli: this.value, supplier };
-        const value = [obj, ...this.dataTable];
+        console.log(obj, total);
+        const isFilled = this.dataTable.some((el) => el._id === obj._id);
+        let value = [];
+        if (!isFilled) {
+          value = [obj, ...this.dataTable];
+        } else {
+          value = this.dataTable;
+        }
+        console.log(isFilled);
         const payload = {
           value,
           props: "dataTable",

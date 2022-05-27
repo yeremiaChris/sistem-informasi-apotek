@@ -20,7 +20,13 @@
       @getDetail="getData($event, 'detail')"
     />
     <ObatDetail class="mt-4" :data="detail" :supplier="supplierData" />
-    <ObatTable class="mt-10" :headers="headers" :data="dataTable" />
+    <ObatTable
+      class="mt-10"
+      :headers="headers"
+      :data="dataTable"
+      @setValueSupplier="setProps('supplier', $event)"
+      @setValueProduct="setProps('product', $event)"
+    />
   </div>
 </template>
 

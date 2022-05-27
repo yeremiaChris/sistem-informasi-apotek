@@ -1,7 +1,7 @@
 <!-- This example requires Tailwind CSS v2.0+ -->
 <template>
   <div class="flex flex-col mt-4">
-    <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+    <div class="-my-2 overflow-auto sm:-mx-6 lg:-mx-8">
       <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
         <div
           class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg"
@@ -28,6 +28,7 @@
                 </th>
               </tr>
             </thead>
+
             <tbody v-if="data.length">
               <tr
                 v-for="(items, index) in data"
@@ -39,6 +40,7 @@
                 >
                   {{ index + 1 }}
                 </td>
+
                 <td
                   v-for="(value, key, idx) in items"
                   v-show="key !== '_id' && key !== 'media'"
@@ -49,6 +51,7 @@
                     key === "updatedAt" ? new Date(value).toDateString() : value
                   }}
                 </td>
+
                 <td
                   v-for="(value, key, idx) in items"
                   v-show="key === 'media'"
@@ -60,25 +63,44 @@
                     :alt="value.defaultImage"
                     style="width: 150px"
                   />
+                  {{ key }}
                 </td>
 
                 <td
                   class="px-6 py-4 whitespace-nowrap flex gap-3 text-sm font-medium"
                 >
                   <NuxtLink
+                    v-if="!$route.path.includes('pembelian')"
                     :to="items._id.toString()"
                     class="text-indigo-600 hover:text-indigo-900"
                     >Edit
                   </NuxtLink>
+
                   <button
-                    @click="deleteModalTrue(items.id)"
+                    v-else
+                    class="text-indigo-600 hover:text-indigo-900"
+                    @click="edit(items)"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    v-if="!$route.path.includes('pembelian')"
                     class="text-red-600 hover:text-red-900"
+                    @click="deleteModalTrue(items.id)"
+                  >
+                    Delete
+                  </button>
+                  <button
+                    v-else
+                    class="text-red-600 hover:text-red-900"
+                    @click="deleteData(items.id)"
                   >
                     Delete
                   </button>
                 </td>
               </tr>
             </tbody>
+
             <p v-else class="px-4 py-4">Data is emtpy.</p>
           </table>
         </div>
@@ -103,6 +125,17 @@ export default {
     deleteModalTrue(id) {
       this.$store.commit("deleteModalTrue");
       this.$store.commit("getDeleteId", id);
+    },
+
+    deleteData(id) {
+      this.$store.commit("deleteModalTrue");
+      this.$store.commit("getDeleteId", id);
+    },
+
+    edit(item) {
+      console.log(item);
+      this.$emit("setValueProduct", item.nameMedicine);
+      this.$emit("setValueSupplier", item.nameSupplier);
     },
   },
 };

@@ -25,7 +25,7 @@
         :class="{ 'cursor-not-allowed': isEmptyObject }"
         placeholder="Quantity..."
       />
-      <p class="text-right mt-3">Total Rp. {{ total }}</p>
+      <p class="text-right mt-3 font-bold text-xl">Total Rp. {{ total }}</p>
       <div class="flex justify-end mt-4 gap-4">
         <FormsButton label="Beli" :is-out-lined="true" />
         <FormsButton label="Tambah" @submit="add" />
@@ -88,7 +88,9 @@ export default {
         const { total, supplier } = this;
         const obj = { ...this.data, total, jumlahBeli: this.value, supplier };
         console.log(obj, total);
-        const isFilled = this.dataTable.some((el) => el._id === obj._id);
+        const isFilled = this.dataTable.some(
+          (el) => el._id === obj._id && el.supplier._id === obj.supplier._id
+        );
         let value = [];
         if (!isFilled) {
           value = [obj, ...this.dataTable];
@@ -102,7 +104,25 @@ export default {
         };
         this.$store.commit("setProps", payload);
       } else {
-        console.log("masuk", !this.isEmptyObject);
+        if (this.isEmptyObject) {
+          const payload = {
+            value: "This field is required",
+            props: "produk",
+          };
+          this.$store.commit("setProps", payload);
+        }
+        if (isEmptyObject(this.supplier)) {
+          const payload = {
+            value: "This field is required",
+            props: "supplier",
+          };
+          this.$store.commit("setProps", payload);
+        }
+      }
+    },
+
+    buy() {
+      if (this.isEmptyObject && isEmptyObject(this.supplier)) {
         if (this.isEmptyObject) {
           const payload = {
             value: "This field is required",

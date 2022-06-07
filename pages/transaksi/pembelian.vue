@@ -10,6 +10,7 @@
       @search="search('supplier', 'suppliers', $event)"
       @setProps="setProps($event, 'supplierData')"
     />
+
     <FormsDropdown
       :data="products"
       :value="product"
@@ -19,7 +20,9 @@
       @search="search('product', 'products', $event)"
       @getDetail="getData($event, 'detail')"
     />
+
     <ObatDetail class="mt-4" :data="detail" :supplier="supplierData" />
+
     <ObatTable
       class="mt-10"
       :headers="headers"
@@ -50,6 +53,20 @@ export default {
       ],
       detail: {},
       supplierData: {},
+      item: null,
+      isDroped: false,
+      dataTest: [
+        {
+          id: "1",
+          title: "button 1",
+          submenu: [],
+        },
+        {
+          id: "2",
+          title: "button 2",
+          submenu: [],
+        },
+      ],
     };
   },
 
@@ -64,6 +81,7 @@ export default {
         return {
           _id: item._id,
           nameSupplier: item.supplier.title,
+          supplierId: item.supplier._id,
           nameMedicine: item.name,
           supply: item.supply,
           price: item.price,
@@ -71,6 +89,12 @@ export default {
           total: item.total,
         };
       });
+    },
+
+    test: {
+      get() {
+        return "test";
+      },
     },
 
     supplierError() {

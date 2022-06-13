@@ -51,6 +51,7 @@ export default {
         "Jumlah beli",
         "Total harga",
       ],
+      test: "m",
       detail: {},
       supplierData: {},
       item: null,
@@ -70,9 +71,10 @@ export default {
     };
   },
 
-  mounted() {
-    this.getData("/medicine/select-data", "products");
-    this.getData("/supplier/select-data", "suppliers");
+  async fetch() {
+    await this.getData("/medicine/select-data", "products");
+    await this.getData("/pembelian", "test");
+    await this.getData("/supplier/select-data", "suppliers");
   },
 
   computed: {
@@ -91,12 +93,6 @@ export default {
       });
     },
 
-    test: {
-      get() {
-        return "test";
-      },
-    },
-
     supplierError() {
       return this.$store.state.supplier;
     },
@@ -113,7 +109,11 @@ export default {
 
     async getData(endpoint, props) {
       const res = await this.$axios.get(endpoint);
+
       this[props] = res.data;
+      if (props === "test") {
+        console.log(res);
+      }
     },
 
     search(props2, props, key) {

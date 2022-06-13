@@ -45,7 +45,7 @@
         Total Rp. {{ total.toLocaleString() }}
       </p>
       <div class="flex justify-end mt-4 gap-4">
-        <FormsButton label="Beli" :is-out-lined="true" />
+        <FormsButton label="Beli" :is-out-lined="true" @submit="buy" />
         <FormsButton label="Tambah" @submit="add" />
       </div>
     </div>
@@ -150,7 +150,7 @@ export default {
       }
     },
 
-    buy() {
+    async buy() {
       if (this.isEmptyObject && isEmptyObject(this.supplier)) {
         if (this.isEmptyObject) {
           const payload = {
@@ -166,6 +166,17 @@ export default {
           };
           this.$store.commit("setProps", payload);
         }
+      } else {
+        console.log("masuk");
+        const data = {
+          supplier: this.dataTable,
+          medicine: this.dataTable,
+        };
+        const res = await this.$axios.post("/pembelian", {
+          laporan: this.dataTable,
+          title: "Laporan " + this.$dayjs().format("DD MMM YYYY Pukul HH:mm"),
+        });
+        console.log(res);
       }
     },
   },

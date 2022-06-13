@@ -15,6 +15,7 @@ export default {
     const data = res.data.map((item) => {
       return {
         _id: item._id,
+        id: item._id,
         name: item.name,
         price: item.price,
         supply: item.supply,

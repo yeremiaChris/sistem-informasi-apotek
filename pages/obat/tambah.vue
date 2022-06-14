@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <form @submit.prevent="submit">
     <Breadcrumbs url="Obat / Tambah" class="mb-7" />
     <!-- title -->
     <FormsTitle title="Form Tambah obat" />
@@ -52,7 +52,7 @@
       />
       <FormsButton @submit="submit" label="Submit" type="submit" />
     </div>
-  </div>
+  </form>
 </template>
 
 <script>
@@ -132,11 +132,24 @@ export default {
   methods: {
     async submit() {
       try {
-        const res = await this.$axios.post("/medicine", {
+        await this.$axios.post("/medicine", {
           ...this.data,
           supply: 0,
         });
+        this.$refs.formEdit.reset(); // This will clear that form
         this.$router.push("/obat/list");
+        const payload2 = {
+          value: true,
+          props: "success",
+        };
+        this.$store.commit("setProps", payload2);
+        setTimeout(() => {
+          const payload3 = {
+            value: false,
+            props: "success",
+          };
+          this.$store.commit("setProps", payload3);
+        }, 3000);
       } catch (error) {
         if (error.response.data.errors) {
           for (const property in error.response.data.errors) {

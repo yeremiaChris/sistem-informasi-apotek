@@ -5,6 +5,7 @@ export const state = () => ({
   dataTable: [],
   supplier: "",
   produk: "",
+  success: false,
 });
 
 export const mutations = {

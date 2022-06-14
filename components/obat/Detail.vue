@@ -1,6 +1,8 @@
 <template>
-  <div
+  <form
+    ref="formPembelian"
     class="mt-3 flex justify-between border border-gray-300 px-4 py-4 shadow-lg"
+    @submit.prevent="buy"
   >
     <div>
       <p>Nama obat</p>
@@ -41,15 +43,18 @@
         :class="{ 'cursor-not-allowed': isEmptyObject }"
         placeholder="Quantity..."
       />
+      <p v-if="error.uangBayar" class="text-sm text-red-500 py-2">
+        {{ error.uangBayar }}
+      </p>
       <p class="text-right mt-3 font-bold text-xl">
         Total Rp. {{ total.toLocaleString() }}
       </p>
       <div class="flex justify-end mt-4 gap-4">
-        <FormsButton label="Beli" :is-out-lined="true" @submit="buy" />
+        <FormsButton label="Beli" type="submit" :is-out-lined="true" />
         <FormsButton label="Tambah" @submit="add" />
       </div>
     </div>
-  </div>
+  </form>
 </template>
 
 <script>
@@ -72,6 +77,7 @@ export default {
     return {
       temp: 1,
       uangBayar: 0,
+      error: {},
     };
   },
 
@@ -107,6 +113,14 @@ export default {
     },
   },
 
+  watch: {
+    uangBayar() {
+      if (this.uangBayar >= this.total) {
+        this.error = { uangBayar: "" };
+      }
+    },
+  },
+
   methods: {
     add() {
       if (!this.isEmptyObject && !isEmptyObject(this.supplier)) {
@@ -121,7 +135,6 @@ export default {
         } else {
           value = this.dataTable;
         }
-        console.log(isFilled);
         const payload = {
           value: value.map((item, index) => {
             return {
@@ -151,7 +164,11 @@ export default {
     },
 
     async buy() {
-      if (this.isEmptyObject && isEmptyObject(this.supplier)) {
+      if (
+        (this.isEmptyObject && isEmptyObject(this.supplier)) ||
+        this.uangBayar < this.total ||
+        this.uangBayar === 0
+      ) {
         if (this.isEmptyObject) {
           const payload = {
             value: "This field is required",
@@ -166,17 +183,48 @@ export default {
           };
           this.$store.commit("setProps", payload);
         }
+        if (this.uangBayar < this.total || this.uangBayar === 0) {
+          console.log(this.uangBayar < this.total || this.uangBayar === 0);
+          if (this.uangBayar < this.total) {
+            this.error = { uangBayar: "This field must be more than total." };
+          } else {
+            this.error = { uangBayar: "This field is required." };
+          }
+        }
       } else {
-        console.log("masuk");
-        const data = {
-          supplier: this.dataTable,
-          medicine: this.dataTable,
-        };
-        const res = await this.$axios.post("/pembelian", {
-          laporan: this.dataTable,
+        const { total, supplier } = this;
+        const obj = { ...this.data, total, jumlahBeli: this.value, supplier };
+
+        // post data
+        await this.$axios.post("/pembelian", {
+          laporan: this.dataTable.length ? this.dataTable : obj,
           title: "Laporan " + this.$dayjs().format("DD MMM YYYY Pukul HH:mm"),
         });
-        console.log(res);
+
+        // reset form
+        this.$emit("setProps", { data: {}, props: "detail" });
+        this.$emit("setProps", { data: "", props: "product" });
+        this.$emit("setProps", { data: "", props: "supplier" });
+        const payload = {
+          value: [],
+          props: "dataTable",
+        };
+        this.$store.commit("setProps", payload);
+        const payload2 = {
+          value: true,
+          props: "success",
+        };
+        this.$store.commit("setProps", payload2);
+        setTimeout(() => {
+          const payload3 = {
+            value: false,
+            props: "success",
+          };
+          this.$store.commit("setProps", payload3);
+        }, 3000);
+        this.$refs.formPembelian.reset(); // This will clear that form
+        this.uangBayar = 0;
+        // last reset form
       }
     },
   },

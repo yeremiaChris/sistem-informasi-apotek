@@ -21,7 +21,12 @@
       @getDetail="getData($event, 'detail')"
     />
 
-    <ObatDetail class="mt-4" :data="detail" :supplier="supplierData" />
+    <ObatDetail
+      class="mt-4"
+      :data="detail"
+      :supplier="supplierData"
+      @setProps="setProps2($event)"
+    />
 
     <ObatTable
       class="mt-10"
@@ -51,7 +56,6 @@ export default {
         "Jumlah beli",
         "Total harga",
       ],
-      test: "m",
       detail: {},
       supplierData: {},
       item: null,
@@ -73,7 +77,6 @@ export default {
 
   async fetch() {
     await this.getData("/medicine/select-data", "products");
-    await this.getData("/pembelian", "test");
     await this.getData("/supplier/select-data", "suppliers");
   },
 
@@ -107,13 +110,14 @@ export default {
       this[props] = data;
     },
 
+    setProps2(props) {
+      this[props.props] = props.data;
+    },
+
     async getData(endpoint, props) {
       const res = await this.$axios.get(endpoint);
 
       this[props] = res.data;
-      if (props === "test") {
-        console.log(res);
-      }
     },
 
     search(props2, props, key) {

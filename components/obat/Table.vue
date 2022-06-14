@@ -74,12 +74,7 @@
                 <td
                   class="px-6 py-4 whitespace-nowrap flex gap-3 text-sm font-medium"
                 >
-                  <div
-                    v-if="
-                      !$route.path.includes('transaksi') &&
-                      !$route.path.includes('laporan')
-                    "
-                  >
+                  <div v-if="!$route.path.includes('transaksi')">
                     <NuxtLink
                       :to="items._id.toString()"
                       class="text-indigo-600 hover:text-indigo-900"

@@ -1,5 +1,10 @@
 <template>
-  <div class="relative mb-3" v-click-outside="hideDropdown">
+  <form
+    ref="selectInput"
+    class="relative mb-3"
+    v-click-outside="hideDropdown"
+    @submit.prevent="submit"
+  >
     <label for="product" class="block text-sm font-medium text-gray-700">
       {{ title }}
     </label>
@@ -19,6 +24,11 @@
       class="absolute z-40 w-full text-gray-600 bg-white border border-b-0 border-gray-400 mt-1"
     >
       <p
+        class="px-3 cursor-pointer py-2 border-b bg-gray-100 hover:bg-gray-300 border-gray-400"
+      >
+        Select {{ title }}...
+      </p>
+      <p
         v-for="(item, index) in data"
         :key="index"
         class="px-3 cursor-pointer py-2 border-b bg-gray-100 hover:bg-gray-300 border-gray-400"
@@ -30,7 +40,7 @@
     </div>
 
     <p v-if="error.length" class="text-red-500 mt-3">{{ error }}</p>
-  </div>
+  </form>
 </template>
 
 <script>

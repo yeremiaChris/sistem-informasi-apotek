@@ -64,6 +64,18 @@ export default {
           },
         };
         await this.$axios.post("/supplier", formData, config);
+        const payload2 = {
+          value: true,
+          props: "success",
+        };
+        this.$store.commit("setProps", payload2);
+        setTimeout(() => {
+          const payload3 = {
+            value: false,
+            props: "success",
+          };
+          this.$store.commit("setProps", payload3);
+        }, 3000);
         this.$router.push("/supplier/list");
       } catch (error) {
         console.log(error);

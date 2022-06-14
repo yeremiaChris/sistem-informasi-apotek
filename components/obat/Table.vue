@@ -74,7 +74,12 @@
                 <td
                   class="px-6 py-4 whitespace-nowrap flex gap-3 text-sm font-medium"
                 >
-                  <div v-if="!$route.path.includes('transaksi')">
+                  <div
+                    v-if="
+                      !$route.path.includes('transaksi') &&
+                      !$route.path.includes('laporan')
+                    "
+                  >
                     <NuxtLink
                       :to="items._id.toString()"
                       class="text-indigo-600 hover:text-indigo-900"
@@ -89,6 +94,13 @@
                     </button>
                   </div>
 
+                  <button
+                    v-else-if="$route.path.includes('laporan')"
+                    class="text-blue-600 hover:text-red-900"
+                    @click="deleteTransaction(items)"
+                  >
+                    View
+                  </button>
                   <button
                     v-else
                     class="text-red-600 hover:text-red-900"

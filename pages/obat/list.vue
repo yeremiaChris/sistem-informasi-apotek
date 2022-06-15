@@ -44,7 +44,14 @@ export default {
         page: 1,
         totalPage: 2,
       },
-      headers: ["Name", "Price", "Supply", "Type", "Unit", "Updated At"],
+      headers: [
+        "Nama",
+        "Harga",
+        " Persediaan",
+        "Tipe",
+        "Satuan",
+        "Tanggal update",
+      ],
     };
   },
   computed: {

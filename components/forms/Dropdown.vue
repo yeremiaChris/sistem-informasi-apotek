@@ -65,6 +65,11 @@ export default {
       type: String,
       required: true,
     },
+
+    endpoint: {
+      type: String,
+      default: () => "/medicine/",
+    },
   },
   data() {
     return {
@@ -84,7 +89,7 @@ export default {
 
     handleClick(item) {
       this.$emit("input", item.title);
-      this.$emit("getDetail", "/medicine/" + item._id);
+      this.$emit("getDetail", this.endpoint + item._id);
       this.$emit("setProps", item);
       const payload = {
         props: this.title.toLowerCase(),

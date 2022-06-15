@@ -145,18 +145,23 @@ export default {
           props: "dataTable",
         };
         this.$store.commit("setProps", payload);
+        // reset form
+        this.$emit("setProps", { data: {}, props: "detail" });
+        this.$emit("setProps", { data: "", props: "product" });
+        this.$emit("setProps", { data: "", props: "supplier" });
+        this.$refs.formPembelian.reset(); // This will clear that form
       } else {
         if (this.isEmptyObject) {
           const payload = {
             value: "This field is required",
-            props: "produk",
+            props: "produkError",
           };
           this.$store.commit("setProps", payload);
         }
         if (isEmptyObject(this.supplier)) {
           const payload = {
             value: "This field is required",
-            props: "supplier",
+            props: "supplierError",
           };
           this.$store.commit("setProps", payload);
         }

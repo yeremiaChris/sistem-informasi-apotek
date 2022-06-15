@@ -22,7 +22,7 @@
     />
 
     <ObatDetail
-      class="mt-4"
+      class="mt-5"
       :data="detail"
       :supplier="supplierData"
       @setProps="setProps2($event)"
@@ -78,6 +78,8 @@ export default {
   async fetch() {
     await this.getData("/medicine/select-data", "products");
     await this.getData("/supplier/select-data", "suppliers");
+    this.$store.commit("setProps", { props: "supplierError", value: "" });
+    this.$store.commit("setProps", { props: "produkError", value: "" });
   },
 
   computed: {
@@ -97,11 +99,11 @@ export default {
     },
 
     supplierError() {
-      return this.$store.state.supplier;
+      return this.$store.state.supplierError;
     },
 
     produkError() {
-      return this.$store.state.produk;
+      return this.$store.state.produkError;
     },
   },
 

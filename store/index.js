@@ -3,8 +3,8 @@ export const state = () => ({
   deleteId: null,
   isRequesting: false,
   dataTable: [],
-  supplier: "",
-  produk: "",
+  supplierError: "",
+  produkError: "",
   success: false,
 });
 

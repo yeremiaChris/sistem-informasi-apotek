@@ -24,7 +24,22 @@
       @search="search('product', 'products', $event)"
       @getDetail="getData($event, 'detail')"
     />
-    <ObatDetailPenjualan :data="detail" />
+
+    <ObatDetailPenjualan
+      :data="detail"
+      :isRecipe="isRecipe"
+      :recipiDataError="recipiDataError"
+      :recipiData="recipiData"
+      @setProps="setProps"
+      @setErrorRecipi="setErrorRecipi"
+    />
+
+    <ObatTable
+      class="mt-10"
+      :headers="headers"
+      :data="dataTable"
+      deleteKey="deleteDataPenjualan"
+    />
   </form>
 </template>
 
@@ -35,7 +50,6 @@ export default {
     return {
       products: [],
       product: "",
-      produkError: "",
       isRecipe: false,
       recipiData: {
         IdentitasDokter: "",
@@ -50,16 +64,55 @@ export default {
         Deskripsi: "",
       },
       detail: {},
+      headers: [
+        "Nama obat",
+        "Harga per satuan",
+        "Jumlah beli",
+        "Total harga",
+        "Resep dokter",
+      ],
     };
   },
+
   async fetch() {
     await this.getData("/medicine/select-data", "products");
   },
+
+  watch: {
+    "$data.recipiData.IdentitasDokter"() {
+      this.recipiDataError.IdentitasDokter = "";
+    },
+    "$data.recipiData.IdentitasPasien"() {
+      this.recipiDataError.IdentitasPasien = "";
+    },
+    "$data.recipiData.InformasiObat"() {
+      this.recipiDataError.InformasiObat = "";
+    },
+    "$data.recipiData.Deskripsi"() {
+      this.recipiDataError.Deskripsi = "";
+    },
+  },
+
+  computed: {
+    produkError() {
+      return this.$store.state.produkError;
+    },
+
+    dataTable() {
+      return this.$store.state.dataTable;
+    },
+  },
+
   methods: {
     async getData(endpoint, props) {
       const res = await this.$axios.get(endpoint);
 
       this[props] = res.data;
+      const payload = {
+        props: "produkError",
+        value: "",
+      };
+      this.$store.commit("setProps", payload);
     },
 
     search(props2, props, key) {
@@ -76,6 +129,14 @@ export default {
 
     toggle() {
       this.isRecipe = !this.isRecipe;
+    },
+
+    setProps(props) {
+      this[props.props] = props.data;
+    },
+
+    setErrorRecipi(props) {
+      this.recipiDataError[props.props] = props.data;
     },
   },
 };

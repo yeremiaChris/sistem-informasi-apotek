@@ -52,9 +52,18 @@
                   :key="idx"
                   class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
                 >
-                  {{
-                    key === "updatedAt" ? new Date(value).toDateString() : value
-                  }}
+                  <FormsToggle
+                    v-if="key === 'isRecipe'"
+                    :value="value"
+                    :showLabel="false"
+                  />
+                  <span v-else>
+                    {{
+                      key === "updatedAt"
+                        ? new Date(value).toDateString()
+                        : value
+                    }}
+                  </span>
                 </td>
 
                 <td
@@ -126,10 +135,15 @@ export default {
       type: Array,
       required: true,
     },
+    deleteKey: {
+      type: String,
+      default: () => "deleteData",
+    },
   },
   methods: {
     deleteModalTrue(id) {
       this.$store.commit("deleteModalTrue");
+
       this.$store.commit("getDeleteId", id);
     },
 
@@ -149,7 +163,7 @@ export default {
     },
 
     deleteTransaction(item) {
-      this.$store.commit("deleteData", item);
+      this.$store.commit(this.deleteKey, item);
     },
   },
 };

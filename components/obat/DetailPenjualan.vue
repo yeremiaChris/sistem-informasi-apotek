@@ -21,7 +21,7 @@
     <div>
       <p class="my-1">Jumlah beli</p>
       <input
-        v-model="value"
+        v-model="jumlah"
         :disabled="isEmptyObject"
         type="number"
         min="0"
@@ -34,7 +34,6 @@
       <p class="mt-3">Uang bayar</p>
       <input
         v-model="uangBayar"
-        :disabled="isEmptyObject"
         type="number"
         min="0"
         name="product"
@@ -43,7 +42,9 @@
         placeholder="Quantity..."
         @keypress="onlyNumber"
       />
-      <p v-if="error.uangBayar" class="text-sm text-red-500 py-2">p</p>
+      <p v-if="error.uangBayar" class="text-sm text-red-500 py-2">
+        {{ error.uangBayar }}
+      </p>
       <p class="text-right mt-3 font-bold text-xl">
         Total Rp. {{ total.toLocaleString() }}
       </p>
@@ -79,12 +80,17 @@ export default {
   },
   data() {
     return {
-      temp: 1,
       uangBayar: 0,
       kembalian: 0,
-      value: 0,
-      error: {},
+      jumlahBeli: 1,
+      error: { uangBayar: "" },
     };
+  },
+
+  watch: {
+    uangBayar() {
+      this.error.uangBayar = "";
+    },
   },
 
   computed: {
@@ -95,12 +101,21 @@ export default {
     total() {
       const total = this.isEmptyObject
         ? 0
-        : this.value * parseInt(this.data.price);
+        : parseInt(this.jumlah) * parseInt(this.data.price);
       return total;
     },
 
     dataTable() {
       return this.$store.state.dataTable;
+    },
+
+    jumlah: {
+      set(value) {
+        this.jumlahBeli = value;
+      },
+      get() {
+        return isEmptyObject(this.data) ? 0 : this.jumlahBeli;
+      },
     },
   },
 
@@ -125,7 +140,7 @@ export default {
           _id,
           name,
           price: price.toLocaleString(),
-          jumlahBeli: this.value.toLocaleString(),
+          jumlahBeli: this.jumlah.toLocaleString(),
           total: this.total.toLocaleString(),
           isRecipe: this.isRecipe,
         };
@@ -141,6 +156,12 @@ export default {
                 props: property,
                 data: "This field is required.",
               });
+            } else {
+              this.$store.commit("setProps", payload);
+              this.$emit("setProps", { props: "detail", data: {} });
+              this.$emit("setProps", { props: "product", data: "" });
+              this.$emit("setProps", { props: "isRecipe", data: false });
+              this.$refs.formPenjualan.reset(); // This will clear that form
             }
           }
         } else {
@@ -158,18 +179,50 @@ export default {
         });
       }
     },
-    buy() {
+
+    async buy() {
       //
+      const payload = {
+        value: this.dataTable,
+        props: "dataTable",
+      };
       if (this.isEmptyObject && this.uangBayar < this.total) {
-        const payload = {
-          props: "produkError",
-          value: "This field is required.",
-        };
-        this.$store.commit("setProps", payload);
-        console.log(this.uangBayar < this.total);
-        if (this.uangBayar < this.total) {
-          this.error.uangBayar = "This field must be more than total.";
+        if (this.isEmptyObject) {
+          const payload = {
+            props: "produkError",
+            value: "This field is required.",
+          };
+          this.$store.commit("setProps", payload);
         }
+        if (this.uangBayar < this.total) {
+          this.error.uangBayar =
+            "This field must be equall or more than total.";
+        }
+      } else {
+        this.$store.commit("setProps", payload);
+        this.$emit("setProps", { props: "detail", data: {} });
+        this.$emit("setProps", { props: "product", data: "" });
+        this.$emit("setProps", { props: "isRecipe", data: false });
+        this.$refs.formPenjualan.reset(); // This will clear that form
+        const { total } = this;
+        const obj = { ...this.data, total, jumlahBeli: this.jumlah };
+
+        // post data
+        await this.$axios.post("/penjualan", {
+          laporan: this.dataTable.length ? this.dataTable : obj,
+          title: "Laporan " + this.$dayjs().format("DD MMM YYYY Pukul HH:mm"),
+        });
+
+        setTimeout(() => {
+          const payload3 = {
+            value: false,
+            props: "success",
+          };
+          this.$store.commit("setProps", payload3);
+        }, 3000);
+        this.$refs.formPenjualan.reset(); // This will clear that form
+        this.uangBayar = 0;
+        // last reset form
       }
     },
   },

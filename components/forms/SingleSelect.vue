@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="min-width: 200px">
     <label for="urutkan" class="block text-sm font-medium text-gray-700"
       >{{ label }}
     </label>

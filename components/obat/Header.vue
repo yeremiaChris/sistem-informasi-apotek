@@ -20,7 +20,14 @@
         </NuxtLink>
       </div>
     </div>
-    <div class="flex justify-end mt-8">
+    <div class="flex justify-between mt-8">
+      <FormsInput
+        class="mb-4"
+        label="Search"
+        name="search"
+        v-model="search"
+        placeholder="Search here..."
+      />
       <FormsSingleSelect label="Urutkan" :items="items" v-model="order" />
     </div>
   </div>
@@ -46,6 +53,7 @@ export default {
   data() {
     return {
       order: "",
+      search: "",
     };
   },
 };

@@ -9,7 +9,7 @@
         :type="type"
         :name="name"
         :id="name"
-        class="shadow-sm border px-2 py-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full border-gray-300 rounded-md"
+        class="shadow-sm border px-3 py-3 focus:ring-indigo-500 focus:border-indigo-500 block w-full border-gray-300"
         :class="customClass"
         :placeholder="placeholder"
         :value="type === 'date' ? date : value"

@@ -50,11 +50,9 @@
                   :key="idx"
                   class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
                 >
-                  <FormsToggle
-                    v-if="key === 'isRecipe'"
-                    :value="value"
-                    :showLabel="false"
-                  />
+                  <span v-if="key === 'isRecipe'">{{
+                    !value ? "Tidak" : "Ya"
+                  }}</span>
                   <span v-else>
                     {{
                       key === "updatedAt"

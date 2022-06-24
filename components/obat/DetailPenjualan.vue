@@ -181,12 +181,15 @@ export default {
     },
 
     async buy() {
-      //
       const payload = {
         value: this.dataTable,
         props: "dataTable",
       };
-      if (this.isEmptyObject && this.uangBayar < this.total) {
+      if (
+        this.isEmptyObject ||
+        this.uangBayar < this.total ||
+        (!this.dataTable.length && this.isEmptyObject)
+      ) {
         if (this.isEmptyObject) {
           const payload = {
             props: "produkError",
@@ -197,6 +200,13 @@ export default {
         if (this.uangBayar < this.total) {
           this.error.uangBayar =
             "This field must be equall or more than total.";
+        }
+        if (!this.dataTable.length && this.isEmptyObject) {
+          const payload = {
+            props: "produkError",
+            value: "You should pick at least one product.",
+          };
+          this.$store.commit("setProps", payload);
         }
       } else {
         this.$store.commit("setProps", payload);
@@ -209,9 +219,14 @@ export default {
 
         // post data
         await this.$axios.post("/penjualan", {
-          laporan: this.dataTable.length ? this.dataTable : obj,
+          laporan: this.dataTable.length ? [obj, ...this.dataTable] : obj,
           title: "Laporan " + this.$dayjs().format("DD MMM YYYY Pukul HH:mm"),
         });
+        const payload2 = {
+          value: [],
+          props: "dataTable",
+        };
+        this.$store.commit("setProps", payload2);
 
         setTimeout(() => {
           const payload3 = {

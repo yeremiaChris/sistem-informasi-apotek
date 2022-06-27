@@ -33,6 +33,19 @@
               : item
           }}
         </td>
+
+        <td
+          v-for="(value, key, idx) in items"
+          v-show="key === 'media'"
+          :key="idx + 'media'"
+          class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+        >
+          <img
+            :src="$config.imageURL + value.defaultImage"
+            :alt="value.defaultImage"
+            style="width: 150px"
+          />
+        </td>
       </tr>
     </tbody>
   </table>

@@ -57,6 +57,8 @@
                     {{
                       key === "updatedAt"
                         ? new Date(value).toDateString()
+                        : typeof value === "number"
+                        ? value.toLocaleString()
                         : value
                     }}
                   </span>

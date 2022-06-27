@@ -1,5 +1,7 @@
 <template>
   <div class="text-gray-600">
+    <Breadcrumbs url="Transaksi / Pembelian" class="mb-7" />
+
     <h1 class="text-3xl font-bold mb-6">Transaksi Pembelian</h1>
     <FormsDropdown
       :data="suppliers"

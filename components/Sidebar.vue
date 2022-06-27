@@ -6,7 +6,7 @@
     >
       <div class="flex items-center flex-shrink-0 px-4 gap-2">
         <img src="/apotek.png" class="h-10 w-10 rounded-full bg-gray-400" />
-        <h1 class="text-lg text-yellow-400 uppercase font-bold">
+        <h1 class="text-lg text-gray-200 uppercase font-bold">
           Apotek Pontjol
         </h1>
       </div>

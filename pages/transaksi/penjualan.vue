@@ -1,5 +1,6 @@
 <template>
   <form class="text-gray-600">
+    <Breadcrumbs url="Transaksi / Penjualan" class="mb-7" />
     <h1 class="text-3xl font-bold mb-6">Transaksi Penjualan</h1>
     <FormsToggle :value="isRecipe" @toggle="toggle" />
 

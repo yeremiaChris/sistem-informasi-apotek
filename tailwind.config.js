@@ -8,6 +8,10 @@ module.exports = {
         "green-brand": "#193335",
         "coklat-smooth": "#F9F9F9",
       },
+      spacing: {
+        "800px": "800px",
+        "1020px": "1020px",
+      },
       maxWidth: {
         "1020px": "1020px",
       },

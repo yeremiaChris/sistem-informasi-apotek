@@ -22,6 +22,7 @@ export default {
   plugins: [
     "@/plugins/axios.js",
     "@/plugins/directives.js",
+    { src: "@/plugins/vue-html2pdf", mode: "client" },
     // ...
   ],
 
@@ -61,5 +62,29 @@ export default {
       "utc", // import 'dayjs/plugin/utc'
       "timezone", // import 'dayjs/plugin/timezone'
     ], // Your Day.js plugin
+  },
+
+  htmlToPdfOptions: {
+    margin: 0,
+
+    filename: `hehehe.pdf`,
+
+    image: {
+      type: "jpeg",
+      quality: 0.98,
+    },
+
+    enableLinks: false,
+
+    html2canvas: {
+      scale: 1,
+      useCORS: true,
+    },
+
+    jsPDF: {
+      unit: "in",
+      format: "a4",
+      orientation: "portrait",
+    },
   },
 };

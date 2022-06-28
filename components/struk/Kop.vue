@@ -25,7 +25,7 @@
 
       <div class="text-center w-full">
         <h1 class="text-2xl font-bold">APOTEK PONTJOL</h1>
-        <h1 class="text-2xl font-bold">LAPORAN PERSEDIAAN OBAT</h1>
+        <h1 class="text-2xl font-bold">{{ title }}</h1>
         <p>
           Jl. Imam Bonjol No.31, Purwosari, Kec. Semarang Utara, Kota Semarang,
           Jawa Tengah 50172
@@ -41,6 +41,10 @@ export default {
     isButton: {
       type: Boolean,
       default: () => true,
+    },
+    title: {
+      type: String,
+      required: true,
     },
   },
   name: "Kop",

@@ -19,7 +19,12 @@
         filename="exportFilename"
         ref="html2PdfSupplier"
       >
-        <PrintReport slot="pdf-content" :headers="headers" :data="printData" />
+        <PrintReport
+          slot="pdf-content"
+          :headers="headers"
+          :data="printData"
+          title="LAPORAN DATA SUPPLIER"
+        />
       </vue-html2pdf>
     </client-only>
   </div>

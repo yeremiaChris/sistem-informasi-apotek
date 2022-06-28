@@ -13,7 +13,7 @@
       </tr>
     </thead>
     <tbody class="divide-y divide-gray-200 bg-white">
-      <tr v-for="person in data" :key="person.email">
+      <tr v-for="(person, index) in data" :key="index" v-show="data.length">
         <td
           v-for="(item, key, index) in person"
           :key="index"
@@ -21,6 +21,8 @@
             key !== '_id' &&
             key !== 'media' &&
             key !== 'supplierId' &&
+            key !== '__v' &&
+            key !== 'createdAt' &&
             key !== 'id'
           "
           class="pl-6 pr-3 py-3.5 text-left text-sm text-gray-900"
@@ -30,12 +32,14 @@
               ? item.toLocaleString()
               : key === "updatedAt"
               ? $dayjs(item).format("dddd, MMM YYYY")
+              : typeof item === "object"
+              ? item.title
               : item
           }}
         </td>
 
         <td
-          v-for="(value, key, idx) in items"
+          v-for="(value, key, idx) in person"
           v-show="key === 'media'"
           :key="idx + 'media'"
           class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"

@@ -6,6 +6,7 @@ export const state = () => ({
   supplierError: "",
   produkError: "",
   success: false,
+  report: { laporan: [], total: 0, kembalian: 0, uangBayar: 0 },
 });
 
 export const mutations = {

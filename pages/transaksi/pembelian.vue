@@ -28,15 +28,29 @@
       :data="detail"
       :supplier="supplierData"
       @setProps="setProps2($event)"
+      @print="print"
     />
 
     <ObatTable
       class="mt-10"
-      :headers="headers"
+      :headers="headers2"
       :data="dataTable"
       @setValueSupplier="setProps('supplier', $event)"
       @setValueProduct="setProps('product', $event)"
     />
+
+    <client-only>
+      <vue-html2pdf
+        :paginate-elements-by-height="1400"
+        :pdf-quality="2"
+        pdf-content-width="100%"
+        pdf-orientation="landscape"
+        filename="exportFilename"
+        ref="strukPembelian"
+      >
+        <PrintPembelian slot="pdf-content" :headers="headers" />
+      </vue-html2pdf>
+    </client-only>
   </div>
 </template>
 
@@ -51,9 +65,20 @@ export default {
       suppliers: [],
       product: "",
       headers: [
+        "Nama obat",
+        "Tipe",
+        "Satuan",
+        "Harga per satuan",
+        "Stok",
+        "Tanggal",
+        "Total harga",
+        "Jumlah beli",
+        "Nama supplier",
+      ],
+      headers2: [
         "Nama supplier",
         "Nama obat",
-        "Stok awal",
+        "Stok",
         "Harga per satuan",
         "Jumlah beli",
         "Total harga",
@@ -84,7 +109,17 @@ export default {
     this.$store.commit("setProps", { props: "produkError", value: "" });
   },
 
+  watch: {
+    supplier() {
+      this.$store.commit("setProps", { props: "supplierError", value: "" });
+    },
+  },
+
   computed: {
+    report() {
+      return this.$store.state.report;
+    },
+
     dataTable() {
       return this.$store.state.dataTable.map((item) => {
         return {
@@ -110,6 +145,10 @@ export default {
   },
 
   methods: {
+    print() {
+      this.$refs.strukPembelian.generatePdf();
+    },
+
     setProps(data, props) {
       this[props] = data;
     },

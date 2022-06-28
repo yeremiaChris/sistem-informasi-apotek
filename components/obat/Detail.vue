@@ -22,26 +22,26 @@
       <p class="my-1">Jumlah beli</p>
       <input
         v-model="value"
-        :disabled="isEmptyObject"
+        :disabled="isEmptyObject || !dataTable.length"
         type="number"
         min="0"
         name="product"
         id="product"
         class="shadow-sm mt-1 border-2 px-2 py-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full border-gray-300"
-        :class="{ 'cursor-not-allowed': isEmptyObject }"
+        :class="{ 'cursor-not-allowed': isEmptyObject || !dataTable.length }"
         placeholder="Quantity..."
+        @keypress="isNumber"
       />
       <p class="mt-3">Uang bayar</p>
       <input
         v-model="uangBayar"
-        :disabled="isEmptyObject"
         type="number"
         min="0"
         name="product"
         id="product"
         class="shadow-sm mt-1 border-2 px-2 py-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full border-gray-300"
-        :class="{ 'cursor-not-allowed': isEmptyObject }"
         placeholder="Quantity..."
+        @keypress="isNumber"
       />
       <p v-if="error.uangBayar" class="text-sm text-red-500 py-2">
         {{ error.uangBayar }}
@@ -78,6 +78,17 @@ export default {
       temp: 1,
       uangBayar: 0,
       error: {},
+      headers: [
+        "Nama obat",
+        "Tipe",
+        "Satuan",
+        "Harga per satuan",
+        "Stok",
+        "Tanggal",
+        "Total harga",
+        "Jumlah beli",
+        "Nama supplier",
+      ],
     };
   },
 
@@ -96,9 +107,13 @@ export default {
     },
 
     total() {
-      const total = this.isEmptyObject
-        ? 0
-        : this.value * parseInt(this.data.price);
+      const total =
+        this.isEmptyObject && !this.dataTable.length
+          ? 0
+          : this.isEmptyObject && this.dataTable.length
+          ? this.dataTable.reduce((a, c) => a + c.total, 0)
+          : this.dataTable.reduce((a, c) => a + c.total, 0) +
+            this.data.price * this.value;
       return total;
     },
 
@@ -122,10 +137,25 @@ export default {
   },
 
   methods: {
+    isNumber(e) {
+      const charCode = e.which ? e.which : e.keyCode;
+
+      if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        e.preventDefault();
+      } else {
+        return true;
+      }
+    },
+
     add() {
       if (!this.isEmptyObject && !isEmptyObject(this.supplier)) {
-        const { total, supplier } = this;
-        const obj = { ...this.data, total, jumlahBeli: this.value, supplier };
+        const { supplier } = this;
+        const obj = {
+          ...this.data,
+          total: this.value * this.data.price,
+          jumlahBeli: this.value,
+          supplier,
+        };
         const isFilled = this.dataTable.some(
           (el) => el._id === obj._id && el.supplier._id === obj.supplier._id
         );
@@ -198,13 +228,30 @@ export default {
         }
       } else {
         const { total, supplier } = this;
-        const obj = { ...this.data, total, jumlahBeli: this.value, supplier };
+        const obj = {
+          ...this.data,
+          total,
+          jumlahBeli: this.value,
+          supplier,
+        };
 
         // post data
-        await this.$axios.post("/pembelian", {
+        const data = await this.$axios.post("/pembelian", {
           laporan: this.dataTable.length ? this.dataTable : obj,
+          uangBayar: this.uangBayar,
+          total: this.total,
+          kembalian: this.kembalian,
           title: "Laporan " + this.$dayjs().format("DD MMM YYYY Pukul HH:mm"),
         });
+
+        console.log(data.data);
+        const payloadPrint = {
+          props: "report",
+          value: data.data,
+        };
+        this.$store.commit("setProps", payloadPrint);
+
+        this.$emit("print");
 
         // reset form
         this.$emit("setProps", { data: {}, props: "detail" });

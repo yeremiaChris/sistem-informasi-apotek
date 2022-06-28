@@ -14,7 +14,12 @@
         filename="exportFilename"
         ref="html2Pdf"
       >
-        <PrintReport slot="pdf-content" :headers="headers" :data="printData" />
+        <PrintReport
+          slot="pdf-content"
+          :headers="headers"
+          :data="printData"
+          title="LAPORAN PERSEDIAAN OBAT"
+        />
       </vue-html2pdf>
     </client-only>
   </div>

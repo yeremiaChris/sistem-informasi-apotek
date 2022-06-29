@@ -81,7 +81,6 @@ export default {
   data() {
     return {
       uangBayar: 0,
-      kembalian: 0,
       jumlahBeli: 1,
       error: { uangBayar: "" },
     };
@@ -89,19 +88,35 @@ export default {
 
   watch: {
     uangBayar() {
-      this.error.uangBayar = "";
+      if (this.uangBayar >= this.total) {
+        this.error.uangBayar = "";
+      }
     },
   },
 
   computed: {
+    kembalian() {
+      return parseInt(this.total) <= parseInt(this.uangBayar)
+        ? parseInt(this.uangBayar) - parseInt(this.total)
+        : 0;
+    },
+
+    report() {
+      return this.$store.state.report;
+    },
+
     isEmptyObject() {
       return isEmptyObject(this.data);
     },
 
     total() {
-      const total = this.isEmptyObject
-        ? 0
-        : parseInt(this.jumlah) * parseInt(this.data.price);
+      const total =
+        this.isEmptyObject && !this.dataTable.length
+          ? 0
+          : this.isEmptyObject && this.dataTable.length
+          ? this.dataTable.reduce((a, c) => a + c.total, 0)
+          : this.dataTable.reduce((a, c) => a + c.total, 0) +
+            parseInt(this.data.price) * this.jumlahBeli;
       return total;
     },
 
@@ -139,9 +154,9 @@ export default {
         const obj = {
           _id,
           name,
-          price: price.toLocaleString(),
-          jumlahBeli: this.jumlah.toLocaleString(),
-          total: this.total.toLocaleString(),
+          price,
+          jumlahBeli: this.jumlah,
+          total: this.data.price * this.jumlahBeli,
           isRecipe: this.isRecipe,
         };
         const payload = {
@@ -186,11 +201,10 @@ export default {
         props: "dataTable",
       };
       if (
-        this.isEmptyObject ||
-        this.uangBayar < this.total ||
-        (!this.dataTable.length && this.isEmptyObject)
+        (this.isEmptyObject && !this.dataTable.length) ||
+        this.uangBayar < this.total
       ) {
-        if (this.isEmptyObject) {
+        if (this.isEmptyObject && !this.dataTable.length) {
           const payload = {
             props: "produkError",
             value: "This field is required.",
@@ -218,16 +232,29 @@ export default {
         const obj = { ...this.data, total, jumlahBeli: this.jumlah };
 
         // post data
-        await this.$axios.post("/penjualan", {
-          laporan: this.dataTable.length ? [obj, ...this.dataTable] : obj,
+        const data = await this.$axios.post("/penjualan", {
+          laporan: this.dataTable.length ? this.dataTable : obj,
+          uangBayar: this.uangBayar,
+          total: this.total,
+          kembalian: this.kembalian,
           title: "Laporan " + this.$dayjs().format("DD MMM YYYY Pukul HH:mm"),
         });
         const payload2 = {
+          value: true,
+          props: "success",
+        };
+        this.$store.commit("setProps", payload2);
+        const payload3 = {
           value: [],
           props: "dataTable",
         };
-        this.$store.commit("setProps", payload2);
-
+        this.$store.commit("setProps", payload3);
+        const payloadPrint = {
+          props: "report",
+          value: data.data,
+        };
+        this.$store.commit("setProps", payloadPrint);
+        this.$emit("print");
         setTimeout(() => {
           const payload3 = {
             value: false,

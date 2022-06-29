@@ -1,5 +1,7 @@
 <template>
   <div>
+    <Breadcrumbs url="Obat / Daftar" class="mb-7" />
+
     <ModalDelete v-show="open" @delete="deleteData" />
     <ObatHeader :items="itemsSelect" label="Daftar Obat" @export="exportPdf" />
     <ObatTable :headers="headers" :data="data" />

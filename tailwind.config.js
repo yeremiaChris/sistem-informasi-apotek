@@ -10,6 +10,7 @@ module.exports = {
       },
       spacing: {
         "800px": "800px",
+        "400px": "400px",
         "1020px": "1020px",
       },
       maxWidth: {

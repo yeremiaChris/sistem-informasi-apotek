@@ -38,7 +38,6 @@
       @setValueSupplier="setProps('supplier', $event)"
       @setValueProduct="setProps('product', $event)"
     />
-
     <client-only>
       <vue-html2pdf
         :paginate-elements-by-height="1400"
@@ -116,16 +115,12 @@ export default {
   },
 
   computed: {
-    report() {
-      return this.$store.state.report;
-    },
-
     dataTable() {
-      return this.$store.state.dataTable.map((item) => {
+      return this.$store.state.dataTable.map((item, index) => {
         return {
           _id: item._id,
-          nameSupplier: item.supplier.title,
-          supplierId: item.supplier._id,
+          nameSupplier: item.supplier ? item.supplier.title : "",
+          supplierId: item.supplier ? item.supplier._id : index,
           nameMedicine: item.name,
           supply: item.supply,
           price: item.price,

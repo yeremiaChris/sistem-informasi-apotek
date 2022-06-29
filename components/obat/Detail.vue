@@ -244,7 +244,6 @@ export default {
           title: "Laporan " + this.$dayjs().format("DD MMM YYYY Pukul HH:mm"),
         });
 
-        console.log(data.data);
         const payloadPrint = {
           props: "report",
           value: data.data,

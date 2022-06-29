@@ -33,6 +33,7 @@
       :recipiData="recipiData"
       @setProps="setProps"
       @setErrorRecipi="setErrorRecipi"
+      @print="print"
     />
 
     <ObatTable
@@ -41,6 +42,19 @@
       :data="dataTable"
       deleteKey="deleteDataPenjualan"
     />
+
+    <client-only>
+      <vue-html2pdf
+        :paginate-elements-by-height="1400"
+        :pdf-quality="2"
+        pdf-content-width="100%"
+        pdf-orientation="landscape"
+        filename="exportFilename"
+        ref="strukPenjualan"
+      >
+        <PrintPembelian slot="pdf-content" :headers="headersPrint" />
+      </vue-html2pdf>
+    </client-only>
   </form>
 </template>
 
@@ -71,6 +85,16 @@ export default {
         "Jumlah beli",
         "Total harga",
         "Resep dokter",
+      ],
+      headersPrint: [
+        "Nama obat",
+        "Tipe",
+        "Satuan",
+        "Harga per satuan",
+        "Stok",
+        "Tanggal",
+        "Total harga",
+        "Jumlah beli",
       ],
     };
   },
@@ -105,6 +129,9 @@ export default {
   },
 
   methods: {
+    print() {
+      this.$refs.strukPenjualan.generatePdf();
+    },
     async getData(endpoint, props) {
       const res = await this.$axios.get(endpoint);
 

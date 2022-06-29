@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Breadcrumbs url="Supplier / Daftar" class="mb-7" />
     <ModalDelete v-show="open" @delete="deleteData" />
     <ObatHeader
       :items="itemsSelect"

@@ -1,12 +1,12 @@
 <!-- This example requires Tailwind CSS v2.0+ -->
 <template>
-  <div class="absolute inset-0 box-center">
+  <div class="absolute inset-0 h-full box-center">
     <div
-      class="absolute bg-black opacity-50 z-10 inset-0 overflow-y-auto"
+      class="fixed bg-black opacity-50 z-10 h-full inset-0 overflow-y-auto"
     ></div>
-    <div class="z-20 absolute">
+    <div class="z-20 fixed inset-0 h-full flex justify-center items-center">
       <div
-        class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6"
+        class="w-400px inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6"
       >
         <div class="sm:flex sm:items-start">
           <div

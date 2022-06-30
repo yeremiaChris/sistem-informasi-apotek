@@ -88,15 +88,43 @@ export default {
     },
 
     handleClick(item) {
-      this.$emit("input", item.title);
-      this.$emit("getDetail", this.endpoint + item._id);
-      this.$emit("setProps", item);
-      const payload = {
-        props: this.title.toLowerCase(),
-        value: "",
-      };
-      this.$store.commit("setProps", payload);
-      this.hideDropdown();
+      if (this.$route.path === "transaksi/penjualan") {
+        if (item.supply > 0) {
+          this.$emit("input", item.title);
+          this.$emit("getDetail", this.endpoint + item._id);
+          this.$emit("setProps", item);
+          const payload = {
+            props: this.title.toLowerCase(),
+            value: "",
+          };
+          this.$store.commit("setProps", payload);
+          this.$store.commit("setProps", {
+            props: "produkError",
+            value: "",
+          });
+          this.hideDropdown();
+        } else {
+          this.$store.commit("setProps", {
+            props: "produkError",
+            value: `The ${item.title} stock is empty.`,
+          });
+          this.hideDropdown();
+        }
+      } else {
+        this.$emit("input", item.title);
+        this.$emit("getDetail", this.endpoint + item._id);
+        this.$emit("setProps", item);
+        const payload = {
+          props: this.title.toLowerCase(),
+          value: "",
+        };
+        this.$store.commit("setProps", payload);
+        this.$store.commit("setProps", {
+          props: "produkError",
+          value: "",
+        });
+        this.hideDropdown();
+      }
     },
 
     search(e) {

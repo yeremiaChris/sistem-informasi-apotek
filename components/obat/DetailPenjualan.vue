@@ -150,39 +150,46 @@ export default {
     add() {
       //
       if (!this.isEmptyObject) {
-        const { name, _id, price } = this.data;
-        const obj = {
-          ...this.data,
-          jumlahBeli: this.jumlahBeli,
-          isRecipe: this.isRecipe,
-          total: this.data.price * this.jumlahBeli,
-        };
-        const payload = {
-          value: [obj, ...this.dataTable],
-          props: "dataTable",
-        };
+        if (this.jumlahBeli <= this.data.supply) {
+          const { name, _id, price } = this.data;
+          const obj = {
+            ...this.data,
+            jumlahBeli: this.jumlahBeli,
+            isRecipe: this.isRecipe,
+            total: this.data.price * this.jumlahBeli,
+          };
+          const payload = {
+            value: [obj, ...this.dataTable],
+            props: "dataTable",
+          };
 
-        if (this.isRecipe) {
-          for (const property in this.recipiData) {
-            if (!this.recipiData[property].length) {
-              this.$emit("setErrorRecipi", {
-                props: property,
-                data: "This field is required.",
-              });
-            } else {
-              this.$store.commit("setProps", payload);
-              this.$emit("setProps", { props: "detail", data: {} });
-              this.$emit("setProps", { props: "product", data: "" });
-              this.$emit("setProps", { props: "isRecipe", data: false });
-              this.$refs.formPenjualan.reset(); // This will clear that form
+          if (this.isRecipe) {
+            for (const property in this.recipiData) {
+              if (!this.recipiData[property].length) {
+                this.$emit("setErrorRecipi", {
+                  props: property,
+                  data: "This field is required.",
+                });
+              } else {
+                this.$store.commit("setProps", payload);
+                this.$emit("setProps", { props: "detail", data: {} });
+                this.$emit("setProps", { props: "product", data: "" });
+                this.$emit("setProps", { props: "isRecipe", data: false });
+                this.$refs.formPenjualan.reset(); // This will clear that form
+              }
             }
+          } else {
+            this.$store.commit("setProps", payload);
+            this.$emit("setProps", { props: "detail", data: {} });
+            this.$emit("setProps", { props: "product", data: "" });
+            this.$emit("setProps", { props: "isRecipe", data: false });
+            this.$refs.formPenjualan.reset(); // This will clear that form
           }
         } else {
-          this.$store.commit("setProps", payload);
-          this.$emit("setProps", { props: "detail", data: {} });
-          this.$emit("setProps", { props: "product", data: "" });
-          this.$emit("setProps", { props: "isRecipe", data: false });
-          this.$refs.formPenjualan.reset(); // This will clear that form
+          this.$store.commit("setProps", {
+            props: "produkError",
+            value: `The ${this.data.name} stock is empty`,
+          });
         }
       } else {
         //
@@ -200,8 +207,15 @@ export default {
       };
       if (
         (this.isEmptyObject && !this.dataTable.length) ||
-        this.uangBayar < this.total
+        this.uangBayar < this.total ||
+        this.data.jumlahBeli > this.data.supply
       ) {
+        if (this.data.jumlahBeli > this.data.supply) {
+          this.$store.commit("setProps", {
+            props: "produkError",
+            value: `The ${this.data.name} stock is empty`,
+          });
+        }
         if (this.isEmptyObject && !this.dataTable.length) {
           const payload = {
             props: "produkError",

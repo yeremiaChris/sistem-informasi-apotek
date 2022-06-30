@@ -18,7 +18,7 @@
       :value="product"
       :error="produkError"
       v-model="product"
-      title="Produk"
+      title="Obat"
       @search="search('product', 'products', $event)"
       @getDetail="getData($event, 'detail')"
     />

@@ -22,13 +22,13 @@
       <p class="my-1">Jumlah beli</p>
       <input
         v-model="value"
-        :disabled="isEmptyObject || !dataTable.length"
+        :disabled="isEmptyObject"
         type="number"
         min="0"
         name="product"
         id="product"
         class="shadow-sm mt-1 border-2 px-2 py-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full border-gray-300"
-        :class="{ 'cursor-not-allowed': isEmptyObject || !dataTable.length }"
+        :class="{ 'cursor-not-allowed': isEmptyObject }"
         placeholder="Quantity..."
         @keypress="isNumber"
       />

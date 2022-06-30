@@ -45,7 +45,9 @@
                     key !== '_id' &&
                     key !== 'media' &&
                     key !== 'supplierId' &&
-                    key !== 'id'
+                    key !== 'id' &&
+                    key !== 'createdAt' &&
+                    key !== '__v'
                   "
                   :key="idx"
                   class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"

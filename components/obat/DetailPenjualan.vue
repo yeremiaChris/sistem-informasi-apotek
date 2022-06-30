@@ -152,12 +152,10 @@ export default {
       if (!this.isEmptyObject) {
         const { name, _id, price } = this.data;
         const obj = {
-          _id,
-          name,
-          price,
-          jumlahBeli: this.jumlah,
-          total: this.data.price * this.jumlahBeli,
+          ...this.data,
+          jumlahBeli: this.jumlahBeli,
           isRecipe: this.isRecipe,
+          total: this.data.price * this.jumlahBeli,
         };
         const payload = {
           value: [obj, ...this.dataTable],
@@ -228,12 +226,23 @@ export default {
         this.$emit("setProps", { props: "product", data: "" });
         this.$emit("setProps", { props: "isRecipe", data: false });
         this.$refs.formPenjualan.reset(); // This will clear that form
-        const { total } = this;
-        const obj = { ...this.data, total, jumlahBeli: this.jumlah };
+        const obj = {
+          ...this.data,
+          jumlahBeli: this.jumlahBeli,
+          isRecipe: this.isRecipe,
+          total: this.data.price * this.jumlahBeli,
+        };
 
         // post data
+        const datas = [obj, ...this.dataTable];
+        console.log(this.dataTable);
         const data = await this.$axios.post("/penjualan", {
-          laporan: this.dataTable.length ? this.dataTable : obj,
+          laporan:
+            this.dataTable.length && !this.isEmptyObject
+              ? datas
+              : this.dataTable.length && this.isEmptyObject
+              ? this.dataTable
+              : obj,
           uangBayar: this.uangBayar,
           total: this.total,
           kembalian: this.kembalian,

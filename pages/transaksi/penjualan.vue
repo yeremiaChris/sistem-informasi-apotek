@@ -38,7 +38,7 @@
 
     <ObatTable
       class="mt-10"
-      :headers="headers"
+      :headers="headersPrint"
       :data="dataTable"
       deleteKey="deleteDataPenjualan"
     />
@@ -93,8 +93,9 @@ export default {
         "Harga per satuan",
         "Stok",
         "Tanggal",
-        "Total harga",
         "Jumlah beli",
+        "Resep dokter",
+        "Total harga",
       ],
     };
   },

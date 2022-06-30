@@ -34,6 +34,10 @@
               ? $dayjs(item).format("dddd, MMM YYYY")
               : typeof item === "object"
               ? item.title
+              : key === "isRecipe"
+              ? item
+                ? "Ya"
+                : "Tidak"
               : item
           }}
         </td>

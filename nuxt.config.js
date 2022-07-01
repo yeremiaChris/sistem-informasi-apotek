@@ -23,6 +23,7 @@ export default {
     "@/plugins/axios.js",
     "@/plugins/directives.js",
     { src: "@/plugins/vue-html2pdf", mode: "client" },
+    { src: "@/plugins/bar-chart", mode: "client" },
     // ...
   ],
 

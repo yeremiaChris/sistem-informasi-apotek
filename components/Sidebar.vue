@@ -2,7 +2,7 @@
   <div class="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0">
     <!-- Sidebar component, swap this element with another sidebar if you like -->
     <div
-      class="flex flex-col flex-grow border-r border-gray-200 pt-5 bg-green-brand overflow-y-auto"
+      class="flex flex-col flex-grow border-r border-gray-200 pt-5 bg-gray-800 overflow-y-auto"
     >
       <div class="flex items-center flex-shrink-0 px-4 gap-2">
         <img src="/apotek.png" class="h-10 w-10 rounded-full bg-gray-400" />

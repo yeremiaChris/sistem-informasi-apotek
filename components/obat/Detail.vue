@@ -13,9 +13,24 @@
       <p class="font-bold">
         {{ data.price ? data.price.toLocaleString() : "-" }}
       </p>
-      <p class="text-xl mt-5 font-bold">
-        Kembalian Rp {{ kembalian.toLocaleString() }}
-      </p>
+      <div class="grid grid-cols-2 gap-6 mt-5">
+        <div>
+          <p class="mt-3 font-bold text-xl">Uang Bayar</p>
+          <p class="mt-3 font-bold text-xl">Total Bayar</p>
+          <p class="text-xl mt-3 font-bold">Kembalian</p>
+        </div>
+        <div>
+          <p class="mt-3 font-bold text-xl">
+            {{ !uangBayar ? 0 : parseInt(uangBayar).toLocaleString() }}
+          </p>
+          <p class="mt-3 font-bold text-xl">
+            {{ total.toLocaleString() }}
+          </p>
+          <p class="text-xl mt-3 font-bold">
+            {{ kembalian.toLocaleString() }}
+          </p>
+        </div>
+      </div>
     </div>
 
     <div>
@@ -46,9 +61,7 @@
       <p v-if="error.uangBayar" class="text-sm text-red-500 py-2">
         {{ error.uangBayar }}
       </p>
-      <p class="text-right mt-3 font-bold text-xl">
-        Total Rp. {{ total.toLocaleString() }}
-      </p>
+
       <div class="flex justify-end mt-4 gap-4">
         <FormsButton label="Beli" type="submit" :is-out-lined="true" />
         <FormsButton label="Tambah" @submit="add" />

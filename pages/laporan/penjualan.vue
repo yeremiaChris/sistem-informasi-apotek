@@ -60,6 +60,18 @@ export default {
     },
   },
 
+  watch: {
+    "$route.query.page"() {
+      this.$fetch();
+    },
+    "$route.query.query"() {
+      this.$fetch();
+    },
+    "$route.query.sortBy"() {
+      this.$fetch();
+    },
+  },
+
   methods: {
     async deleteData() {
       try {
@@ -75,9 +87,17 @@ export default {
     },
 
     async getData(endpoint, props) {
-      const res = await this.$axios.get(endpoint);
-
-      this[props] = res.data;
+      const { page, query, sortBy } = this.$route.query;
+      const res = await this.$axios.get(endpoint, {
+        params: {
+          page,
+          query,
+          sortBy,
+        },
+      });
+      const { data, pagination } = res.data;
+      this[props] = data;
+      this.pagination = pagination;
     },
   },
 };

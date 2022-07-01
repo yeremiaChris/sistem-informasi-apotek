@@ -75,8 +75,9 @@ export default {
 
     async getData(endpoint, props) {
       const res = await this.$axios.get(endpoint);
-
-      this[props] = res.data;
+      const { data, pagination } = res.data;
+      this[props] = data;
+      this.pagination = pagination;
     },
   },
 };

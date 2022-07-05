@@ -35,14 +35,14 @@ export default {
       printData: [],
       pagination: {
         page: 1,
-        totalPage: 2,
+        totalPage: 1,
       },
       headers: [
         "Nama",
         "Harga",
         " Persediaan",
         "Tipe",
-        "Satuan",
+        "Satuan", 
         "Tanggal update",
       ],
       data: [],

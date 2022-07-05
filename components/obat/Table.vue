@@ -61,6 +61,8 @@
                         ? new Date(value).toDateString()
                         : typeof value === "number"
                         ? value.toLocaleString()
+                        : key === "laporan"
+                        ? value.length
                         : value
                     }}
                   </span>
@@ -80,7 +82,10 @@
                   {{ key }}
                 </td>
 
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                <td
+                  v-if="$route.path !== '/'"
+                  class="px-6 py-4 whitespace-nowrap text-sm font-medium"
+                >
                   <div
                     v-if="!$route.path.includes('transaksi')"
                     class="flex gap-5"

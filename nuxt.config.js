@@ -97,20 +97,23 @@ export default {
   auth: {
     strategies: {
       local: {
+        redirect: {
+          login: "/login",
+          logout: "/login",
+          callback: "/login",
+          home: "/",
+        },
         token: {
           property: "token",
           global: true,
           // required: true,
           // type: 'Bearer'
         },
-        user: {
-          property: "user",
-          // autoFetch: true
-        },
+        user: false,
         endpoints: {
-          login: { url: "/api/auth/login", method: "post" },
-          logout: { url: "/api/auth/logout", method: "post" },
-          user: { url: "/api/auth/user", method: "get" },
+          login: { url: "/auth/login", method: "post" },
+          // logout: { url: "/api/auth/logout", method: "post" },
+          user: false,
         },
       },
     },

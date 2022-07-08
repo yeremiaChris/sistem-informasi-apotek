@@ -95,31 +95,31 @@ export default {
   },
 
   auth: {
+    redirect: {
+      login: "/login",
+      logout: "/login",
+      callback: false,
+      home: "/",
+    },
     strategies: {
       local: {
-        redirect: {
-          login: "/login",
-          logout: "/login",
-          callback: "/login",
-          home: "/",
-        },
         token: {
           property: "token",
           global: true,
+          maxAge: false,
           // required: true,
           // type: 'Bearer'
         },
         user: false,
         endpoints: {
           login: { url: "/auth/login", method: "post" },
-          // logout: { url: "/api/auth/logout", method: "post" },
+          refresh: { url: "/auth/token", method: "post" },
           user: false,
         },
       },
     },
   },
-
   router: {
-    middleware: ["auth"],
+    middleware: "auth",
   },
 };

@@ -92,8 +92,11 @@ export default {
         const response = await this.$auth.loginWith("local", {
           data: { email, password },
         });
-        console.log(response);
-        this.$auth.strategy.token.set(response.data.token);
+        await this.$auth.setUser(data);
+        const { data } = response;
+        this.$auth.strategy.token.set(data.token);
+        this.$auth.setUserToken(data.token, data.data.refreshToken);
+        // this.$router.push("/");
       } catch (err) {
         this.errorBackend = err.response.data.message;
         console.log(err.response);

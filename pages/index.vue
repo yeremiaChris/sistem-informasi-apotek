@@ -76,16 +76,19 @@ export default {
   methods: {
     async getData(endpoint, props) {
       const { page, query } = this.$route.query;
-
-      const res = await this.$axios.get(endpoint, {
-        params: {
-          page,
-          query,
-        },
-      });
-      const { data, pagination } = res.data;
-      this[props] = data;
-      this.pagination = pagination;
+      try {
+        const res = await this.$axios.get(endpoint, {
+          params: {
+            page,
+            query,
+          },
+        });
+        const { data, pagination } = res.data;
+        this[props] = data;
+        this.pagination = pagination;
+      } catch (error) {
+        console.log(error);
+      }
     },
     hover(title) {
       this.boxes = this.boxes.map((item) =>

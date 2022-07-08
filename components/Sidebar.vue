@@ -115,6 +115,7 @@
     </div>
 
     <button
+      @click="logout"
       class="shadow flex bg-white items-center gap-4 border px-3 py-2 text-sm"
     >
       <img class="w-6" src="/sidebar/logout.svg" alt="logout" />
@@ -139,6 +140,13 @@ export default {
           ? { ...item, isActive: !item.isActive }
           : { ...item, isActive: false }
       );
+    },
+    async logout() {
+      try {
+        await this.$auth.logout();
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };

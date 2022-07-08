@@ -1,5 +1,5 @@
 // import jwtDecode from 'jwt-decode'
-export default function ({ $axios, store }) {
+export default function ({ $axios, store, redirect }) {
   $axios.onRequest((config) => {
     const payload = {
       props: "isRequesting",
@@ -18,12 +18,14 @@ export default function ({ $axios, store }) {
     store.commit("setProps", payload);
   });
 
-  $axios.onError(() => {
+  $axios.onError((err) => {
     const payload = {
       props: "isRequesting",
       value: false,
     };
-
+    // if (err.response.data === "Access denied") {
+    //   redirect("/login");
+    // }
     store.commit("setProps", payload);
   });
 }

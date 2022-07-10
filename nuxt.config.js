@@ -73,7 +73,7 @@ export default {
   htmlToPdfOptions: {
     margin: 0,
 
-    filename: `hehehe.pdf`,
+    filename: `laporan.pdf`,
 
     image: {
       type: "jpeg",

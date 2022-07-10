@@ -61,7 +61,7 @@ export default {
   },
 
   async fetch() {
-    await this.getData("/penjualan-terbaru", "data");
+    await this.getData("/penjualan/terbaru", "data");
   },
 
   watch: {

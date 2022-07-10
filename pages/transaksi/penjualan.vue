@@ -14,7 +14,6 @@
         />
       </div>
     </div>
-
     <FormsDropdown
       :data="products"
       :value="product"
@@ -136,7 +135,7 @@ export default {
     async getData(endpoint, props) {
       const res = await this.$axios.get(endpoint);
       console.log(res);
-      // this[props] = res.data;
+      this[props] = res.data;
       // const payload = {
       //   props: "produkError",
       //   value: "",

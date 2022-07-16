@@ -79,7 +79,6 @@
                     :alt="value.defaultImage"
                     style="width: 150px"
                   />
-                  {{ key }}
                 </td>
 
                 <td

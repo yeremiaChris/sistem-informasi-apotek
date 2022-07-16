@@ -1,6 +1,5 @@
 export default function (context) {
   context.$axios.onError((err) => {
-    console.log(err.response);
     if (
       err.response.status === 403 &&
       err.response.statusText === "Forbidden"

@@ -3,7 +3,9 @@
     class="h-screen w-full bg-cover bg-center"
     style="background-image: url('/bg-login.jpg')"
   >
-    <Nuxt id="content" />
+    <div class="fixed flex justify-center items-center inset-0 z-50">
+      <Nuxt id="content" />
+    </div>
   </div>
 </template>
 

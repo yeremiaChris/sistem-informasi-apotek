@@ -28,14 +28,8 @@ export default {
   data() {
     return {
       boxes: [],
-      headers: [
-        "Banyak obat",
-        "Nama laporan",
-        " Uang bayar",
-        "total",
-        "kembalian",
-        "Tanggal",
-      ],
+      headers: ["Nama", "Uang Bayar", "Total", "Kembalian", "Tanggal"],
+
       data: [],
       pagination: {
         page: 1,
@@ -50,7 +44,7 @@ export default {
         datasets: [
           {
             data: [12, 11, 13, 9, 10, 8],
-            backgroundColor: "#193335",
+            backgroundColor: "rgba(227, 233, 235, 0.4)",
           },
         ],
       };
@@ -58,7 +52,7 @@ export default {
   },
 
   async fetch() {
-    await this.getData("/penjualan/terbaru", "data");
+    await this.getData("/penjualan", "data");
     await this.getData("/total-data", "boxes");
   },
 

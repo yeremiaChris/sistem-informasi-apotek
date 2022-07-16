@@ -8,7 +8,7 @@
         <p class="px-3 py-2 border-b">Bulan ini</p>
       </div>
       <client-only>
-        <BarChart :height="250" :data="chartData" class="mt-10" />
+        <LineChart :height="250" :data="chartData" class="mt-10" />
       </client-only>
     </div>
     <form @submit.prevent="submit">
@@ -21,7 +21,6 @@
         placeholder="Search here..."
       />
       <ObatTable :headers="headers" :data="data" />
-      <Pagination :data="pagination" />
     </form>
   </div>
 </template>

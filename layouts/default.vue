@@ -25,6 +25,7 @@
 import Notification from "../components/Notification.vue";
 export default {
   components: { Notification },
+  middleware: "isLogged",
   computed: {
     onRequesting() {
       return this.$store.state.isRequesting;

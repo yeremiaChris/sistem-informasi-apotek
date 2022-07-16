@@ -1,5 +1,5 @@
 export default {
-  ssr: false,
+  // ssr: false,
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: "sistem-informasi-apotek",
@@ -113,7 +113,7 @@ export default {
         user: false,
         endpoints: {
           login: { url: "/auth/login", method: "post" },
-          refresh: { url: "/auth/token", method: "post" },
+          refresh: false,
           user: false,
         },
       },

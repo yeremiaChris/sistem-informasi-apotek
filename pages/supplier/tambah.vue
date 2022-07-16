@@ -11,7 +11,7 @@
       label="Name"
       name="name"
       v-model="name"
-      placeholder="Name of medicine..."
+      placeholder="Name of supplier..."
     />
 
     <!-- field name -->

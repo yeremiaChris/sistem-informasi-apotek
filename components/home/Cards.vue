@@ -10,7 +10,7 @@
           class="text-xl font-bold"
           :class="{ 'text-white': item.isHover, 'text-black': !item.isHover }"
         >
-          120
+          {{ item.total }}
         </h1>
         <p class="text-lg">Total {{ item.title }}</p>
       </div>
@@ -29,7 +29,9 @@
         />
       </svg>
     </div>
-    <button class="py-4 border-t">View List</button>
+    <NuxtLink :to="item.url" class="py-4 border-t text-center"
+      >View List</NuxtLink
+    >
   </div>
 </template>
 

@@ -3,7 +3,9 @@
     <h1 class="font-bold text-2xl">Dashboard</h1>
     <p class="text-sm mt-2 text-gray-400">Sistem Informasi Apotek Pontjol</p>
     <div class="mt-10 grid md:grid-cols-4 gap-4">
+      <p v-if="!boxes.length">Waiting...</p>
       <HomeCards
+        v-else
         v-for="item in boxes"
         :key="item.title"
         :item="item"
@@ -25,12 +27,7 @@ export default {
   name: "HomePage",
   data() {
     return {
-      boxes: [
-        { title: "Obat", isHover: false },
-        { title: "Supplier", isHover: false },
-        { title: "Pembelian", isHover: false },
-        { title: "Penjualan", isHover: false },
-      ],
+      boxes: [],
       headers: [
         "Banyak obat",
         "Nama laporan",
@@ -62,6 +59,7 @@ export default {
 
   async fetch() {
     await this.getData("/penjualan/terbaru", "data");
+    await this.getData("/total-data", "boxes");
   },
 
   watch: {
@@ -85,7 +83,9 @@ export default {
         });
         const { data, pagination } = res.data;
         this[props] = data;
-        this.pagination = pagination;
+        if (pagination) {
+          this.pagination = pagination;
+        }
       } catch (error) {
         console.log(error);
       }

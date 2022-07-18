@@ -3,14 +3,16 @@ export default () => ({
     name: "",
     type: "",
     unit: "",
-    price: 0,
+    purchasePrice: 0,
+    sellingPrice: 0,
     supply: 0,
   },
   errorMedicine: {
     name: "",
     type: "",
     unit: "",
-    price: "",
+    purchasePrice: "",
+    sellingPrice: "",
     supply: "",
   },
 });

@@ -1,15 +1,15 @@
 const types = [
   {
     title: "Tablet",
-    value: "Tablet",
+    value: "tablet",
   },
   {
     title: "Pil",
-    value: "Pil",
+    value: "pil",
   },
   {
     title: "Bubuk",
-    value: "Bubuk",
+    value: "bubuk",
   },
 ];
 

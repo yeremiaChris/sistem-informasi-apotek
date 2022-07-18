@@ -11,12 +11,18 @@ export default {
   emptyField(state) {
     for (const property in state.formsMedicine) {
       state.formsMedicine[property] =
-        property === "supply" || property === "price" ? 0 : "";
+        property === "supply" ||
+        property === "purchasePrice" ||
+        property === "sellingPrice"
+          ? 0
+          : "";
       state.errorMedicine[property] = "";
     }
   },
 
   getDetail(state, payload) {
-    state.formsMedicine = payload;
+    console.log(payload);
+    const { name, type, unit, purchasePrice, sellingPrice } = payload;
+    state.formsMedicine = { name, type, unit, purchasePrice, sellingPrice };
   },
 };

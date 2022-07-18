@@ -15,14 +15,21 @@
     />
 
     <!-- field price -->
-    <FormsErrorMsg :msg="error.price" />
+    <FormsErrorMsg :msg="error.purchasePrice" />
     <FormsInputNumber
       class="mb-4"
-      label="Price"
-      name="price"
-      type="number"
-      :value="price"
-      v-model="price"
+      label="Harga beli"
+      name="purchasePrice"
+      v-model="purchasePrice"
+      placeholder="0"
+    />
+
+    <FormsErrorMsg :msg="error.sellingPrice" />
+    <FormsInputNumber
+      class="mb-4"
+      label="Harga jual"
+      name="sellingPrice"
+      v-model="sellingPrice"
       placeholder="0"
     />
 
@@ -38,6 +45,7 @@
 
     <!-- field unit -->
     <FormsErrorMsg :msg="error.unit" />
+    {{ unit }}
     <FormsSingleSelect
       v-model="unit"
       :value="unit"
@@ -88,14 +96,27 @@ export default {
       },
     },
 
-    price: {
+    purchasePrice: {
       get() {
-        return this.$store.state.obat.formsMedicine.price;
+        return this.$store.state.obat.formsMedicine.purchasePrice;
       },
       set(value) {
         const payload = {
-          key: "price",
-          value,
+          key: "purchasePrice",
+          value: parseInt(value),
+        };
+        this.$store.commit("obat/changeData", payload);
+      },
+    },
+
+    sellingPrice: {
+      get() {
+        return this.$store.state.obat.formsMedicine.sellingPrice;
+      },
+      set(value) {
+        const payload = {
+          key: "sellingPrice",
+          value: parseInt(value),
         };
         this.$store.commit("obat/changeData", payload);
       },

@@ -47,6 +47,7 @@
                     key !== 'supplierId' &&
                     key !== 'id' &&
                     key !== 'createdAt' &&
+                    key !== 'recipiData' &&
                     key !== '__v' &&
                     key !== 'laporan'
                   "

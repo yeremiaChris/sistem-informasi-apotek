@@ -4,17 +4,23 @@
     class="mt-3 flex justify-between border border-gray-300 px-4 py-4 shadow-lg"
     @submit.prevent="buy"
   >
-    <div>
+    <div class="grid place-items-start">
       <p>Nama obat</p>
       <p class="font-bold">{{ data.name || "-" }}</p>
       <p>Satuan</p>
       <p class="font-bold">{{ data.unit || "-" }}</p>
       <p>Harga</p>
       <p class="font-bold">
-        {{ data.price ? data.price.toLocaleString() : "-" }}
+        {{ data.sellingPrice ? data.sellingPrice.toLocaleString() : "-" }}
+      </p>
+      <p class="text-xl mt-5 font-bold">
+        Uang bayar Rp {{ uangBayar.toLocaleString() }}
       </p>
       <p class="text-xl mt-5 font-bold">
         Kembalian Rp {{ kembalian.toLocaleString() }}
+      </p>
+      <p class="text-right mt-3 font-bold text-xl">
+        Total Rp. {{ total.toLocaleString() }}
       </p>
     </div>
 
@@ -45,9 +51,7 @@
       <p v-if="error.uangBayar" class="text-sm text-red-500 py-2">
         {{ error.uangBayar }}
       </p>
-      <p class="text-right mt-3 font-bold text-xl">
-        Total Rp. {{ total.toLocaleString() }}
-      </p>
+
       <div class="flex justify-end mt-4 gap-4">
         <FormsButton label="Bayar" type="submit" :is-out-lined="true" />
         <FormsButton label="Tambah" @submit="add" />
@@ -116,7 +120,7 @@ export default {
           : this.isEmptyObject && this.dataTable.length
           ? this.dataTable.reduce((a, c) => a + c.total, 0)
           : this.dataTable.reduce((a, c) => a + c.total, 0) +
-            parseInt(this.data.price) * this.jumlahBeli;
+            parseInt(this.data.sellingPrice) * this.jumlahBeli;
       return total;
     },
 
@@ -155,8 +159,9 @@ export default {
           const obj = {
             ...this.data,
             jumlahBeli: this.jumlahBeli,
+            recipiData: this.recipiData,
             isRecipe: this.isRecipe,
-            total: this.data.price * this.jumlahBeli,
+            total: this.data.sellingPrice * this.jumlahBeli,
           };
           const payload = {
             value: [obj, ...this.dataTable],
@@ -242,9 +247,10 @@ export default {
         this.$refs.formPenjualan.reset(); // This will clear that form
         const obj = {
           ...this.data,
+          recipiData: this.recipiData,
           jumlahBeli: this.jumlahBeli,
           isRecipe: this.isRecipe,
-          total: this.data.price * this.jumlahBeli,
+          total: this.data.sellingPrice * this.jumlahBeli,
         };
 
         // post data

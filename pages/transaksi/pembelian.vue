@@ -123,7 +123,7 @@ export default {
           supplierId: item.supplier ? item.supplier._id : index,
           nameMedicine: item.name,
           supply: item.supply,
-          price: item.price,
+          purchasePrice: item.purchasePrice,
           jumlahBeli: item.jumlahBeli,
           total: item.total,
         };

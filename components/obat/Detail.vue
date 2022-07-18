@@ -11,7 +11,7 @@
       <p class="font-bold">{{ data.unit || "-" }}</p>
       <p>Harga</p>
       <p class="font-bold">
-        {{ data.price ? data.price.toLocaleString() : "-" }}
+        {{ data.purchasePrice ? data.purchasePrice.toLocaleString() : "-" }}
       </p>
       <div class="grid grid-cols-2 gap-6 mt-5">
         <div>
@@ -126,7 +126,7 @@ export default {
           : this.isEmptyObject && this.dataTable.length
           ? this.dataTable.reduce((a, c) => a + c.total, 0)
           : this.dataTable.reduce((a, c) => a + c.total, 0) +
-            this.data.price * this.value;
+            this.data.purchasePrice * this.value;
       return total;
     },
 
@@ -165,7 +165,7 @@ export default {
         const { supplier } = this;
         const obj = {
           ...this.data,
-          total: this.value * this.data.price,
+          total: this.value * this.data.purchasePrice,
           jumlahBeli: this.value,
           supplier,
         };
@@ -192,6 +192,8 @@ export default {
         this.$emit("setProps", { data: {}, props: "detail" });
         this.$emit("setProps", { data: "", props: "product" });
         this.$emit("setProps", { data: "", props: "supplier" });
+        this.total = 0;
+        this.uangBayar = 0;
         this.$refs.formPembelian.reset(); // This will clear that form
       } else {
         if (this.isEmptyObject) {

@@ -51,7 +51,7 @@
         filename="exportFilename"
         ref="strukPenjualan"
       >
-        <PrintPembelian slot="pdf-content" :headers="headersPrint" />
+        <PrintPenjualan slot="pdf-content" :headers="headersPrint" />
       </vue-html2pdf>
     </client-only>
   </form>

@@ -43,6 +43,7 @@
             <div class="ml-4 flex-shrink-0 flex">
               <button
                 type="button"
+                :disabled="disabled"
                 @click="close"
                 class="bg-white rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
@@ -78,12 +79,26 @@ export default {
       show: true,
     };
   },
+  watch: {
+    "$store.state.success"() {
+      setTimeout(() => {
+        const payload3 = {
+          value: false,
+          props: "success",
+        };
+        this.$store.commit("setProps", payload3);
+      }, 3000);
+    },
+  },
   computed: {
     success() {
       return this.$store.state.success;
     },
+    disabled() {
+      return this.$store.state.isRequesting;
+    },
   },
-  
+
   methods: {
     close() {
       const payload = {

@@ -50,7 +50,7 @@
         label="Back"
         type="button"
       />
-      <FormsButton @submit="submit" label="Submit" type="submit" />
+      <FormsButton label="Submit" type="submit" />
     </div>
   </form>
 </template>
@@ -136,20 +136,13 @@ export default {
           ...this.data,
           supply: 0,
         });
-        this.$refs.formEdit.reset(); // This will clear that form
+        // this.$refs.formEdit.reset(); // This will clear that form
         this.$router.push("/obat/list");
         const payload2 = {
           value: true,
           props: "success",
         };
         this.$store.commit("setProps", payload2);
-        setTimeout(() => {
-          const payload3 = {
-            value: false,
-            props: "success",
-          };
-          this.$store.commit("setProps", payload3);
-        }, 3000);
       } catch (error) {
         if (error.response.data.errors) {
           for (const property in error.response.data.errors) {

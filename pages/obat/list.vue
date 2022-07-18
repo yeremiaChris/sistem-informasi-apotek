@@ -38,11 +38,12 @@ export default {
         totalPage: 1,
       },
       headers: [
+        "Kode",
         "Nama",
         "Harga",
         " Persediaan",
         "Tipe",
-        "Satuan", 
+        "Satuan",
         "Tanggal update",
       ],
       data: [],
@@ -78,6 +79,7 @@ export default {
       return {
         _id: item._id,
         id: item._id,
+        kode: item.kode.toUpperCase(),
         name: item.name,
         price: item.price,
         supply: item.supply,
@@ -130,7 +132,7 @@ export default {
 
     async deleteData() {
       try {
-        await this.$axios.delete("/medicine/" + parseInt(this.deleteId));
+        await this.$axios.delete("/medicine/" + this.deleteId);
         this.$store.commit("deleteModalFalse");
         this.$nuxt.refresh();
       } catch (error) {

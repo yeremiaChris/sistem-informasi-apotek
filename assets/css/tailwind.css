@@ -9,3 +9,7 @@
 .box-left {
   @apply flex items-center justify-end;
 }
+
+button:disabled {
+  @apply opacity-40;
+}

@@ -41,6 +41,7 @@
             </NuxtLink>
             <button
               v-else
+              :disabled="disabled"
               class="w-full"
               :class="[
                 $route.path === item.href &&
@@ -116,6 +117,7 @@
 
     <button
       @click="logout"
+      :disabled="disabled"
       class="shadow flex bg-white items-center gap-4 border px-3 py-2 text-sm"
     >
       <img class="w-6" src="/sidebar/logout.svg" alt="logout" />
@@ -132,6 +134,11 @@ export default {
     return {
       navigation,
     };
+  },
+  computed: {
+    disabled() {
+      return this.$store.state.isRequesting;
+    },
   },
   methods: {
     showDropdown(name) {

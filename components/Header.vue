@@ -3,6 +3,7 @@
     <!-- mobile to open sidebar -->
     <button
       type="button"
+      :disabled="disabled"
       class="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden"
     >
       <span class="sr-only">Open sidebar</span>
@@ -26,5 +27,10 @@
 <script>
 export default {
   name: "SidebarComponent",
+  computed: {
+    disabled() {
+      return this.$store.state.isRequesting;
+    },
+  },
 };
 </script>

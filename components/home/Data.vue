@@ -13,14 +13,7 @@
     </div>
     <form @submit.prevent="submit">
       <h1 class="text-lg font-bold">Penjualan Terbaru</h1>
-      <FormsInput
-        class="mb-4 mt-2"
-        label="Search"
-        name="search"
-        v-model="search"
-        placeholder="Search here..."
-      />
-      <ObatTable :headers="headers" :data="data" />
+      <ObatTable :headers="headers" :data="data" class="mt-8" />
     </form>
   </div>
 </template>
@@ -44,17 +37,6 @@ export default {
     pagination: {
       type: Object,
       required: true,
-    },
-  },
-  data() {
-    return {
-      search: "",
-    };
-  },
-  methods: {
-    submit() {
-      const query = this.$route.query;
-      this.$router.push({ query: { ...query, query: this.search } });
     },
   },
 };

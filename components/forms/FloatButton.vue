@@ -2,6 +2,7 @@
   <div class="fixed bottom-4 top-20 right-4 gap-10">
     <button
       type="button"
+      :disabled="disabled"
       class="items-center p-3 border border-transparent rounded-full shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
       aria-label="going-up"
       @click="scrollDown"
@@ -60,6 +61,11 @@ export default {
         top: main.scrollHeight,
         behavior: "smooth",
       });
+    },
+  },
+  computed: {
+    disabled() {
+      return this.$store.state.isRequesting;
     },
   },
 };

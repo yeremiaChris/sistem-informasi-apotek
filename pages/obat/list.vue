@@ -122,8 +122,10 @@ export default {
         return {
           _id: item._id,
           id: item._id,
+          kode: item.kode.toUpperCase(),
           name: item.name,
-          price: item.price,
+          purchasePrice: item.purchasePrice,
+          sellingPrice: item.sellingPrice,
           supply: item.supply,
           type: item.type,
           unit: item.unit,

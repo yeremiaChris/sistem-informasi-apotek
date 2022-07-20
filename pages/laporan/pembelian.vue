@@ -1,9 +1,30 @@
 <template>
   <div>
     <ModalDelete v-show="open" @delete="deleteData" />
-    <ObatHeader :items="itemsSelect" label="Laporan pembelian" />
-    <ObatTable :headers="headers" :data="datas" />
+    <ObatHeader
+      :items="itemsSelect"
+      label="Laporan pembelian"
+      @export="exportPdf"
+    />
+    <ObatTable :headers="headers" :data="data" />
     <Pagination :data="pagination" />
+    <client-only>
+      <vue-html2pdf
+        :paginate-elements-by-height="1400"
+        :pdf-quality="2"
+        pdf-content-width="800px"
+        pdf-orientation="portrait"
+        filename="exportFilename"
+        ref="html2Pdf"
+      >
+        <PrintReport
+          slot="pdf-content"
+          :headers="headers"
+          :data="printData"
+          title="LAPORAN PEMBELIAN OBAT"
+        />
+      </vue-html2pdf>
+    </client-only>
   </div>
 </template>
 
@@ -17,8 +38,9 @@ export default {
         page: 1,
         totalPage: 2,
       },
-      headers: ["Nama", "Total harga"],
+      headers: ["Nama", "Uang Bayar", "Total", "Kembalian", "Tanggal"],
       data: [],
+      printData: [],
       itemsSelect: [
         {
           title: "Newest",
@@ -43,21 +65,6 @@ export default {
     deleteId() {
       return this.$store.state.deleteId;
     },
-    datas() {
-      const data = this.data.map((item) => {
-        return {
-          title: item.title,
-          total:
-            "Rp " +
-            item.laporan
-              .reduce((acc, item) => acc + item.total, 0)
-              .toLocaleString(),
-          _id: item._id,
-          id: item._id,
-        };
-      });
-      return data;
-    },
   },
   watch: {
     "$route.query.page"() {
@@ -71,6 +78,24 @@ export default {
     },
   },
   methods: {
+    async getDataPrint() {
+      const res2 = await this.$axios.get("/pembelian/print");
+      this.printData = res2.data.map((item) => {
+        const { title, uangBayar, total, kembalian, updatedAt } = item;
+        return {
+          title,
+          uangBayar,
+          total,
+          kembalian,
+          updatedAt,
+        };
+      });
+    },
+    async exportPdf() {
+      //
+      await this.getDataPrint();
+      this.$refs.html2Pdf.generatePdf();
+    },
     async deleteData() {
       try {
         await this.$axios.delete("/pembelian/" + parseInt(this.deleteId));
@@ -87,13 +112,14 @@ export default {
     async getData(endpoint, props) {
       const { page, query, sortBy } = this.$route.query;
       const res = await this.$axios.get(endpoint, {
-        params: { 
+        params: {
           page,
           query,
           sortBy,
         },
       });
       const { data, pagination } = res.data;
+
       this[props] = data;
       this.pagination = pagination;
     },

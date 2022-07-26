@@ -259,13 +259,15 @@ export default {
           title: "Laporan " + this.$dayjs().format("DD MMM YYYY Pukul HH:mm"),
         });
 
-        const payloadPrint = {
-          props: "report",
-          value: data.data,
-        };
-        this.$store.commit("setProps", payloadPrint);
+        window.scrollTo({ top: 0, behavior: "smooth" });
 
-        this.$emit("print");
+        // const payloadPrint = {
+        //   props: "report",
+        //   value: data.data,
+        // };
+        // this.$store.commit("setProps", payloadPrint);
+
+        // this.$emit("print");
 
         // reset form
         this.$emit("setProps", { data: {}, props: "detail" });

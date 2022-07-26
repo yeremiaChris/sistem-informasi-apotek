@@ -99,7 +99,7 @@ export default {
       login: "/login",
       logout: "/login",
       callback: false,
-      home: "/",
+      home: "/obat/list",
     },
     strategies: {
       local: {

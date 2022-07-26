@@ -272,18 +272,20 @@ export default {
           value: true,
           props: "success",
         };
+        window.scrollTo({ top: 0, behavior: "smooth" });
+
         this.$store.commit("setProps", payload2);
         const payload3 = {
           value: [],
           props: "dataTable",
         };
         this.$store.commit("setProps", payload3);
-        const payloadPrint = {
-          props: "report",
-          value: data.data,
-        };
-        this.$store.commit("setProps", payloadPrint);
-        this.$emit("print");
+        // const payloadPrint = {
+        //   props: "report",
+        //   value: data.data,
+        // };
+        // this.$store.commit("setProps", payloadPrint);
+        // this.$emit("print");
         setTimeout(() => {
           const payload3 = {
             value: false,

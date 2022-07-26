@@ -1,5 +1,5 @@
 export default [
-  { name: "Dashboard", href: "/", icon: "icon", isActive: false },
+  // { name: "Dashboard", href: "/", icon: "icon", isActive: false },
   { name: "Obat", href: "/obat/list", icon: "icon", isActive: false },
   { name: "Supplier", href: "/supplier/list", icon: "icon", isActive: false },
   {
@@ -22,5 +22,5 @@ export default [
       { name: "Penjualan", href: "/laporan/penjualan" },
     ],
   },
-  { name: "Retur", href: "#", icon: "icon", isActive: false },
+  // { name: "Retur", href: "#", icon: "icon", isActive: false },
 ];

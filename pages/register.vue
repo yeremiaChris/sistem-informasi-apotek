@@ -2,7 +2,7 @@
   <div>
     <AuthHeader />
 
-    <AuthFormSignIn />
+    <AuthFormSignUp />
   </div>
 </template>
 

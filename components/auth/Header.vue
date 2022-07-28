@@ -7,7 +7,8 @@
     />
     <h2 class="mt-6 text-center text-3xl font-extrabold">Apotek Pontjol</h2>
     <h2 class="mt-6 text-center text-3xl font-extrabold">
-      Sign in to your account
+      {{ $route.path.includes("register") ? "Sign up" : "Sign in" }} to your
+      account
     </h2>
   </div>
 </template>

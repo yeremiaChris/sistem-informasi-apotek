@@ -8,10 +8,10 @@
     <FormsErrorMsg :msg="error.name" />
     <FormsInput
       class="mb-4"
-      label="Name"
+      label="Nama obat"
       name="name"
       v-model="name"
-      placeholder="Name of medicine..."
+      placeholder="Nama obat..."
     />
 
     <!-- field price -->
@@ -50,7 +50,7 @@
       v-model="unit"
       :value="unit"
       class="mb-4"
-      label="Unit"
+      label="Satuan"
       :items="unitItems"
     />
 

@@ -8,17 +8,17 @@
     <FormsErrorMsg :msg="error.name" />
     <FormsInput
       class="mb-4"
-      label="Name"
+      label="Nama supplier"
       name="name"
       v-model="name"
-      placeholder="Name of supplier..."
+      placeholder="Nama supplier..."
     />
 
     <!-- field name -->
     <FormsErrorMsg :msg="error.image" />
     <FormsInput
       class="mb-4"
-      label="Image"
+      label="Gambar icon"
       type="file"
       name="image"
       v-model="image"

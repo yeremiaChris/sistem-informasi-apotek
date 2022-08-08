@@ -9,7 +9,7 @@ export default [
     subMenu: [
       { name: "Daftar obat", href: "/obat/list" },
       { name: "Jenis obat", href: "/obat/jenis" },
-      { name: "Satuan obat", href: "/obat/kategori" },
+      { name: "Satuan obat", href: "/obat/satuan" },
     ],
   },
   { name: "Supplier", href: "/supplier/list", icon: "icon", isActive: false },

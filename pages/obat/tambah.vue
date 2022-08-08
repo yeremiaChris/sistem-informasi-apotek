@@ -147,11 +147,25 @@ export default {
     },
   },
 
+  async fetch() {
+    await this.getData("/medicine/jenis/select-data", "types");
+    await this.getData("/medicine/satuan/select-data", "unitItems");
+  },
+
   mounted() {
     this.$store.commit("obat/emptyField");
   },
 
   methods: {
+    async getData(endpoint, props) {
+      try {
+        const res = await this.$axios.get(endpoint);
+        this[props] = res.data.map((item) => ({
+          title: item.title,
+          value: item.title.toLowerCase(),
+        }));
+      } catch (error) {}
+    },
     async submit() {
       try {
         await this.$axios.post("/medicine", {

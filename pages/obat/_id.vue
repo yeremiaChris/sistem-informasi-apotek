@@ -45,7 +45,6 @@
 
     <!-- field unit -->
     <FormsErrorMsg :msg="error.unit" />
-    {{ unit }}
     <FormsSingleSelect
       v-model="unit"
       :value="unit"
@@ -74,11 +73,17 @@ export default {
     return {
       types,
       unitItems,
+      unit: "",
+      type: "",
     };
   },
 
   async fetch() {
+    await this.getData("/medicine/jenis/select-data", "types");
+    await this.getData("/medicine/satuan/select-data", "unitItems");
     const res = await this.$axios.get("/medicine/" + this.$route.params.id);
+    this.unit = res.data.unit;
+    this.type = res.data.type;
     this.$store.commit("obat/getDetail", res.data);
   },
 
@@ -122,31 +127,31 @@ export default {
       },
     },
 
-    type: {
-      get() {
-        return this.$store.state.obat.formsMedicine.type;
-      },
-      set(value) {
-        const payload = {
-          key: "type",
-          value,
-        };
-        this.$store.commit("obat/changeData", payload);
-      },
-    },
+    // type: {
+    //   get() {
+    //     return this.$store.state.obat.formsMedicine.type;
+    //   },
+    //   set(value) {
+    //     const payload = {
+    //       key: "type",
+    //       value,
+    //     };
+    //     this.$store.commit("obat/changeData", payload);
+    //   },
+    // },
 
-    unit: {
-      get() {
-        return this.$store.state.obat.formsMedicine.unit;
-      },
-      set(value) {
-        const payload = {
-          key: "unit",
-          value,
-        };
-        this.$store.commit("obat/changeData", payload);
-      },
-    },
+    // unit: {
+    //   get() {
+    //     return this.$store.state.obat.formsMedicine.unit;
+    //   },
+    //   set(value) {
+    //     const payload = {
+    //       key: "unit",
+    //       value,
+    //     };
+    //     this.$store.commit("obat/changeData", payload);
+    //   },
+    // },
     data() {
       return this.$store.state.obat.formsMedicine;
     },
@@ -156,6 +161,15 @@ export default {
   },
 
   methods: {
+    async getData(endpoint, props) {
+      try {
+        const res = await this.$axios.get(endpoint);
+        this[props] = res.data.map((item) => ({
+          title: item.title,
+          value: item.title.toLowerCase(),
+        }));
+      } catch (error) {}
+    },
     async submit() {
       try {
         const res = await this.$axios.put(

@@ -14,7 +14,13 @@
         </button>
         <NuxtLink
           v-if="!$route.path.includes('laporan')"
-          :to="$route.path.includes('jenis') ? '/obat/jenis/tambah' : 'tambah'"
+          :to="
+            $route.path.includes('jenis')
+              ? '/obat/jenis/tambah'
+              : $route.path.includes('satuan')
+              ? '/obat/satuan/tambah'
+              : 'tambah'
+          "
           class="font-bold items-center px-4 py-4 uppercase border border-gray-300 shadow-sm text-base font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
           Tambah {{ label }}

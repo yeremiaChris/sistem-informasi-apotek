@@ -95,6 +95,8 @@
                       :to="
                         $route.path.includes('jenis')
                           ? '/obat/jenis/' + items._id.toString()
+                          : $route.path.includes('satuan')
+                          ? '/obat/satuan/' + items._id.toString()
                           : items._id.toString()
                       "
                       class="text-indigo-600 hover:text-indigo-900"

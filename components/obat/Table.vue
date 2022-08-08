@@ -92,7 +92,11 @@
                     class="flex gap-5"
                   >
                     <NuxtLink
-                      :to="items._id.toString()"
+                      :to="
+                        $route.path.includes('jenis')
+                          ? '/obat/jenis/' + items._id.toString()
+                          : items._id.toString()
+                      "
                       class="text-indigo-600 hover:text-indigo-900"
                       >Edit
                     </NuxtLink>

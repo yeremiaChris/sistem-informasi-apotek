@@ -120,7 +120,7 @@ export default {
       });
       const { data, pagination } = res.data;
 
-      this[props] = data;
+      this[props] = data.map((item) => ({ ...item, id: item._id }));
       this.pagination = pagination;
     },
   },

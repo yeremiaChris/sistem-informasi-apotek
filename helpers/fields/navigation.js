@@ -1,6 +1,17 @@
 export default [
   // { name: "Dashboard", href: "/", icon: "icon", isActive: false },
-  { name: "Obat", href: "/obat/list", icon: "icon", isActive: false },
+  {
+    name: "Obat",
+    href: "",
+    icon: "icon",
+    isActive: false,
+
+    subMenu: [
+      { name: "Daftar obat", href: "/obat/list" },
+      { name: "Jenis obat", href: "/obat/jenis" },
+      { name: "Satuan obat", href: "/obat/kategori" },
+    ],
+  },
   { name: "Supplier", href: "/supplier/list", icon: "icon", isActive: false },
   {
     name: "Transaksi",

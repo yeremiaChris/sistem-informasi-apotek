@@ -12,7 +12,7 @@
       </div>
       <div class="mt-5 flex-grow flex flex-col">
         <nav class="flex-1 px-2 pb-4 space-y-1">
-          <div v-for="(item, index) in navigation" :key="index + 'menu'">
+          <div v-for="(item, index) in navigations" :key="index + 'menu'">
             <NuxtLink
               v-if="item.href"
               :to="item.href"
@@ -50,7 +50,7 @@
                   : 'text-gray-200 hover:bg-gray-50 hover:text-gray-900',
                 'group flex items-center px-2 py-2 text-sm font-medium rounded-md',
               ]"
-              @click="showDropdown(item.name)"
+              @click="showDropdown(item.title)"
             >
               <div class="flex w-full justify-between">
                 <div class="flex gap-4">
@@ -114,7 +114,6 @@
         </nav>
       </div>
     </div>
-
     <button
       @click="logout"
       :disabled="disabled"
@@ -135,15 +134,29 @@ export default {
       navigation,
     };
   },
+
   computed: {
     disabled() {
       return this.$store.state.isRequesting;
+    },
+    auth() {
+      return this.$auth.$storage.getLocalStorage("user");
+    },
+    navigations() {
+      const menu = !this.auth && !this.auth.role ? [] : this.auth.role.menus;
+      const menus = menu
+        .filter((el) => el.isPermitted)
+        .map((item) => {
+          const obj = this.navigation.find((el) => el.title === item.menuName);
+          return obj;
+        });
+      return menus;
     },
   },
   methods: {
     showDropdown(name) {
       this.navigation = this.navigation.map((item) =>
-        item.name === name
+        item.title === name
           ? { ...item, isActive: !item.isActive }
           : { ...item, isActive: false }
       );
@@ -151,6 +164,8 @@ export default {
     async logout() {
       try {
         await this.$auth.logout();
+        this.$auth.$storage.removeState("user");
+        this.$auth.$storage.removeLocalStorage("user");
       } catch (error) {
         console.log(error);
       }

@@ -30,6 +30,7 @@ export default [
     href: "/supplier/list",
     icon: "icon",
     isActive: false,
+    subMenu: [],
   },
   {
     name: "Supplier",
@@ -37,6 +38,7 @@ export default [
     href: "/transaksi/pembelian",
     icon: "icon",
     isActive: false,
+    subMenu: [],
   },
   {
     name: "Obat",
@@ -44,6 +46,7 @@ export default [
     href: "/transaksi/Penjualan",
     icon: "icon",
     isActive: false,
+    subMenu: [],
   },
 
   {
@@ -52,6 +55,7 @@ export default [
     href: "/laporan/pembelian",
     icon: "icon",
     isActive: false,
+    subMenu: [],
   },
 
   {
@@ -60,6 +64,7 @@ export default [
     href: "/laporan/penjualan",
     icon: "icon",
     isActive: false,
+    subMenu: [],
   },
   // { name: "Retur", href: "#", icon: "icon", isActive: false },
 ];

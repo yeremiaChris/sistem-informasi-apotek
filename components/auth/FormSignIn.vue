@@ -36,10 +36,10 @@
             />
           </div>
         </div>
-        <div class="mt-4">
+        <!-- <div class="mt-4">
           <span>Kalau belum punya akun, </span>
           <NuxtLink to="/register" class="text-blue-700">daftar</NuxtLink>
-        </div>
+        </div> -->
         <div>
           <button
             @click="userLogin"
@@ -87,7 +87,8 @@ export default {
         });
         const { data } = response;
         await this.$auth.setUser(data);
-        this.$auth.strategy.token.set(data.data.token);
+        this.$auth.strategy.token.set(data.token);
+        this.$auth.$storage.setLocalStorage("user", data.data);
         this.$auth.setUserToken(data.token, data.data.refreshToken);
         this.$router.push("/");
       } catch (err) {

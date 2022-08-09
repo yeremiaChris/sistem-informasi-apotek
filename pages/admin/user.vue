@@ -1,12 +1,11 @@
 <template>
   <div>
-    <Breadcrumbs url="Obat / Daftar" class="mb-7" />
+    <Breadcrumbs url="Admin / User" class="mb-7" />
 
     <ModalDelete v-show="open" @delete="deleteData" />
-    <ObatHeader :items="itemsSelect" label="Daftar Obat" @export="exportPdf" />
+    <ObatHeader :items="itemsSelect" label="Daftar User" @export="exportPdf" />
     <ObatTable :headers="headers" :data="data" />
     <Pagination :data="pagination" />
-
     <client-only>
       <vue-html2pdf
         :paginate-elements-by-height="1400"
@@ -20,7 +19,7 @@
           slot="pdf-content"
           :headers="headers"
           :data="printData"
-          title="LAPORAN PERSEDIAAN OBAT"
+          title="LAPORAN JENIS OBAT"
         />
       </vue-html2pdf>
     </client-only>
@@ -37,32 +36,16 @@ export default {
         page: 1,
         totalPage: 1,
       },
-      headers: [
-        "Nama",
-        "Harga beli",
-        "Harga jual",
-        " Persediaan",
-        "Tipe",
-        "Satuan",
-        "Tanggal update",
-      ],
+      headers: ["Username", "Email", "Tanggal"],
       data: [],
       itemsSelect: [
         {
-          title: "Nama",
-          value: "name",
+          title: "Title",
+          value: "title",
         },
         {
-          title: "Harga beli",
-          value: "purchasePrice",
-        },
-        {
-          title: "Harga jual",
-          value: "sellingPrice",
-        },
-        {
-          title: "Persediaan",
-          value: "supply",
+          title: "Description",
+          value: "description",
         },
       ],
     };
@@ -70,7 +53,7 @@ export default {
 
   async fetch() {
     const { page, query, sortBy } = this.$route.query;
-    const res = await this.$axios.get("/medicine", {
+    const res = await this.$axios.get("/role/user", {
       params: {
         page,
         query,
@@ -81,15 +64,9 @@ export default {
     const { data, pagination } = res.data;
     const datas = data.map((item) => {
       return {
+        ...item,
         _id: item._id,
         id: item._id,
-        name: item.name,
-        purchasePrice: item.purchasePrice,
-        sellingPrice: item.sellingPrice,
-        supply: item.supply,
-        type: item.type,
-        unit: item.unit,
-        updatedAt: item.updatedAt,
       };
     });
     this.data = datas;
@@ -138,7 +115,7 @@ export default {
 
     async deleteData() {
       try {
-        await this.$axios.delete("/medicine/" + this.deleteId);
+        await this.$axios.delete("/role/user/" + this.deleteId);
         this.$store.commit("deleteModalFalse");
         this.$nuxt.refresh();
       } catch (error) {

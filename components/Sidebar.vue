@@ -12,7 +12,7 @@
       </div>
       <div class="mt-5 flex-grow flex flex-col">
         <nav class="flex-1 px-2 pb-4 space-y-1">
-          <div v-for="item in navigation" :key="item.name">
+          <div v-for="(item, index) in navigation" :key="index + 'menu'">
             <NuxtLink
               v-if="item.href"
               :to="item.href"
@@ -36,7 +36,7 @@
                   :src="'/sidebar/' + item.name.toLowerCase() + '-white.svg'"
                   alt="logo"
                 />
-                {{ item.name }}
+                {{ item.title }}
               </div>
             </NuxtLink>
             <button
@@ -67,7 +67,7 @@
                     alt="logo"
                   />
                   <p>
-                    {{ item.name }}
+                    {{ item.title }}
                   </p>
                 </div>
                 <div class="transform" :class="{ 'rotate-90': !item.isActive }">

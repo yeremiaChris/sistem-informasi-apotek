@@ -43,12 +43,8 @@ export default {
       printData: [],
       itemsSelect: [
         {
-          title: "Newest",
-          value: "newest",
-        },
-        {
-          title: "Type",
-          value: "type",
+          title: "Title",
+          value: "title",
         },
       ],
     };

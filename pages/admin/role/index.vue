@@ -45,12 +45,8 @@ export default {
       data: [],
       itemsSelect: [
         {
-          title: "Title",
-          value: "title",
-        },
-        {
-          title: "Description",
-          value: "description",
+          title: "Role Name",
+          value: "roleName",
         },
       ],
     };
@@ -106,7 +102,6 @@ export default {
         return {
           _id: item._id,
           id: item._id,
-          kode: item.kode.toUpperCase(),
           name: item.name,
           purchasePrice: item.purchasePrice,
           sellingPrice: item.sellingPrice,

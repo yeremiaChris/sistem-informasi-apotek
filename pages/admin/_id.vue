@@ -3,6 +3,7 @@
     <Breadcrumbs url="Obat / Tambah / User" class="mb-7" />
     <!-- title -->
     <FormsTitle title="Form Tambah User" />
+    <FormsErrorMsg :msg="errorAbove" class="mb-4" />
 
     <!-- field name -->
     <FormsErrorMsg :msg="errors.name" />
@@ -69,6 +70,7 @@ export default {
         role: "",
       },
       roles: [],
+      errorAbove: "",
     };
   },
 
@@ -96,7 +98,7 @@ export default {
         const { name, email } = res.data;
         this.name = name;
         this.email = email;
-        this.role = !res.data.role ? "" : res.data.role._id;
+        this.role = !res.data.role ? "" : res.data.role._id.toString();
       } catch (error) {}
     },
     async getRole() {
@@ -110,31 +112,40 @@ export default {
       } catch (error) {}
     },
     async submit() {
-      try {
-        const { name, email, password, role } = this;
-        const data = {
-          name,
-          email,
-          password,
-          role,
-        };
-        await this.$axios.put("/auth/register/" + this.$route.params.id, data);
-        // this.$refs.formEdit.reset(); // This will clear that form
-        this.$router.push("/admin/user");
-        const payload2 = {
-          value: true,
-          props: "success",
-        };
-        this.$store.commit("setProps", payload2);
-      } catch (error) {
-        if (error.response.data.errors) {
-          const obj = error.response.data.errors;
-          console.log(obj);
-
-          for (const key in obj) {
-            if (Object.hasOwnProperty.call(obj, key)) {
-              this.errors = { ...this.errors, [key]: obj[key].message };
+      if (this.password.length <= 6) {
+        this.errorAbove = "Password is required and min length is 6";
+      } else {
+        try {
+          const { name, email, password, role } = this;
+          const data = {
+            name,
+            email,
+            password,
+            role,
+          };
+          await this.$axios.put(
+            "/auth/register/" + this.$route.params.id,
+            data
+          );
+          // this.$refs.formEdit.reset(); // This will clear that form
+          this.$router.push("/admin/user");
+          const payload2 = {
+            value: true,
+            props: "success",
+          };
+          this.$store.commit("setProps", payload2);
+        } catch (error) {
+          if (error.response.data.errors) {
+            for (const property in error.response.data.errors) {
+              const payload = {
+                key: property,
+                value: error.response.data.errors[property],
+              };
+              this.$store.commit("obat/getErrorFromBackend", payload);
             }
+          }
+          if (error.response.data.message) {
+            this.errorAbove = error.response.data.message;
           }
         }
       }

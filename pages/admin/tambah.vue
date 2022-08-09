@@ -3,7 +3,7 @@
     <Breadcrumbs url="Obat / Tambah / User" class="mb-7" />
     <!-- title -->
     <FormsTitle title="Form Tambah User" />
-
+    <FormsErrorMsg :msg="errorAbove" class="mb-4" />
     <!-- field name -->
     <FormsErrorMsg :msg="errors.name" />
     <FormsInput
@@ -69,6 +69,7 @@ export default {
         role: "",
       },
       roles: [],
+      errorAbove: "",
     };
   },
 
@@ -97,31 +98,38 @@ export default {
       } catch (error) {}
     },
     async submit() {
-      try {
-        const { name, email, password, role } = this;
-        const data = {
-          name,
-          email,
-          password,
-          role,
-        };
-        await this.$axios.post("/auth/register", data);
-        // this.$refs.formEdit.reset(); // This will clear that form
-        this.$router.push("/admin/user");
-        const payload2 = {
-          value: true,
-          props: "success",
-        };
-        this.$store.commit("setProps", payload2);
-      } catch (error) {
-        if (error.response.data.errors) {
-          const obj = error.response.data.errors;
-          console.log(obj);
+      if (this.password.length <= 6) {
+        this.errorAbove = "Password is required and min length is 6";
+      } else {
+        try {
+          const { name, email, password, role } = this;
+          const data = {
+            name,
+            email,
+            password,
+            role,
+          };
+          await this.$axios.post("/auth/register", data);
+          // this.$refs.formEdit.reset(); // This will clear that form
+          this.$router.push("/admin/user");
+          const payload2 = {
+            value: true,
+            props: "success",
+          };
+          this.$store.commit("setProps", payload2);
+        } catch (error) {
+          if (error.response.data.errors) {
+            const obj = error.response.data.errors;
+            console.log(obj);
 
-          for (const key in obj) {
-            if (Object.hasOwnProperty.call(obj, key)) {
-              this.errors = { ...this.errors, [key]: obj[key].message };
+            for (const key in obj) {
+              if (Object.hasOwnProperty.call(obj, key)) {
+                this.errors = { ...this.errors, [key]: obj[key].message };
+              }
             }
+          }
+          if (error.response.data.message) {
+            this.errorAbove = error.response.data.message;
           }
         }
       }

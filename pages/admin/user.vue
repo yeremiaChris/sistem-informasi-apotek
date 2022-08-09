@@ -36,7 +36,7 @@ export default {
         page: 1,
         totalPage: 1,
       },
-      headers: ["Username", "Email", "Role", "Tanggal"],
+      headers: ["Username", "Email", "Role"],
       data: [],
       itemsSelect: [
         {
@@ -68,7 +68,6 @@ export default {
         name: item.name,
         email: item.email,
         role: item.role.roleName,
-        createdAt: item.createdAt,
         id: item._id,
       };
     });

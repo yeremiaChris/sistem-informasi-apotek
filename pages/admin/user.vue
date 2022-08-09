@@ -36,7 +36,7 @@ export default {
         page: 1,
         totalPage: 1,
       },
-      headers: ["Username", "Email", "Tanggal"],
+      headers: ["Username", "Email", "Role", "Tanggal"],
       data: [],
       itemsSelect: [
         {
@@ -64,8 +64,11 @@ export default {
     const { data, pagination } = res.data;
     const datas = data.map((item) => {
       return {
-        ...item,
         _id: item._id,
+        name: item.name,
+        email: item.email,
+        role: item.role.roleName,
+        createdAt: item.createdAt,
         id: item._id,
       };
     });

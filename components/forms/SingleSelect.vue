@@ -11,7 +11,7 @@
       class="mt-1 block w-full pl-3 pr-10 py-3 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
     >
       <!-- <option selected class="text-gray-500">Pilih</option> -->
-      <option selected="" disabled value="">Select....</option>
+      <option selected="" disabled value="">Pilih....</option>
       <option v-for="(item, index) in items" :key="index" :value="item.value">
         {{ item.title }}
       </option>

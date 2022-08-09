@@ -175,7 +175,7 @@ export default {
       this.$store.emit("delete", data);
     },
 
-    edit(item) {
+    handleEdit(item) {
       console.log(item);
       this.$emit("setValueProduct", item.nameMedicine);
       this.$emit("setValueSupplier", item.nameSupplier);

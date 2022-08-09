@@ -3,6 +3,7 @@
     <Breadcrumbs url="Obat / Edit" class="mb-7" />
     <!-- title -->
     <FormsTitle title="Form Edit obat" />
+    <FormsErrorMsg :msg="errorAbove" class="mb-4" />
 
     <!-- field name -->
     <FormsErrorMsg :msg="error.name" />
@@ -75,6 +76,7 @@ export default {
       unitItems,
       unit: "",
       type: "",
+      errorAbove: "",
     };
   },
 
@@ -171,37 +173,45 @@ export default {
       } catch (error) {}
     },
     async submit() {
-      try {
-        const res = await this.$axios.put(
-          "/medicine/" + this.$route.params.id,
-          {
-            ...this.data,
-          }
-        );
-        this.$router.push("/obat/list");
-        this.$refs.formEdit.reset(); // This will clear that form
-        const payload2 = {
-          value: true,
-          props: "success",
-        };
-        this.$store.commit("setProps", payload2);
-        setTimeout(() => {
-          const payload3 = {
-            value: false,
+      if (this.sellingPrice > this.purchasePrice) {
+        try {
+          const res = await this.$axios.put(
+            "/medicine/" + this.$route.params.id,
+            {
+              ...this.data,
+            }
+          );
+          this.$router.push("/obat/list");
+          this.$refs.formEdit.reset(); // This will clear that form
+          const payload2 = {
+            value: true,
             props: "success",
           };
-          this.$store.commit("setProps", payload3);
-        }, 3000);
-      } catch (error) {
-        if (error.response.data.errors) {
-          for (const property in error.response.data.errors) {
-            const payload = {
-              key: property,
-              value: error.response.data.errors[property],
+          this.$store.commit("setProps", payload2);
+          setTimeout(() => {
+            const payload3 = {
+              value: false,
+              props: "success",
             };
-            this.$store.commit("obat/getErrorFromBackend", payload);
+            this.$store.commit("setProps", payload3);
+          }, 3000);
+        } catch (error) {
+          if (error.response.data.errors) {
+            for (const property in error.response.data.errors) {
+              const payload = {
+                key: property,
+                value: error.response.data.errors[property],
+              };
+              this.$store.commit("obat/getErrorFromBackend", payload);
+            }
+          }
+
+          if (error.response.data.message) {
+            this.errorAbove = error.response.data.message;
           }
         }
+      } else {
+        this.errorAbove = "Harga jual harus lebih besar dari harga beli.";
       }
     },
 

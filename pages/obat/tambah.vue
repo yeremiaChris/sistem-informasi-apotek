@@ -168,32 +168,36 @@ export default {
       } catch (error) {}
     },
     async submit() {
-      try {
-        await this.$axios.post("/medicine", {
-          ...this.data,
-          supply: 0,
-        });
-        // this.$refs.formEdit.reset(); // This will clear that form
-        this.$router.push("/obat/list");
-        const payload2 = {
-          value: true,
-          props: "success",
-        };
-        this.$store.commit("setProps", payload2);
-      } catch (error) {
-        console.log(error.response);
-        if (error.response.data.errors) {
-          for (const property in error.response.data.errors) {
-            const payload = {
-              key: property,
-              value: error.response.data.errors[property],
-            };
-            this.$store.commit("obat/getErrorFromBackend", payload);
+      if (this.sellingPrice > this.purchasePrice) {
+        try {
+          await this.$axios.post("/medicine", {
+            ...this.data,
+            supply: 0,
+          });
+          // this.$refs.formEdit.reset(); // This will clear that form
+          this.$router.push("/obat/list");
+          const payload2 = {
+            value: true,
+            props: "success",
+          };
+          this.$store.commit("setProps", payload2);
+        } catch (error) {
+          console.log(error.response);
+          if (error.response.data.errors) {
+            for (const property in error.response.data.errors) {
+              const payload = {
+                key: property,
+                value: error.response.data.errors[property],
+              };
+              this.$store.commit("obat/getErrorFromBackend", payload);
+            }
+          }
+          if (error.response.data.message) {
+            this.errorAbove = error.response.data.message;
           }
         }
-        if (error.response.data.message) {
-          this.errorAbove = error.response.data.message;
-        }
+      } else {
+        this.errorAbove = "Harga jual harus lebih besar dari harga beli.";
       }
     },
     back() {

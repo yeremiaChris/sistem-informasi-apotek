@@ -3,7 +3,7 @@
     <Breadcrumbs url="Supplier / Tambah" class="mb-7" />
     <!-- title -->
     <FormsTitle title="Form Tambah Supplier" />
-
+    <FormsErrorMsg :msg="errorAbove" class="mb-4" />
     <!-- field name -->
     <FormsErrorMsg :msg="error.name" />
     <FormsInput
@@ -41,6 +41,7 @@ export default {
       error: { ...fieldState },
       imageField: "",
       src: "",
+      errorAbove: "",
     };
   },
 
@@ -99,7 +100,11 @@ export default {
           this.$store.commit("setProps", payload3);
         }, 3000);
         this.$router.push("/supplier/list");
-      } catch {}
+      } catch (error) {
+        if (error.response.data.message) {
+          this.errorAbove = error.response.data.message;
+        }
+      }
     },
   },
 };

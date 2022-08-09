@@ -10,7 +10,7 @@
         :id="name"
         class="shadow-sm border px-3 py-3 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300"
         :placeholder="placeholder"
-        :value="value"
+        :value="!value ? 0 : value"
         @input="handleChange"
       />
     </div>

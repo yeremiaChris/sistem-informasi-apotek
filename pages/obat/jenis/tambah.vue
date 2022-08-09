@@ -3,7 +3,7 @@
     <Breadcrumbs url="Obat / Tambah / Jenis" class="mb-7" />
     <!-- title -->
     <FormsTitle title="Form Tambah Jenis obat" />
-
+    <FormsErrorMsg :msg="errorAbove" class="mb-4" />
     <!-- field name -->
     <FormsErrorMsg :msg="errors.title" />
     <FormsInput
@@ -46,6 +46,7 @@ export default {
         title: "",
         description: "",
       },
+      errorAbove: "",
     };
   },
 
@@ -88,6 +89,10 @@ export default {
               this.errors = { ...this.errors, [key]: obj[key].message };
             }
           }
+        }
+
+        if (error.response.data.message) {
+          this.errorAbove = error.response.data.message;
         }
       }
     },

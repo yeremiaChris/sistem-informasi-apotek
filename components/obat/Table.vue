@@ -93,11 +93,13 @@
                   >
                     <NuxtLink
                       :to="
-                        $route.path.includes('jenis')
-                          ? '/obat/jenis/' + items._id.toString()
-                          : $route.path.includes('satuan')
-                          ? '/obat/satuan/' + items._id.toString()
-                          : items._id.toString()
+                        !edit
+                          ? $route.path.includes('jenis')
+                            ? '/obat/jenis/' + items._id.toString()
+                            : $route.path.includes('satuan')
+                            ? '/obat/satuan/' + items._id.toString()
+                            : items._id.toString()
+                          : edit + items._id
                       "
                       class="text-indigo-600 hover:text-indigo-900"
                       >Edit
@@ -140,6 +142,10 @@
 <script>
 export default {
   props: {
+    edit: {
+      type: String,
+      default: () => "",
+    },
     headers: {
       type: Array,
       required: true,

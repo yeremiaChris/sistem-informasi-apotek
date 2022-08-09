@@ -9,7 +9,7 @@
       link="/admin/role/tambah"
       @export="exportPdf"
     />
-    <ObatTable :headers="headers" :data="data" />
+    <ObatTable :headers="headers" :data="data" edit="/admin/role/" />
     <Pagination :data="pagination" />
     <client-only>
       <vue-html2pdf

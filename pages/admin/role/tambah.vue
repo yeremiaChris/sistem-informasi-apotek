@@ -14,6 +14,22 @@
       placeholder="Title..."
     />
 
+    <div>
+      <p class="my-4 block text-sm font-medium text-gray-700">Menus</p>
+      <div
+        class="grid my-4 grid-cols-2 justify-between text-sm"
+        v-for="(menu, index) in menus"
+        :key="index + 'menus'"
+      >
+        <p>{{ menu.menuName }}</p>
+        <FormsToggle
+          :showLabel="false"
+          @toggle="toggleMenus(menu.menuName)"
+          :value="menu.isPermitted"
+        />
+      </div>
+    </div>
+
     <!-- button submit -->
     <div class="flex justify-end gap-3">
       <FormsButton
@@ -28,6 +44,7 @@
 </template>
 
 <script>
+import menus from "@/helpers/fields/role";
 export default {
   data() {
     return {
@@ -35,6 +52,7 @@ export default {
       errors: {
         roleName: "",
       },
+      menus,
     };
   },
 
@@ -45,15 +63,23 @@ export default {
   },
 
   methods: {
+    toggleMenus(name) {
+      this.menus = this.menus.map((item) =>
+        item.menuName === name
+          ? { ...item, isPermitted: !item.isPermitted }
+          : item
+      );
+    },
     async submit() {
       try {
-        const { roleName } = this;
+        const { roleName, menus } = this;
         const data = {
           roleName,
+          menus,
         };
         await this.$axios.post("/role", data);
         // this.$refs.formEdit.reset(); // This will clear that form
-        this.$router.push("/obat/jenis");
+        this.$router.push("/admin/role");
         const payload2 = {
           value: true,
           props: "success",

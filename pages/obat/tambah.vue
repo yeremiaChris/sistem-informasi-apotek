@@ -3,7 +3,7 @@
     <Breadcrumbs url="Obat / Tambah" class="mb-7" />
     <!-- title -->
     <FormsTitle title="Form Tambah obat" />
-
+    <FormsErrorMsg :msg="errorAbove" class="mb-4" />
     <!-- field name -->
     <FormsErrorMsg :msg="error.name" />
     <FormsInput
@@ -71,6 +71,7 @@ export default {
     return {
       types,
       unitItems,
+      errorAbove: "",
     };
   },
 
@@ -180,6 +181,7 @@ export default {
         };
         this.$store.commit("setProps", payload2);
       } catch (error) {
+        console.log(error.response);
         if (error.response.data.errors) {
           for (const property in error.response.data.errors) {
             const payload = {
@@ -188,6 +190,9 @@ export default {
             };
             this.$store.commit("obat/getErrorFromBackend", payload);
           }
+        }
+        if (error.response.data.message) {
+          this.errorAbove = error.response.data.message;
         }
       }
     },

@@ -6,7 +6,7 @@
     <FormsErrorMsg :msg="errorAbove" class="mb-4" />
 
     <!-- field name -->
-    <FormsErrorMsg :msg="errors.name" />
+    <FormsErrorMsg v-if="!name" :msg="errors.name" />
     <FormsInput
       class="mb-4"
       label="Username"
@@ -15,7 +15,7 @@
       placeholder="Username..."
     />
 
-    <FormsErrorMsg :msg="errors.email" />
+    <FormsErrorMsg v-if="!email" :msg="errors.email" />
     <FormsInput
       class="mb-4"
       label="Email"
@@ -23,7 +23,7 @@
       v-model="email"
       placeholder="Email..."
     />
-    <FormsErrorMsg :msg="errors.password" />
+    <FormsErrorMsg v-if="!password" :msg="errors.password" />
     <FormsInput
       class="mb-4"
       label="Password"
@@ -34,7 +34,7 @@
     />
 
     <!-- field type -->
-    <FormsErrorMsg :msg="errors.role" />
+    <FormsErrorMsg v-if="!role" :msg="errors.role" />
     <FormsSingleSelect
       v-model="role"
       class="mb-4"
@@ -74,12 +74,6 @@ export default {
     };
   },
 
-  watch: {
-    name() {
-      this.errors.name = "";
-    },
-  },
-
   async fetch() {
     await this.getRole();
     await this.getDetail();
@@ -112,9 +106,19 @@ export default {
       } catch (error) {}
     },
     async submit() {
-      if (this.password.length <= 6) {
-        this.errorAbove = "Password is required and min length is 6";
-      } else {
+      const obj = this.errors;
+      let arr = [];
+      for (const key in obj) {
+        if (Object.hasOwnProperty.call(obj, key)) {
+          arr.push(this[key]);
+          if (!this[key]) {
+            this.errors[key] = "This field is required.";
+          }
+        }
+      }
+
+      const isNotEmpty = arr.every((el) => el);
+      if (isNotEmpty) {
         try {
           const { name, email, password, role } = this;
           const data = {

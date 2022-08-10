@@ -72,6 +72,7 @@ export default {
         this.$emit("setFile", e);
       } else {
         this.$emit("input", e.target.value);
+        this.$emit("setError");
       }
     },
 

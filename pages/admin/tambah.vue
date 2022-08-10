@@ -11,6 +11,7 @@
       label="Username"
       name="Username"
       v-model="name"
+      @setError="setError('name')"
       placeholder="Username..."
     />
 
@@ -20,6 +21,7 @@
       label="Email"
       name="Email"
       v-model="email"
+      @setError="setError('email')"
       placeholder="Email..."
     />
     <FormsErrorMsg :msg="errors.password" />
@@ -28,6 +30,7 @@
       label="Password"
       name="Password"
       type="password"
+      @setError="setError('password')"
       v-model="password"
       placeholder="Password..."
     />
@@ -37,6 +40,7 @@
     <FormsSingleSelect
       v-model="role"
       class="mb-4"
+      @setError="setError('role')"
       label="Role"
       :items="roles"
     />
@@ -73,17 +77,14 @@ export default {
     };
   },
 
-  watch: {
-    name() {
-      this.errors.name = "";
-    },
-  },
-
   async fetch() {
     await this.getRole();
   },
 
   methods: {
+    setError(key) {
+      this.errors[key] = "";
+    },
     handleSelect(value) {
       this.role = value;
     },
@@ -98,9 +99,19 @@ export default {
       } catch (error) {}
     },
     async submit() {
-      if (this.password.length <= 6) {
-        this.errorAbove = "Password is required and min length is 6";
-      } else {
+      const obj = this.errors;
+      let arr = [];
+      for (const key in obj) {
+        if (Object.hasOwnProperty.call(obj, key)) {
+          arr.push(this[key]);
+          if (!this[key]) {
+            this.errors[key] = "This field is required.";
+          }
+        }
+      }
+
+      const isNotEmpty = arr.every((el) => el);
+      if (isNotEmpty) {
         try {
           const { name, email, password, role } = this;
           const data = {
@@ -124,12 +135,10 @@ export default {
 
             for (const key in obj) {
               if (Object.hasOwnProperty.call(obj, key)) {
+                console.log(key);
                 this.errors = { ...this.errors, [key]: obj[key].message };
               }
             }
-          }
-          if (error.response.data.message) {
-            this.errorAbove = error.response.data.message;
           }
         }
       }

@@ -45,6 +45,7 @@ export default {
           url: "",
         };
         this.$emit("input", e.target.value);
+        this.$emit("setError");
       }
     },
   },

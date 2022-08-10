@@ -16,6 +16,7 @@
 
     <div>
       <p class="my-4 block text-sm font-medium text-gray-700">Menus</p>
+      <FormsErrorMsg :msg="errors.menus" />
       <div
         class="grid my-4 grid-cols-2 justify-between text-sm"
         v-for="(menu, index) in menus"
@@ -51,6 +52,7 @@ export default {
       roleName: "",
       errors: {
         roleName: "",
+        menus: "",
       },
       menus,
     };
@@ -69,30 +71,40 @@ export default {
           ? { ...item, isPermitted: !item.isPermitted }
           : item
       );
+      this.errors.menus = "";
     },
     async submit() {
-      try {
-        const { roleName, menus } = this;
-        const data = {
-          roleName,
-          menus,
-        };
-        await this.$axios.post("/role", data);
-        // this.$refs.formEdit.reset(); // This will clear that form
-        this.$router.push("/admin/role");
-        const payload2 = {
-          value: true,
-          props: "success",
-        };
-        this.$store.commit("setProps", payload2);
-      } catch (error) {
-        if (error.response.data.errors) {
-          const obj = error.response.data.errors;
-          console.log(obj);
+      if (!this.roleName || this.menus.every((el) => !el.isPermitted)) {
+        if (!this.roleName) {
+          this.errors.roleName = "Field ini harus diisi";
+        }
+        if (this.menus.every((el) => !el.isPermitted)) {
+          this.errors.menus = "Field ini harus diisi";
+        }
+      } else {
+        try {
+          const { roleName, menus } = this;
+          const data = {
+            roleName,
+            menus,
+          };
+          await this.$axios.post("/role", data);
+          // this.$refs.formEdit.reset(); // This will clear that form
+          this.$router.push("/admin/role");
+          const payload2 = {
+            value: true,
+            props: "success",
+          };
+          this.$store.commit("setProps", payload2);
+        } catch (error) {
+          if (error.response.data.errors) {
+            const obj = error.response.data.errors;
+            console.log(obj);
 
-          for (const key in obj) {
-            if (Object.hasOwnProperty.call(obj, key)) {
-              this.errors = { ...this.errors, [key]: obj[key].message };
+            for (const key in obj) {
+              if (Object.hasOwnProperty.call(obj, key)) {
+                this.errors = { ...this.errors, [key]: obj[key].message };
+              }
             }
           }
         }

@@ -6,7 +6,7 @@
     <FormsErrorMsg :msg="errorAbove" class="mb-4" />
 
     <!-- field name -->
-    <FormsErrorMsg v-if="!name" :msg="errors.name" />
+    <FormsErrorMsg :msg="errors.name" />
     <FormsInput
       class="mb-4"
       label="Username"
@@ -15,7 +15,7 @@
       placeholder="Username..."
     />
 
-    <FormsErrorMsg v-if="!email" :msg="errors.email" />
+    <FormsErrorMsg :msg="errors.email" />
     <FormsInput
       class="mb-4"
       label="Email"
@@ -23,7 +23,7 @@
       v-model="email"
       placeholder="Email..."
     />
-    <FormsErrorMsg v-if="!password" :msg="errors.password" />
+    <FormsErrorMsg :msg="errors.password" />
     <FormsInput
       class="mb-4"
       label="Password"
@@ -34,7 +34,7 @@
     />
 
     <!-- field type -->
-    <FormsErrorMsg v-if="!role" :msg="errors.role" />
+    <FormsErrorMsg :msg="errors.role" />
     <FormsSingleSelect
       v-model="role"
       class="mb-4"
@@ -110,14 +110,18 @@ export default {
       let arr = [];
       for (const key in obj) {
         if (Object.hasOwnProperty.call(obj, key)) {
-          arr.push(this[key]);
+          arr.push({ name: key, value: this[key] });
           if (!this[key]) {
             this.errors[key] = "This field is required.";
+          } else if (this[key].length < 6 && key === "password") {
+            this.errors[key] = `Karakter ${key} harus lebih dari 6`;
           }
         }
       }
 
-      const isNotEmpty = arr.every((el) => el);
+      const isNotEmpty = arr.every((el) =>
+        el.name === "password" ? el.value.length >= 6 : el.value
+      );
       if (isNotEmpty) {
         try {
           const { name, email, password, role } = this;

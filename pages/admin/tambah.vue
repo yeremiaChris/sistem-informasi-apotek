@@ -103,14 +103,18 @@ export default {
       let arr = [];
       for (const key in obj) {
         if (Object.hasOwnProperty.call(obj, key)) {
-          arr.push(this[key]);
+          arr.push({ name: key, value: this[key] });
           if (!this[key]) {
             this.errors[key] = "This field is required.";
+          } else if (this[key].length < 6 && key === "password") {
+            this.errors[key] = `Karakter ${key} harus lebih dari 6`;
           }
         }
       }
 
-      const isNotEmpty = arr.every((el) => el);
+      const isNotEmpty = arr.every((el) =>
+        el.name === "password" ? el.value.length >= 6 : el.value
+      );
       if (isNotEmpty) {
         try {
           const { name, email, password, role } = this;
@@ -139,6 +143,10 @@ export default {
                 this.errors = { ...this.errors, [key]: obj[key].message };
               }
             }
+          }
+
+          if (error.response.data.message) {
+            this.errorAbove = error.response.data.message;
           }
         }
       }

@@ -5,48 +5,53 @@
     <FormsTitle title="Form Tambah obat" />
     <FormsErrorMsg :msg="errorAbove" class="mb-4" />
     <!-- field name -->
-    <FormsErrorMsg :msg="error.name" />
+    <FormsErrorMsg :msg="errors.name" />
     <FormsInput
       class="mb-4"
       label="Nama obat"
       name="name"
-      v-model="name"
+      v-model="form['name']"
+      @setError="setError('name')"
       placeholder="Nama obat..."
     />
 
     <!-- field price -->
-    <FormsErrorMsg :msg="error.purchasePrice" />
+    <FormsErrorMsg :msg="errors.purchasePrice" />
     <FormsInputNumber
       class="mb-4"
       label="Harga beli"
       name="purchasePrice"
-      v-model="purchasePrice"
+      v-model="form['purchasePrice']"
+      @setError="setError('purchasePrice')"
       placeholder="0"
     />
 
-    <FormsErrorMsg :msg="error.sellingPrice" />
+    <FormsErrorMsg :msg="errors.sellingPrice" />
     <FormsInputNumber
       class="mb-4"
       label="Harga jual"
       name="sellingPrice"
-      v-model="sellingPrice"
+      @setError="setError('sellingPrice')"
+      v-model="form['sellingPrice']"
       placeholder="0"
     />
 
     <!-- field type -->
-    <FormsErrorMsg :msg="error.type" />
+    <FormsErrorMsg :msg="errors.type" />
     <FormsSingleSelect
-      v-model="type"
+      v-model="form['type']"
       class="mb-4"
       label="Jenis"
+      @setError="setError('type')"
       :items="types"
     />
 
     <!-- field unit -->
-    <FormsErrorMsg :msg="error.unit" />
+    <FormsErrorMsg :msg="errors.unit" />
     <FormsSingleSelect
-      v-model="unit"
+      v-model="form['unit']"
       class="mb-4"
+      @setError="setError('unit')"
       label="Satuan"
       :items="unitItems"
     />
@@ -72,80 +77,21 @@ export default {
       types,
       unitItems,
       errorAbove: "",
+      form: {
+        name: "",
+        purchasePrice: "",
+        sellingPrice: "",
+        type: "",
+        unit: "",
+      },
+      errors: {
+        name: "",
+        purchasePrice: "",
+        sellingPrice: "",
+        type: "",
+        unit: "",
+      },
     };
-  },
-
-  computed: {
-    name: {
-      get() {
-        return this.$store.state.obat.formsMedicine.name;
-      },
-      set(value) {
-        const payload = {
-          key: "name",
-          value,
-        };
-        this.$store.commit("obat/changeData", payload);
-      },
-    },
-
-    purchasePrice: {
-      get() {
-        return this.$store.state.obat.formsMedicine.purchasePrice;
-      },
-      set(value) {
-        const payload = {
-          key: "purchasePrice",
-          value: parseInt(value),
-        };
-        this.$store.commit("obat/changeData", payload);
-      },
-    },
-
-    sellingPrice: {
-      get() {
-        return this.$store.state.obat.formsMedicine.sellingPrice;
-      },
-      set(value) {
-        const payload = {
-          key: "sellingPrice",
-          value: parseInt(value),
-        };
-        this.$store.commit("obat/changeData", payload);
-      },
-    },
-
-    type: {
-      get() {
-        return this.$store.state.obat.formsMedicine.type;
-      },
-      set(value) {
-        const payload = {
-          key: "type",
-          value,
-        };
-        this.$store.commit("obat/changeData", payload);
-      },
-    },
-
-    unit: {
-      get() {
-        return this.$store.state.obat.formsMedicine.unit;
-      },
-      set(value) {
-        const payload = {
-          key: "unit",
-          value,
-        };
-        this.$store.commit("obat/changeData", payload);
-      },
-    },
-    data() {
-      return this.$store.state.obat.formsMedicine;
-    },
-    error() {
-      return this.$store.state.obat.errorMedicine;
-    },
   },
 
   async fetch() {
@@ -153,11 +99,10 @@ export default {
     await this.getData("/medicine/satuan/select-data", "unitItems");
   },
 
-  mounted() {
-    this.$store.commit("obat/emptyField");
-  },
-
   methods: {
+    setError(key) {
+      this.errors[key] = "";
+    },
     async getData(endpoint, props) {
       try {
         const res = await this.$axios.get(endpoint);
@@ -168,7 +113,31 @@ export default {
       } catch (error) {}
     },
     async submit() {
-      if (this.sellingPrice > this.purchasePrice) {
+      const object = this.errors;
+      let arr = [];
+      for (const key in object) {
+        if (Object.hasOwnProperty.call(object, key)) {
+          arr.push({ name: key, value: this.form[key] });
+          if (!this.form[key]) {
+            this.errors[key] = "Field ini harus diisi.";
+          } else {
+            if (
+              key === "purchasePrice" ||
+              (key === "sellingPrice" &&
+                this.form["purchasePrice"] >= this.form["sellingPrice"])
+            ) {
+              this.errorAbove = "Harga jual harus lebih besar dari harga beli.";
+            }
+          }
+        }
+      }
+
+      const isNotEmpty = arr.some((el) =>
+        el.name === "purchasePrice" || el.name === "sellingPrice"
+          ? this.form["purchasePrice"] < this.form["sellingPrice"]
+          : el.value
+      );
+      if (isNotEmpty) {
         try {
           await this.$axios.post("/medicine", {
             ...this.data,
@@ -196,9 +165,38 @@ export default {
             this.errorAbove = error.response.data.message;
           }
         }
-      } else {
-        this.errorAbove = "Harga jual harus lebih besar dari harga beli.";
       }
+      // if (this.sellingPrice > this.purchasePrice) {
+      //   try {
+      //     await this.$axios.post("/medicine", {
+      //       ...this.data,
+      //       supply: 0,
+      //     });
+      //     // this.$refs.formEdit.reset(); // This will clear that form
+      //     this.$router.push("/obat/list");
+      //     const payload2 = {
+      //       value: true,
+      //       props: "success",
+      //     };
+      //     this.$store.commit("setProps", payload2);
+      //   } catch (error) {
+      //     console.log(error.response);
+      //     if (error.response.data.errors) {
+      //       for (const property in error.response.data.errors) {
+      //         const payload = {
+      //           key: property,
+      //           value: error.response.data.errors[property],
+      //         };
+      //         this.$store.commit("obat/getErrorFromBackend", payload);
+      //       }
+      //     }
+      //     if (error.response.data.message) {
+      //       this.errorAbove = error.response.data.message;
+      //     }
+      //   }
+      // } else {
+      //   this.errorAbove = "Harga jual harus lebih besar dari harga beli.";
+      // }
     },
     back() {
       this.$router.back();

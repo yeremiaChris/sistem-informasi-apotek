@@ -12,8 +12,8 @@
       <vue-html2pdf
         :paginate-elements-by-height="1400"
         :pdf-quality="2"
-        pdf-content-width="800px"
-        pdf-orientation="portrait"
+        pdf-content-width="100%"
+        pdf-orientation="landscape"
         filename="exportFilename"
         ref="html2Pdf"
       >

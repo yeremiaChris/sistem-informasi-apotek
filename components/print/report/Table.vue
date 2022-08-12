@@ -20,6 +20,7 @@
           v-show="
             key !== '_id' &&
             key !== 'media' &&
+            key !== 'recipiData' &&
             key !== 'supplierId' &&
             key !== '__v' &&
             key !== 'createdAt' &&
@@ -40,19 +41,6 @@
                 : "Tidak"
               : item
           }}
-        </td>
-
-        <td
-          v-for="(value, key, idx) in person"
-          v-show="key === 'media'"
-          :key="idx + 'media'"
-          class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
-        >
-          <img
-            :src="$config.imageURL + value.defaultImage"
-            :alt="value.defaultImage"
-            style="width: 150px"
-          />
         </td>
       </tr>
     </tbody>

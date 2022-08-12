@@ -27,7 +27,6 @@
       @setError="setError('imageField')"
       @setFile="setFile($event, 'imageField')"
     />
-    <div style=""></div>
     <img v-if="src" :src="src" alt="image" class="w-32 h-32" />
     <div class="flex justify-end">
       <FormsButton @submit="submit" label="Submit" type="submit" />

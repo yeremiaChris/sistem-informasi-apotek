@@ -3,6 +3,7 @@ export default [
   {
     name: "Superadmin",
     title: "Manage Superadmin",
+    front: "Mengelola User",
     href: "",
     icon: "icon",
     isActive: false,
@@ -14,6 +15,7 @@ export default [
   {
     name: "Obat",
     title: "Manage Obat",
+    front: "Mengelola Obat",
     href: "",
     icon: "icon",
     isActive: false,
@@ -27,6 +29,7 @@ export default [
   {
     name: "Supplier",
     title: "Manage Supplier",
+    front: "Mengelola Supplier",
     href: "/supplier/list",
     icon: "icon",
     isActive: false,
@@ -35,6 +38,7 @@ export default [
   {
     name: "Supplier",
     title: "Pembelian",
+    front: "Pembelian",
     href: "/transaksi/pembelian",
     icon: "icon",
     isActive: false,
@@ -43,6 +47,7 @@ export default [
   {
     name: "Obat",
     title: "Penjualan",
+    front: "Penjualan",
     href: "/transaksi/Penjualan",
     icon: "icon",
     isActive: false,
@@ -52,6 +57,7 @@ export default [
   {
     name: "Laporan",
     title: "Laporan Pembelian",
+    front: "Laporan Pembelian",
     href: "/laporan/pembelian",
     icon: "icon",
     isActive: false,
@@ -61,6 +67,7 @@ export default [
   {
     name: "Laporan",
     title: "Laporan Penjualan",
+    front: "Laporan Penjualan",
     href: "/laporan/penjualan",
     icon: "icon",
     isActive: false,

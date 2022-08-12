@@ -36,7 +36,7 @@
                   :src="'/sidebar/' + item.name.toLowerCase() + '-white.svg'"
                   alt="logo"
                 />
-                {{ item.title }}
+                {{ item.front }}
               </div>
             </NuxtLink>
             <button
@@ -67,7 +67,7 @@
                     alt="logo"
                   />
                   <p>
-                    {{ item.title }}
+                    {{ item.front }}
                   </p>
                 </div>
                 <div class="transform" :class="{ 'rotate-90': !item.isActive }">

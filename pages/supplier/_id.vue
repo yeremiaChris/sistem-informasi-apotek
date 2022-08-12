@@ -92,7 +92,7 @@ export default {
         if (Object.hasOwnProperty.call(object, key)) {
           arr.push({ name: key, value: this[key] });
           if (!this[key]) {
-            this.error[key] = "Field ini harus diisi.";
+            this.error[key] = "Field ini harus diisi";
           }
         }
       }

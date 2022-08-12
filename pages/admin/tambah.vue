@@ -47,12 +47,6 @@
 
     <!-- button submit -->
     <div class="flex justify-end gap-3">
-      <FormsButton
-        @submit="back"
-        className="bg-indigo-100 hover:bg-indigo-200 text-indigo-700"
-        label="Back"
-        type="button"
-      />
       <FormsButton label="Submit" type="submit" />
     </div>
   </form>
@@ -105,7 +99,7 @@ export default {
         if (Object.hasOwnProperty.call(obj, key)) {
           arr.push({ name: key, value: this[key] });
           if (!this[key]) {
-            this.errors[key] = "This field is required.";
+            this.errors[key] = "Field ini harus diisi.";
           } else if (this[key].length < 6 && key === "password") {
             this.errors[key] = `Karakter ${key} harus lebih dari 6`;
           }

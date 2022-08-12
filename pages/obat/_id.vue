@@ -61,12 +61,6 @@
 
     <!-- button submit -->
     <div class="flex justify-end gap-3">
-      <FormsButton
-        @submit="back"
-        className="bg-indigo-100 hover:bg-indigo-200 text-indigo-700"
-        label="Back"
-        type="button"
-      />
       <FormsButton label="Submit" type="submit" />
     </div>
   </form>
@@ -130,7 +124,7 @@ export default {
         if (Object.hasOwnProperty.call(object, key)) {
           arr.push({ name: key, value: this.form[key] });
           if (!this.form[key]) {
-            this.errors[key] = "Field ini harus diisi.";
+            this.errors[key] = "Field ini harus diisi";
           } else {
             if (
               key === "purchasePrice" &&

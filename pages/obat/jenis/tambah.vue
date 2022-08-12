@@ -65,34 +65,49 @@ export default {
 
   methods: {
     async submit() {
-      try {
-        const { title, description } = this;
-        const data = {
-          title,
-          description,
-        };
-        await this.$axios.post("/medicine/jenis", data);
-        // this.$refs.formEdit.reset(); // This will clear that form
-        this.$router.push("/obat/jenis");
-        const payload2 = {
-          value: true,
-          props: "success",
-        };
-        this.$store.commit("setProps", payload2);
-      } catch (error) {
-        if (error.response.data.errors) {
-          const obj = error.response.data.errors;
-          console.log(obj);
-
-          for (const key in obj) {
-            if (Object.hasOwnProperty.call(obj, key)) {
-              this.errors = { ...this.errors, [key]: obj[key].message };
-            }
+      const obj = this.errors;
+      let arr = [];
+      for (const key in obj) {
+        if (Object.hasOwnProperty.call(obj, key)) {
+          arr.push({ name: key, value: this[key] });
+          if (!this[key]) {
+            this.errors[key] = "Field ini harus diisi.";
           }
         }
+      }
 
-        if (error.response.data.message) {
-          this.errorAbove = error.response.data.message;
+      const isNotEmpty = arr.every((el) => el.value);
+
+      if (isNotEmpty) {
+        try {
+          const { title, description } = this;
+          const data = {
+            title,
+            description,
+          };
+          await this.$axios.post("/medicine/jenis", data);
+          // this.$refs.formEdit.reset(); // This will clear that form
+          this.$router.push("/obat/jenis");
+          const payload2 = {
+            value: true,
+            props: "success",
+          };
+          this.$store.commit("setProps", payload2);
+        } catch (error) {
+          if (error.response.data.errors) {
+            const obj = error.response.data.errors;
+            console.log(obj);
+
+            for (const key in obj) {
+              if (Object.hasOwnProperty.call(obj, key)) {
+                this.errors = { ...this.errors, [key]: obj[key].message };
+              }
+            }
+          }
+
+          if (error.response.data.message) {
+            this.errorAbove = error.response.data.message;
+          }
         }
       }
     },

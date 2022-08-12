@@ -33,12 +33,6 @@
 
     <!-- button submit -->
     <div class="flex justify-end gap-3">
-      <FormsButton
-        @submit="back"
-        className="bg-indigo-100 hover:bg-indigo-200 text-indigo-700"
-        label="Back"
-        type="button"
-      />
       <FormsButton label="Submit" type="submit" />
     </div>
   </form>

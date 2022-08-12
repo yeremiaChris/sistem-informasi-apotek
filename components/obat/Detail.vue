@@ -198,14 +198,14 @@ export default {
       } else {
         if (this.isEmptyObject) {
           const payload = {
-            value: "This field is required",
+            value: "Field ini harus diisi",
             props: "produkError",
           };
           this.$store.commit("setProps", payload);
         }
         if (isEmptyObject(this.supplier)) {
           const payload = {
-            value: "This field is required",
+            value: "Field ini harus diisi",
             props: "supplierError",
           };
           this.$store.commit("setProps", payload);
@@ -221,14 +221,14 @@ export default {
       ) {
         if (this.isEmptyObject) {
           const payload = {
-            value: "This field is required",
+            value: "Field ini harus diisi",
             props: "produk",
           };
           this.$store.commit("setProps", payload);
         }
         if (isEmptyObject(this.supplier)) {
           const payload = {
-            value: "This field is required",
+            value: "Field ini harus diisi",
             props: "supplier",
           };
           this.$store.commit("setProps", payload);
@@ -238,7 +238,7 @@ export default {
           if (this.uangBayar < this.total) {
             this.error = { uangBayar: "This field must be more than total." };
           } else {
-            this.error = { uangBayar: "This field is required." };
+            this.error = { uangBayar: "Field ini harus diisi." };
           }
         }
       } else {

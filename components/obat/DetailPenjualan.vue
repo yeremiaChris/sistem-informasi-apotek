@@ -173,7 +173,7 @@ export default {
               if (!this.recipiData[property].length) {
                 this.$emit("setErrorRecipi", {
                   props: property,
-                  data: "This field is required.",
+                  data: "Field ini harus diisi.",
                 });
               } else {
                 this.$store.commit("setProps", payload);
@@ -200,7 +200,7 @@ export default {
         //
         this.$store.commit("setProps", {
           props: "produkError",
-          value: "This field is required.",
+          value: "Field ini harus diisi.",
         });
       }
     },
@@ -224,7 +224,7 @@ export default {
         if (this.isEmptyObject && !this.dataTable.length) {
           const payload = {
             props: "produkError",
-            value: "This field is required.",
+            value: "Field ini harus diisi.",
           };
           this.$store.commit("setProps", payload);
         }

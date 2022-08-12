@@ -3,10 +3,10 @@
     <ModalDelete v-show="open" @delete="deleteData" />
     <ObatHeader
       :items="itemsSelect"
-      label="Laporan penjualan"
+      label="Laporan Detail Penjualan"
       @export="exportPdf"
     />
-    <ObatTable :headers="headers" :data="datas" />
+    <ObatTable :headers="headers" :data="datas" class="mt-20" />
     <Pagination :data="pagination" />
     <client-only>
       <vue-html2pdf
@@ -21,7 +21,7 @@
           slot="pdf-content"
           :headers="headers"
           :data="datas"
-          title="LAPORAN PENJUALAN OBAT"
+          title="LAPORAN DETAIL PENJUALAN OBAT"
         />
       </vue-html2pdf>
     </client-only>

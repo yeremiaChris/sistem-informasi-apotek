@@ -34,7 +34,7 @@
         </NuxtLink>
       </div>
     </div>
-    <div class="flex justify-between mt-8">
+    <div class="flex justify-between mt-8" v-if="!$route.path.includes('view')">
       <FormsInput
         class="mb-4"
         label="Search"

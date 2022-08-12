@@ -70,6 +70,7 @@ export default {
     handleChange(e) {
       if (this.type === "file") {
         this.$emit("setFile", e);
+        this.$emit("setError");
       } else {
         this.$emit("input", e.target.value);
         this.$emit("setError");

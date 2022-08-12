@@ -11,6 +11,7 @@
       class="mb-4"
       label="Username"
       name="Username"
+      @setError="setError('name')"
       v-model="name"
       placeholder="Username..."
     />
@@ -21,6 +22,7 @@
       label="Email"
       name="Email"
       v-model="email"
+      @setError="setError('email')"
       placeholder="Email..."
     />
     <FormsErrorMsg :msg="errors.password" />
@@ -29,6 +31,7 @@
       label="Password"
       name="Password"
       type="password"
+      @setError="setError('password')"
       v-model="password"
       placeholder="Password..."
     />
@@ -39,6 +42,7 @@
       v-model="role"
       class="mb-4"
       label="Role"
+      @setError="setError('role')"
       :items="roles"
     />
 
@@ -80,6 +84,9 @@ export default {
   },
 
   methods: {
+    setError(key) {
+      this.errors[key] = "";
+    },
     handleSelect(value) {
       this.role = value;
     },

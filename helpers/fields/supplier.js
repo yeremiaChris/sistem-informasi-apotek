@@ -5,7 +5,7 @@ const fields = [
   },
   {
     title: "Image",
-    id: "image",
+    id: "imageField",
   },
 ];
 

@@ -11,6 +11,7 @@
         class="shadow-sm border px-3 py-3 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300"
         :placeholder="placeholder"
         :value="!value ? 0 : value"
+        @keypress="isNumber"
         @input="handleChange"
       />
     </div>
@@ -37,14 +38,23 @@ export default {
       default: () => "",
     },
     value: {
-      type: Number,
-      default: () => 0,
+      type: String,
+      default: () => "0",
     },
   },
   methods: {
     handleChange(e) {
       this.$emit("input", e.target.value);
       this.$emit("setError");
+    },
+    isNumber(e) {
+      const charCode = e.which ? e.which : e.keyCode;
+
+      if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        e.preventDefault();
+      } else {
+        return true;
+      }
     },
   },
 };

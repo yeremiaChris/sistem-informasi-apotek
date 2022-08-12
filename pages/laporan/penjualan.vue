@@ -121,7 +121,12 @@ export default {
         },
       });
       const { data, pagination } = res.data;
-      this[props] = data;
+      this[props] = data.map((item) => {
+        return {
+          ...item,
+          id: item._id,
+        };
+      });
       this.pagination = pagination;
     },
   },

@@ -11,8 +11,15 @@
     </button>
 
     <!-- search -->
-    <div class="flex-1 px-4 flex justify-end">
+    <div class="flex-1 px-4 flex justify-between items-center">
       <!-- profile -->
+      <p class="text-lg font-bold">
+        Selamat datang
+        <span class="text-purple-700">
+          {{ auth.name }}
+        </span>
+        di aplikasi sistem informasi apotek
+      </p>
       <div class="ml-4 flex items-center md:ml-6">
         <img
           class="h-8 w-8 rounded-full"
@@ -30,6 +37,9 @@ export default {
   computed: {
     disabled() {
       return this.$store.state.isRequesting;
+    },
+    auth() {
+      return this.$auth.$storage.getLocalStorage("user");
     },
   },
 };

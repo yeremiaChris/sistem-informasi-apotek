@@ -6,49 +6,54 @@
     <FormsErrorMsg :msg="errorAbove" class="mb-4" />
 
     <!-- field name -->
-    <FormsErrorMsg :msg="error.name" />
+    <FormsErrorMsg :msg="errors.name" />
     <FormsInput
       class="mb-4"
       label="Nama obat"
       name="name"
-      v-model="name"
+      v-model="form['name']"
+      @setError="setError('name')"
       placeholder="Nama obat..."
     />
 
     <!-- field price -->
-    <FormsErrorMsg :msg="error.purchasePrice" />
+    <FormsErrorMsg :msg="errors.purchasePrice" />
     <FormsInputNumber
       class="mb-4"
       label="Harga beli"
       name="purchasePrice"
-      v-model="purchasePrice"
+      @setError="setError('purchasePrice')"
+      v-model="form['purchasePrice']"
       placeholder="0"
     />
 
-    <FormsErrorMsg :msg="error.sellingPrice" />
+    <FormsErrorMsg :msg="errors.sellingPrice" />
     <FormsInputNumber
       class="mb-4"
       label="Harga jual"
       name="sellingPrice"
-      v-model="sellingPrice"
+      @setError="setError('sellingPrice')"
+      v-model="form['sellingPrice']"
       placeholder="0"
     />
 
     <!-- field type -->
-    <FormsErrorMsg :msg="error.type" />
+    <FormsErrorMsg :msg="errors.type" />
     <FormsSingleSelect
-      v-model="type"
-      :value="type"
+      v-model="form['type']"
+      @setError="setError('type')"
+      :value="form['type']"
       class="mb-4"
       label="Jenis"
       :items="types"
     />
 
     <!-- field unit -->
-    <FormsErrorMsg :msg="error.unit" />
+    <FormsErrorMsg :msg="errors.unit" />
     <FormsSingleSelect
-      v-model="unit"
-      :value="unit"
+      v-model="form['unit']"
+      @setError="setError('unit')"
+      :value="form['unit']"
       class="mb-4"
       label="Satuan"
       :items="unitItems"
@@ -77,6 +82,20 @@ export default {
       unit: "",
       type: "",
       errorAbove: "",
+      form: {
+        name: "",
+        purchasePrice: "",
+        sellingPrice: "",
+        type: "",
+        unit: "",
+      },
+      errors: {
+        name: "",
+        purchasePrice: "",
+        sellingPrice: "",
+        type: "",
+        unit: "",
+      },
     };
   },
 
@@ -84,85 +103,17 @@ export default {
     await this.getData("/medicine/jenis/select-data", "types");
     await this.getData("/medicine/satuan/select-data", "unitItems");
     const res = await this.$axios.get("/medicine/" + this.$route.params.id);
-    this.unit = res.data.unit;
-    this.type = res.data.type;
-    this.$store.commit("obat/getDetail", res.data);
+    const object = res.data;
+    for (const key in object) {
+      if (Object.hasOwnProperty.call(object, key)) {
+        this.form[key] = object[key];
+      }
+    }
   },
-
-  computed: {
-    name: {
-      get() {
-        return this.$store.state.obat.formsMedicine.name;
-      },
-      set(value) {
-        const payload = {
-          key: "name",
-          value,
-        };
-        this.$store.commit("obat/changeData", payload);
-      },
-    },
-
-    purchasePrice: {
-      get() {
-        return this.$store.state.obat.formsMedicine.purchasePrice;
-      },
-      set(value) {
-        const payload = {
-          key: "purchasePrice",
-          value: parseInt(value),
-        };
-        this.$store.commit("obat/changeData", payload);
-      },
-    },
-
-    sellingPrice: {
-      get() {
-        return this.$store.state.obat.formsMedicine.sellingPrice;
-      },
-      set(value) {
-        const payload = {
-          key: "sellingPrice",
-          value: parseInt(value),
-        };
-        this.$store.commit("obat/changeData", payload);
-      },
-    },
-
-    // type: {
-    //   get() {
-    //     return this.$store.state.obat.formsMedicine.type;
-    //   },
-    //   set(value) {
-    //     const payload = {
-    //       key: "type",
-    //       value,
-    //     };
-    //     this.$store.commit("obat/changeData", payload);
-    //   },
-    // },
-
-    // unit: {
-    //   get() {
-    //     return this.$store.state.obat.formsMedicine.unit;
-    //   },
-    //   set(value) {
-    //     const payload = {
-    //       key: "unit",
-    //       value,
-    //     };
-    //     this.$store.commit("obat/changeData", payload);
-    //   },
-    // },
-    data() {
-      return this.$store.state.obat.formsMedicine;
-    },
-    error() {
-      return this.$store.state.obat.errorMedicine;
-    },
-  },
-
   methods: {
+    setError(key) {
+      this.errors[key] = "";
+    },
     async getData(endpoint, props) {
       try {
         const res = await this.$axios.get(endpoint);
@@ -173,13 +124,46 @@ export default {
       } catch (error) {}
     },
     async submit() {
-      if (this.sellingPrice > this.purchasePrice) {
+      const object = this.errors;
+      let arr = [];
+      for (const key in object) {
+        if (Object.hasOwnProperty.call(object, key)) {
+          arr.push({ name: key, value: this.form[key] });
+          if (!this.form[key]) {
+            this.errors[key] = "Field ini harus diisi.";
+          } else {
+            if (
+              key === "purchasePrice" &&
+              key === "sellingPrice" &&
+              parseInt(this.form["purchasePrice"]) >=
+                parseInt(this.form["sellingPrice"])
+            ) {
+              this.errorAbove = "Harga jual harus lebih besar dari harga beli.";
+            }
+          }
+        }
+      }
+
+      const isNotEmpty = arr.every((el) =>
+        el.name !== "purchasePrice" && el.name !== "sellingPrice"
+          ? el.value
+          : true
+      );
+      if (
+        isNotEmpty &&
+        parseInt(this.form["purchasePrice"]) <
+          parseInt(this.form["sellingPrice"])
+      ) {
         try {
+          const form = {
+            ...this.form,
+            purchasePrice: parseInt(this.form.purchasePrice),
+            sellingPrice: parseInt(this.form.sellingPrice),
+            supply: 0,
+          };
           const res = await this.$axios.put(
             "/medicine/" + this.$route.params.id,
-            {
-              ...this.data,
-            }
+            form
           );
           this.$router.push("/obat/list");
           this.$refs.formEdit.reset(); // This will clear that form

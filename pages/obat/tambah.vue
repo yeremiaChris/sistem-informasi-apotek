@@ -122,9 +122,10 @@ export default {
             this.errors[key] = "Field ini harus diisi.";
           } else {
             if (
-              key === "purchasePrice" ||
-              (key === "sellingPrice" &&
-                this.form["purchasePrice"] >= this.form["sellingPrice"])
+              key === "purchasePrice" &&
+              key === "sellingPrice" &&
+              parseInt(this.form["purchasePrice"]) >=
+                parseInt(this.form["sellingPrice"])
             ) {
               this.errorAbove = "Harga jual harus lebih besar dari harga beli.";
             }
@@ -132,17 +133,24 @@ export default {
         }
       }
 
-      const isNotEmpty = arr.some((el) =>
-        el.name === "purchasePrice" || el.name === "sellingPrice"
-          ? this.form["purchasePrice"] < this.form["sellingPrice"]
-          : el.value
+      const isNotEmpty = arr.every((el) =>
+        el.name !== "purchasePrice" && el.name !== "sellingPrice"
+          ? el.value
+          : true
       );
-      if (isNotEmpty) {
+      if (
+        isNotEmpty &&
+        parseInt(this.form["purchasePrice"]) <
+          parseInt(this.form["sellingPrice"])
+      ) {
         try {
-          await this.$axios.post("/medicine", {
-            ...this.data,
+          const form = {
+            ...this.form,
+            purchasePrice: parseInt(this.form.purchasePrice),
+            sellingPrice: parseInt(this.form.sellingPrice),
             supply: 0,
-          });
+          };
+          await this.$axios.post("/medicine", form);
           // this.$refs.formEdit.reset(); // This will clear that form
           this.$router.push("/obat/list");
           const payload2 = {
@@ -166,37 +174,6 @@ export default {
           }
         }
       }
-      // if (this.sellingPrice > this.purchasePrice) {
-      //   try {
-      //     await this.$axios.post("/medicine", {
-      //       ...this.data,
-      //       supply: 0,
-      //     });
-      //     // this.$refs.formEdit.reset(); // This will clear that form
-      //     this.$router.push("/obat/list");
-      //     const payload2 = {
-      //       value: true,
-      //       props: "success",
-      //     };
-      //     this.$store.commit("setProps", payload2);
-      //   } catch (error) {
-      //     console.log(error.response);
-      //     if (error.response.data.errors) {
-      //       for (const property in error.response.data.errors) {
-      //         const payload = {
-      //           key: property,
-      //           value: error.response.data.errors[property],
-      //         };
-      //         this.$store.commit("obat/getErrorFromBackend", payload);
-      //       }
-      //     }
-      //     if (error.response.data.message) {
-      //       this.errorAbove = error.response.data.message;
-      //     }
-      //   }
-      // } else {
-      //   this.errorAbove = "Harga jual harus lebih besar dari harga beli.";
-      // }
     },
     back() {
       this.$router.back();

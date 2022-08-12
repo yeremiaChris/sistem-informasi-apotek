@@ -88,7 +88,7 @@
                   class="px-6 py-4 whitespace-nowrap text-sm font-medium"
                 >
                   <div
-                    v-if="!$route.path.includes('transaksi')"
+                    v-if="!$route.path.includes('laporan')"
                     class="flex gap-5"
                   >
                     <NuxtLink
@@ -113,20 +113,19 @@
                     </button>
                   </div>
 
-                  <button
-                    v-else-if="$route.path.includes('laporan')"
+                  <NuxtLink
+                    v-else-if="
+                      $route.path.includes('laporan') &&
+                      !$route.path.includes('view')
+                    "
                     class="text-blue-600 hover:text-red-900"
-                    @click="deleteTransaction(items)"
+                    :to="{
+                      path: $route.path + '/view',
+                      query: { data: items.laporan },
+                    }"
                   >
                     View
-                  </button>
-                  <button
-                    v-else
-                    class="text-red-600 hover:text-red-900"
-                    @click="deleteTransaction(items)"
-                  >
-                    Delete
-                  </button>
+                  </NuxtLink>
                 </td>
               </tr>
             </tbody>

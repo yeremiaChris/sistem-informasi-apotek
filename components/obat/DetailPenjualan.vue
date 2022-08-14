@@ -280,7 +280,7 @@ export default {
           let obj = {};
           obj = {
             ...this.data,
-            recipiData: this.recipiData,
+            recepiData: this.recipiData,
             jumlahBeli: this.jumlahBeli,
             total: this.data.sellingPrice * this.jumlahBeli,
           };
@@ -291,7 +291,7 @@ export default {
           for (let index = 0; index < this.dataTable.length; index++) {
             const obj = {
               ...this.dataTable[index],
-              recipiData: this.dataTable[index].recipiData,
+              recepiData: this.dataTable[index].recipiData,
               jumlahBeli: this.dataTable[index].jumlahBeli,
               total:
                 this.dataTable[index].sellingPrice *

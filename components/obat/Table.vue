@@ -59,7 +59,17 @@
                   }}</span>
                   <span v-else>
                     {{
-                      key === "supplier"
+                      key === "recepiData"
+                        ? !value.IdentitasDokter
+                          ? "Tidak resep dokter"
+                          : value.IdentitasDokter +
+                            "," +
+                            value.IdentitasCustomer +
+                            "," +
+                            value.InformasiObat +
+                            "," +
+                            value.Deskripsi
+                        : key === "supplier"
                         ? value.title
                         : key === "updatedAt"
                         ? $dayjs(value).format("DD MMM YYYY | HH:mm")

@@ -102,6 +102,7 @@ export default {
         "Jumlah jual",
         "Total harga",
         "Tanggal",
+        "Resep dokter",
       ],
       printData: [],
       data: [],
@@ -191,6 +192,7 @@ export default {
         },
       });
       const { data, pagination } = res.data;
+      console.log(data);
       this[props] = data.map((item) => {
         const {
           _id,
@@ -201,6 +203,7 @@ export default {
           jumlahBeli,
           total,
           updatedAt,
+          recepiData,
         } = item;
         return {
           _id,
@@ -211,6 +214,7 @@ export default {
           jumlahBeli,
           total,
           updatedAt,
+          recepiData: type === "keras" ? recepiData : "-",
         };
       });
       this.pagination = pagination;

@@ -5,6 +5,7 @@
       :items="itemsSelect"
       label="Laporan pembelian"
       @export="exportPdf"
+      @getData="getData('/pembelian', 'data')"
     />
     <ObatTable :headers="headers" :data="data" />
     <Pagination :data="pagination" />
@@ -116,12 +117,14 @@ export default {
     },
 
     async getData(endpoint, props) {
-      const { page, query, sortBy } = this.$route.query;
+      const { page, query, sortBy, startDate, endDate } = this.$route.query;
       const res = await this.$axios.get(endpoint, {
         params: {
           page,
           query,
           sortBy,
+          startDate,
+          endDate,
         },
       });
       const { data, pagination } = res.data;

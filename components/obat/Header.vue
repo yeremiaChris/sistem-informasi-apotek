@@ -60,7 +60,7 @@
         type="date"
         v-model="endDate"
       />
-      <FormsButton label="Filter" class="mt-4" />
+      <FormsButton label="Filter" class="mt-4" @submit="submitDate" />
     </div>
   </form>
 </template>
@@ -99,9 +99,13 @@ export default {
 
     if (query.startDate) {
       this.startDate = query.startDate;
+    } else {
+      this.startDate = this.$dayjs().subtract(1, "year");
     }
     if (query.endDate) {
       this.endDate = query.endDate;
+    } else {
+      this.endDate = this.$dayjs();
     }
   },
   watch: {
@@ -122,6 +126,9 @@ export default {
     submit() {
       const query = this.$route.query;
       this.$router.push({ query: { ...query, query: this.search } });
+    },
+    submitDate() {
+      this.$emit("getData");
     },
     exportPdf(e) {
       e.preventDefault();

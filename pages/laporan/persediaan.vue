@@ -9,6 +9,31 @@
       @export="exportPdf"
       @getData="$fetch()"
     />
+    <div class="my-4">
+      <p>
+        Tanggal awal
+        <span class="font-bold">
+          {{
+            $dayjs($route.query.startDate).format("DD MMMM YYYY") ||
+            $dayjs().subtract(1, "year").format("DD MMMM YYYY")
+          }}
+        </span>
+      </p>
+      <p>
+        Tanggal akhir
+        <span class="font-bold">
+          {{
+            $dayjs($route.query.endDate).format("DD MMMM YYYY") ||
+            $dayjs().format("DD MMM YYYY")
+          }}
+        </span>
+      </p>
+      <p>
+        Total seluruh persediaan obat
+
+        <span class="font-bold"> Rp {{ total.toLocaleString() }} </span>
+      </p>
+    </div>
     <ObatTable :headers="headers" :data="data" />
     <Pagination :data="pagination" />
 
@@ -21,12 +46,43 @@
         filename="exportFilename"
         ref="html2Pdf"
       >
-        <PrintReport
-          slot="pdf-content"
-          :headers="headers"
-          :data="printData"
-          title="LAPORAN PERSEDIAAN OBAT"
-        />
+        <div slot="pdf-content">
+          <StrukKop
+            class="pdf-item px-10 mt-6"
+            :is-button="false"
+            title="LAPORAN PERSEDIAAN OBAT"
+          />
+          <div class="my-4 mx-6">
+            <p>
+              Tanggal awal
+              <span class="font-bold">
+                {{
+                  $dayjs($route.query.startDate).format("DD MMMM YYYY") ||
+                  $dayjs().subtract(1, "year").format("DD MMMM YYYY")
+                }}
+              </span>
+            </p>
+            <p>
+              Tanggal akhir
+              <span class="font-bold">
+                {{
+                  $dayjs($route.query.endDate).format("DD MMMM YYYY") ||
+                  $dayjs().format("DD MMM YYYY")
+                }}
+              </span>
+            </p>
+            <p>
+              Total seluruh persediaan obat
+
+              <span class="font-bold"> Rp {{ total.toLocaleString() }} </span>
+            </p>
+          </div>
+          <PrintReport
+            :headers="headers"
+            :data="printData"
+            title="LAPORAN PERSEDIAAN OBAT"
+          />
+        </div>
       </vue-html2pdf>
     </client-only>
   </div>
@@ -121,6 +177,10 @@ export default {
     },
     deleteId() {
       return this.$store.state.deleteId;
+    },
+    total() {
+      const total = this.data.reduce((a, c) => a + c.supply, 0);
+      return total || 0;
     },
   },
 

@@ -7,17 +7,31 @@
       @export="exportPdf"
       @getData="getData('/pembelian', 'data')"
     />
-    <p class="my-4">
-      Total pembelian
-      {{
-        $route.query.startDate ||
-        $dayjs().subtract(1, "year").format("DD MMMM YYYY")
-      }}
-      sampai
-      {{ $route.query.startDate || $dayjs().format("DD MMM YYYY") }}
+    <div class="my-4">
+      <p>
+        Tanggal awal
+        <span class="font-bold">
+          {{
+            $dayjs($route.query.startDate).format("DD MMMM YYYY") ||
+            $dayjs().subtract(1, "year").format("DD MMMM YYYY")
+          }}
+        </span>
+      </p>
+      <p>
+        Tanggal akhir
+        <span class="font-bold">
+          {{
+            $dayjs($route.query.endDate).format("DD MMMM YYYY") ||
+            $dayjs().format("DD MMM YYYY")
+          }}
+        </span>
+      </p>
+      <p>
+        Total pembelian
 
-      <span> Rp {{ total.toLocaleString() }} </span>
-    </p>
+        <span class="font-bold"> Rp {{ total.toLocaleString() }} </span>
+      </p>
+    </div>
     <ObatTable :headers="headers" :data="data" />
     <Pagination :data="pagination" />
     <client-only>
@@ -38,19 +52,26 @@
           <div class="my-4 mx-6">
             <p>
               Tanggal awal
-              {{
-                $route.query.startDate ||
-                $dayjs().subtract(1, "year").format("DD MMMM YYYY")
-              }}
+              <span class="font-bold">
+                {{
+                  $dayjs($route.query.startDate).format("DD MMMM YYYY") ||
+                  $dayjs().subtract(1, "year").format("DD MMMM YYYY")
+                }}
+              </span>
             </p>
             <p>
               Tanggal akhir
-              {{ $route.query.startDate || $dayjs().format("DD MMM YYYY") }}
+              <span class="font-bold">
+                {{
+                  $dayjs($route.query.endDate).format("DD MMMM YYYY") ||
+                  $dayjs().format("DD MMM YYYY")
+                }}
+              </span>
             </p>
             <p>
               Total pembelian
 
-              <span> Rp {{ total.toLocaleString() }} </span>
+              <span class="font-bold"> Rp {{ total.toLocaleString() }} </span>
             </p>
           </div>
           <PrintReport

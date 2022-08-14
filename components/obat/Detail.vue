@@ -221,6 +221,7 @@ export default {
     },
 
     async buy() {
+      let arr = [];
       if (this.dataTable.length) {
         if (this.uangBayar < this.total || this.uangBayar === 0) {
           this.error = {
@@ -229,7 +230,6 @@ export default {
               "Field ini harus diisi dan harus lebih besar atau sama dengan total harga.",
           };
         } else {
-          console.log(this.dataTable);
           for (let index = 0; index < this.dataTable.length; index++) {
             const body = {
               ...this.dataTable[index],
@@ -237,8 +237,13 @@ export default {
               total: this.dataTable[index].total,
               supplier: this.dataTable[index].supplier,
             };
-            await this.$axios.post("/pembelian", body);
+            const data = await this.$axios.post("/pembelian", body);
+            arr.push(data.data);
           }
+          this.$router.push({
+            path: "/transaksi/pembelian/struk",
+            query: { arr },
+          });
 
           const supplierError = {
             value: "",
@@ -336,9 +341,12 @@ export default {
           supplier: this.supplier,
           total: this.total,
         };
-        console.log(body);
-        await this.$axios.post("/pembelian", body);
-
+        const data = await this.$axios.post("/pembelian", body);
+        arr.push(data.data);
+        this.$router.push({
+          path: "/transaksi/pembelian/struk",
+          query: { arr },
+        });
         window.scrollTo({ top: 0, behavior: "smooth" });
 
         // reset form
@@ -382,8 +390,13 @@ export default {
             total: this.dataTable[index].total,
             supplier: this.dataTable[index].supplier,
           };
-          await this.$axios.post("/pembelian", body);
+          const data = await this.$axios.post("/pembelian", body);
+          arr.push(data.data);
         }
+        this.$router.push({
+          path: "/transaksi/pembelian/struk",
+          query: { arr },
+        });
 
         const body = {
           ...this.data,
@@ -391,7 +404,12 @@ export default {
           supplier: this.supplier,
           total: this.total,
         };
-        await this.$axios.post("/pembelian", body);
+        const data = await this.$axios.post("/pembelian", body);
+        arr.push(data.data);
+        this.$router.push({
+          path: "/transaksi/pembelian/struk",
+          query: { data },
+        });
 
         const supplierError = {
           value: "",

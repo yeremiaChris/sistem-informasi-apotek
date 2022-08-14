@@ -34,7 +34,11 @@
                 :class="index % 2 === 0 ? 'bg-white' : 'bg-gray-50'"
               >
                 <td
-                  class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                  class="px-6 py-4 font-medium text-gray-900"
+                  :class="{
+                    'text-xs': $route.path.includes('struk'),
+                    'text-sm': !$route.path.includes('struk'),
+                  }"
                 >
                   {{ index + 1 }}
                 </td>
@@ -52,7 +56,11 @@
                     key !== 'laporan'
                   "
                   :key="idx"
-                  class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                  class="px-6 py-4 font-medium text-gray-900"
+                  :class="{
+                    'text-xs': $route.path.includes('struk'),
+                    'text-sm': !$route.path.includes('struk'),
+                  }"
                 >
                   <span v-if="key === 'isRecipe'">{{
                     !value ? "Tidak" : "Ya"
@@ -60,7 +68,7 @@
                   <span v-else>
                     {{
                       key === "recepiData"
-                        ? !value.IdentitasDokter
+                        ? !value && !value.IdentitasDokter
                           ? "Tidak resep dokter"
                           : value.IdentitasDokter +
                             "," +
@@ -86,7 +94,11 @@
                   v-for="(value, key, idx) in items"
                   v-show="key === 'media'"
                   :key="idx + 'media'"
-                  class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                  class="px-6 py-4 font-medium text-gray-900"
+                  :class="{
+                    'text-xs': $route.path.includes('struk'),
+                    'text-sm': !$route.path.includes('struk'),
+                  }"
                 >
                   <img
                     :src="$config.imageURL + value.defaultImage"
@@ -97,10 +109,17 @@
 
                 <td
                   v-if="$route.path !== '/'"
-                  class="px-6 py-4 whitespace-nowrap text-sm font-medium"
+                  class="px-6 py-4 font-medium"
+                  :class="{
+                    'text-xs': $route.path.includes('struk'),
+                    'text-sm': !$route.path.includes('struk'),
+                  }"
                 >
                   <div
-                    v-if="!$route.path.includes('laporan')"
+                    v-if="
+                      !$route.path.includes('laporan') &&
+                      !$route.path.includes('struk')
+                    "
                     class="flex gap-5"
                   >
                     <NuxtLink

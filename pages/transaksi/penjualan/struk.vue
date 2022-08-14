@@ -41,7 +41,7 @@
 export default {
   data() {
     return {
-      header: ["Nama", "Jumlah Beli", "Total", "Supplier"],
+      header: ["Nama", "Jumlah Beli", "Total", "Resep dokter"],
     };
   },
   computed: {
@@ -52,7 +52,7 @@ export default {
           name: item.name,
           jumlahBeli: item.jumlahBeli,
           total: item.total,
-          supplier: item.supplier,
+          isRecipe: item.type === "keras",
         };
       });
     },

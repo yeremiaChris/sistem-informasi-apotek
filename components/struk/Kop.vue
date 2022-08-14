@@ -3,6 +3,7 @@
     <div v-if="isButton" class="flex justify-end mb-12">
       <button
         type="button"
+        @click="exportData"
         class="inline-flex gap-3 items-center px-6 py-3 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
       >
         <svg
@@ -20,13 +21,25 @@
         Cetak
       </button>
     </div>
-    <div class="flex items-center mb-12">
+    <div class="flex items-center mb-12" v-if="!$route.path.includes('struk')">
       <img src="/apotek.png" class="h-20 w-20 rounded-full bg-gray-400" />
 
       <div class="text-center w-full">
         <h1 class="text-2xl font-bold">APOTEK PONTJOL</h1>
         <h1 class="text-2xl font-bold">{{ title }}</h1>
         <p>
+          Jl. Imam Bonjol No.31, Purwosari, Kec. Semarang Utara, Kota Semarang,
+          Jawa Tengah 50172
+        </p>
+      </div>
+    </div>
+    <div v-else class="flex items-center mb-12">
+      <img src="/apotek.png" class="h-12 w-12 rounded-full bg-gray-400" />
+
+      <div class="text-center w-full">
+        <h1 class="text-sm font-bold">APOTEK PONTJOL</h1>
+        <h1 class="text-sm font-bold">{{ title }}</h1>
+        <p class="text-xs">
           Jl. Imam Bonjol No.31, Purwosari, Kec. Semarang Utara, Kota Semarang,
           Jawa Tengah 50172
         </p>
@@ -48,5 +61,11 @@ export default {
     },
   },
   name: "Kop",
+
+  methods: {
+    exportData() {
+      this.$emit("export");
+    },
+  },
 };
 </script>

@@ -223,6 +223,7 @@ export default {
     },
 
     async buy() {
+      let arr = [];
       const payload = {
         value: this.dataTable,
         props: "dataTable",
@@ -286,7 +287,13 @@ export default {
           };
 
           // post data
-          await this.$axios.post("/penjualan", obj);
+          const data = await this.$axios.post("/penjualan", obj);
+
+          arr.push(data.data);
+          this.$router.push({
+            path: "/transaksi/penjualan/struk",
+            query: { arr },
+          });
         } else {
           for (let index = 0; index < this.dataTable.length; index++) {
             const obj = {
@@ -297,8 +304,13 @@ export default {
                 this.dataTable[index].sellingPrice *
                 this.dataTable[index].jumlahBeli,
             };
-            await this.$axios.post("/penjualan", obj);
+            const data = await this.$axios.post("/penjualan", obj);
+            arr.push(data.data);
           }
+          this.$router.push({
+            path: "/transaksi/penjualan/struk",
+            query: { arr },
+          });
         }
 
         this.$store.commit("setProps", payload);

@@ -15,9 +15,7 @@
       <!-- profile -->
       <p class="text-lg font-bold">
         Selamat datang
-        <span class="text-purple-700">
-          {{ auth.name }}
-        </span>
+        <span class="text-purple-700"> {{ auth._doc.name }} </span>
         di aplikasi sistem informasi apotek
       </p>
       <div class="ml-4 flex items-center md:ml-6">

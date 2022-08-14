@@ -7,6 +7,7 @@
       :items="itemsSelect"
       label="Laporan Persediaan Obat"
       @export="exportPdf"
+      @getData="$fetch()"
     />
     <ObatTable :headers="headers" :data="data" />
     <Pagination :data="pagination" />
@@ -73,12 +74,14 @@ export default {
   },
 
   async fetch() {
-    const { page, query, sortBy } = this.$route.query;
+    const { page, query, sortBy, startDate, endDate } = this.$route.query;
     const res = await this.$axios.get("/medicine", {
       params: {
         page,
         query,
         sortBy,
+        startDate,
+        endDate,
       },
     });
 

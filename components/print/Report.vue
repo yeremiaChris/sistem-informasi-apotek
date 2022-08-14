@@ -1,6 +1,5 @@
 <template>
   <section>
-    <StrukKop class="pdf-item px-10 mt-6" :is-button="false" :title="title" />
     <PrintReportTable :data="data" :headers="headers" />
     <StrukFooter />
   </section>

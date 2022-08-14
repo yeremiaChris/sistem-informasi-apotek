@@ -7,6 +7,17 @@
       @export="exportPdf"
       @getData="getData('/pembelian', 'data')"
     />
+    <p class="my-4">
+      Total pembelian
+      {{
+        $route.query.startDate ||
+        $dayjs().subtract(1, "year").format("DD MMMM YYYY")
+      }}
+      sampai
+      {{ $route.query.startDate || $dayjs().format("DD MMM YYYY") }}
+
+      <span> Rp {{ total.toLocaleString() }} </span>
+    </p>
     <ObatTable :headers="headers" :data="data" />
     <Pagination :data="pagination" />
     <client-only>
@@ -18,12 +29,36 @@
         filename="exportFilename"
         ref="html2Pdf"
       >
-        <PrintReport
-          slot="pdf-content"
-          :headers="headers"
-          :data="data"
-          title="LAPORAN PEMBELIAN OBAT"
-        />
+        <div slot="pdf-content">
+          <StrukKop
+            class="pdf-item px-10 mt-6"
+            :is-button="false"
+            title="LAPORAN PEMBELIAN OBAT"
+          />
+          <div class="my-4 mx-6">
+            <p>
+              Tanggal awal
+              {{
+                $route.query.startDate ||
+                $dayjs().subtract(1, "year").format("DD MMMM YYYY")
+              }}
+            </p>
+            <p>
+              Tanggal akhir
+              {{ $route.query.startDate || $dayjs().format("DD MMM YYYY") }}
+            </p>
+            <p>
+              Total pembelian
+
+              <span> Rp {{ total.toLocaleString() }} </span>
+            </p>
+          </div>
+          <PrintReport
+            :headers="headers"
+            :data="data"
+            title="LAPORAN PEMBELIAN OBAT"
+          />
+        </div>
       </vue-html2pdf>
     </client-only>
   </div>
@@ -71,6 +106,10 @@ export default {
     },
     deleteId() {
       return this.$store.state.deleteId;
+    },
+    total() {
+      const total = this.data.reduce((a, c) => a + c.total, 0);
+      return total || 0;
     },
   },
   watch: {

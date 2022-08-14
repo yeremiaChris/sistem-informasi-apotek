@@ -1,52 +1,57 @@
 <template>
-  <form @submit.prevent="submit">
-    <!-- <Breadcrumbs :url="breadcrumbs" class="mb-7" /> -->
-    <div class="flex justify-between">
-      <h1 class="text-xl font-bold uppercase">{{ label }}</h1>
-      <div class="flex gap-3">
-        <button
-          @click="exportPdf"
-          v-if="
-            !$route.path.includes('admin') &&
-            !$route.path.includes('jenis') &&
-            !$route.path.includes('obat/list') &&
-            !$route.path.includes('supplier/list') &&
-            !$route.path.includes('satuan')
-          "
-          type="button"
-          class="flex gap-3 font-bold items-center px-4 py-4 uppercase border border-gray-300 shadow-sm text-base font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        >
-          <img src="/export.svg" class="w-6" alt="export" />
-          Cetak
-        </button>
-        <NuxtLink
-          v-if="!$route.path.includes('laporan')"
-          :to="
-            !link
-              ? $route.path.includes('jenis')
-                ? '/obat/jenis/tambah'
-                : $route.path.includes('satuan')
-                ? '/obat/satuan/tambah'
-                : 'tambah'
-              : link
-          "
-          class="font-bold items-center px-4 py-4 uppercase border border-gray-300 shadow-sm text-base font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        >
-          Tambah {{ label }}
-        </NuxtLink>
+  <div>
+    <form @submit.prevent="submit">
+      <!-- <Breadcrumbs :url="breadcrumbs" class="mb-7" /> -->
+      <div class="flex justify-between">
+        <h1 class="text-xl font-bold uppercase">{{ label }}</h1>
+        <div class="flex gap-3">
+          <button
+            @click="exportPdf"
+            v-if="
+              !$route.path.includes('admin') &&
+              !$route.path.includes('jenis') &&
+              !$route.path.includes('obat/list') &&
+              !$route.path.includes('supplier/list') &&
+              !$route.path.includes('satuan')
+            "
+            type="button"
+            class="flex gap-3 font-bold items-center px-4 py-4 uppercase border border-gray-300 shadow-sm text-base font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            <img src="/export.svg" class="w-6" alt="export" />
+            Cetak
+          </button>
+          <NuxtLink
+            v-if="!$route.path.includes('laporan')"
+            :to="
+              !link
+                ? $route.path.includes('jenis')
+                  ? '/obat/jenis/tambah'
+                  : $route.path.includes('satuan')
+                  ? '/obat/satuan/tambah'
+                  : 'tambah'
+                : link
+            "
+            class="font-bold items-center px-4 py-4 uppercase border border-gray-300 shadow-sm text-base font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            Tambah {{ label }}
+          </NuxtLink>
+        </div>
       </div>
-    </div>
-    <div class="flex justify-between mt-8" v-if="!$route.path.includes('view')">
-      <FormsInput
-        class="mb-4"
-        label="Search"
-        name="search"
-        v-model="search"
-        placeholder="Search here..."
-      />
-      <FormsSingleSelect label="Urutkan" :items="items" v-model="order" />
-    </div>
-    <p class="mt-4">Filter by date</p>
+      <div
+        class="flex justify-between mt-8"
+        v-if="!$route.path.includes('view')"
+      >
+        <FormsInput
+          class="mb-4"
+          label="Search"
+          name="search"
+          v-model="search"
+          placeholder="Search here..."
+        />
+        <FormsSingleSelect label="Urutkan" :items="items" v-model="order" />
+      </div>
+      <p class="mt-4">Filter by date</p>
+    </form>
     <div v-if="$route.path.includes('laporan')" class="flex items-center gap-3">
       <FormsInput
         label="Start date"
@@ -60,9 +65,14 @@
         type="date"
         v-model="endDate"
       />
-      <FormsButton label="Filter" class="mt-4" @submit="submitDate" />
+      <FormsButton
+        type="button"
+        label="Filter"
+        class="mt-4"
+        @submit="submitDate"
+      />
     </div>
-  </form>
+  </div>
 </template>
 
 <script>
@@ -90,24 +100,11 @@ export default {
     return {
       order: "",
       search: "",
-      startDate: "",
-      endDate: "",
+      startDate: this.$dayjs().subtract(1, "year").toString(),
+      endDate: this.$dayjs().toString(),
     };
   },
-  mounted() {
-    const query = this.$route.query;
 
-    if (query.startDate) {
-      this.startDate = query.startDate;
-    } else {
-      this.startDate = this.$dayjs().subtract(1, "year");
-    }
-    if (query.endDate) {
-      this.endDate = query.endDate;
-    } else {
-      this.endDate = this.$dayjs();
-    }
-  },
   watch: {
     order() {
       const query = this.$route.query;
@@ -128,7 +125,9 @@ export default {
       this.$router.push({ query: { ...query, query: this.search } });
     },
     submitDate() {
-      this.$emit("getData");
+      if (this.startDate && this.endDate) {
+        this.$emit("getData");
+      }
     },
     exportPdf(e) {
       e.preventDefault();

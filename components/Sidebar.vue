@@ -114,6 +114,7 @@
         </nav>
       </div>
     </div>
+
     <button
       @click="logout"
       :disabled="disabled"

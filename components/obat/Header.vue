@@ -9,6 +9,8 @@
           v-if="
             !$route.path.includes('admin') &&
             !$route.path.includes('jenis') &&
+            !$route.path.includes('obat/list') &&
+            !$route.path.includes('supplier/list') &&
             !$route.path.includes('satuan')
           "
           type="button"
@@ -44,6 +46,9 @@
       />
       <FormsSingleSelect label="Urutkan" :items="items" v-model="order" />
     </div>
+    <div class="flex justify-between">
+      <FormsSingleSelect label="Filter" :items="filter" v-model="filterData" />
+    </div>
   </form>
 </template>
 
@@ -71,13 +76,32 @@ export default {
   data() {
     return {
       order: "",
+      filterData: "",
       search: "",
+      filter: [
+        {
+          title: "Minggu ini",
+          value: "thisWeek",
+        },
+        {
+          title: "Bulan ini",
+          value: "thisMonth",
+        },
+        {
+          title: "Tahun ini",
+          value: "thisYear",
+        },
+      ],
     };
   },
   watch: {
     order() {
       const query = this.$route.query;
       this.$router.push({ query: { ...query, sortBy: this.order } });
+    },
+    filterData() {
+      const query = this.$route.query;
+      this.$router.push({ query: { ...query, filter: this.filterData } });
     },
   },
   methods: {

@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import menus from "@/helpers/fields/role";
+import menuses from "@/helpers/fields/role";
 export default {
   data() {
     return {
@@ -48,7 +48,7 @@ export default {
         roleName: "",
         menus: "",
       },
-      menus,
+      menus: menuses,
     };
   },
 
@@ -68,8 +68,14 @@ export default {
         const res = await this.$axios.get("/role/" + this.$route.params.id);
         const { roleName, menus } = res.data;
         this.roleName = roleName;
-
-        this.menus = menus;
+        this.menus = menuses.map((item) => {
+          const isPermitted = menus.find((el) => el.menuName === item.menuName);
+          console.log(isPermitted);
+          return {
+            ...item,
+            isPermitted: (isPermitted && isPermitted.isPermitted) || false,
+          };
+        });
       } catch (error) {}
     },
     toggleMenus(name) {

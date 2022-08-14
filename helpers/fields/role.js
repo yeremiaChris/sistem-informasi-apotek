@@ -27,4 +27,8 @@ export default [
     menuName: "Laporan Penjualan",
     isPermitted: false,
   },
+  {
+    menuName: "Laporan Persediaan",
+    isPermitted: false,
+  },
 ];

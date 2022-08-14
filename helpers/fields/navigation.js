@@ -73,5 +73,14 @@ export default [
     isActive: false,
     subMenu: [],
   },
+  {
+    name: "Laporan",
+    title: "Laporan Persediaan",
+    front: "Laporan Persediaan",
+    href: "/laporan/persediaan",
+    icon: "icon",
+    isActive: false,
+    subMenu: [],
+  },
   // { name: "Retur", href: "#", icon: "icon", isActive: false },
 ];

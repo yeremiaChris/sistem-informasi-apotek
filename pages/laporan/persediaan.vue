@@ -1,9 +1,13 @@
 <template>
   <div>
-    <Breadcrumbs url="Obat / Daftar" class="mb-7" />
+    <Breadcrumbs url="Laporan / Persediaan" class="mb-7" />
 
     <ModalDelete v-show="open" @delete="deleteData" />
-    <ObatHeader :items="itemsSelect" label="Daftar Obat" @export="exportPdf" />
+    <ObatHeader
+      :items="itemsSelect"
+      label="Laporan Persediaan Obat"
+      @export="exportPdf"
+    />
     <ObatTable :headers="headers" :data="data" />
     <Pagination :data="pagination" />
 
@@ -20,7 +24,7 @@
           slot="pdf-content"
           :headers="headers"
           :data="printData"
-          title="LAPORAN DATA  OBAT"
+          title="LAPORAN PERSEDIAAN OBAT"
         />
       </vue-html2pdf>
     </client-only>
@@ -39,11 +43,12 @@ export default {
       },
       headers: [
         "Nama",
-        "Jenis",
-        "Satuan",
-        "Tanggal",
         "Harga beli",
         "Harga jual",
+        " Persediaan",
+        "Tipe",
+        "Satuan",
+        "Tanggal update",
       ],
       data: [],
       itemsSelect: [
@@ -58,6 +63,10 @@ export default {
         {
           title: "Harga jual",
           value: "sellingPrice",
+        },
+        {
+          title: "Persediaan",
+          value: "supply",
         },
       ],
     };
@@ -79,10 +88,11 @@ export default {
         _id: item._id,
         id: item._id,
         name: item.name,
-        type: item.type,
-        unit: item.unit,
         purchasePrice: item.purchasePrice,
         sellingPrice: item.sellingPrice,
+        supply: item.supply,
+        type: item.type,
+        unit: item.unit,
         updatedAt: item.updatedAt,
       };
     });
@@ -119,10 +129,11 @@ export default {
           _id: item._id,
           id: item._id,
           name: item.name,
-          type: item.type,
-          unit: item.unit,
           purchasePrice: item.purchasePrice,
           sellingPrice: item.sellingPrice,
+          supply: item.supply,
+          type: item.type,
+          unit: item.unit,
           updatedAt: item.updatedAt,
         };
       });

@@ -38,7 +38,18 @@ export default {
         page: 1,
         totalPage: 2,
       },
-      headers: ["Nama", "Uang Bayar", "Total", "Kembalian", "Tanggal"],
+      headers: [
+        "Nama",
+        "Jenis",
+        "Satuan",
+        "Harga beli",
+        "Harga jual",
+        "Stok awal",
+        "Jumlah beli",
+        "Total harga",
+        "Tanggal transaksi",
+        "Stok akhir",
+      ],
       data: [],
       printData: [],
       itemsSelect: [
@@ -116,7 +127,11 @@ export default {
       });
       const { data, pagination } = res.data;
 
-      this[props] = data.map((item) => ({ ...item, id: item._id }));
+      this[props] = data.map((item) => ({
+        ...item,
+        id: item._id,
+        stokTerbaru: item.supply + item.jumlahBeli,
+      }));
       this.pagination = pagination;
     },
   },

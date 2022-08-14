@@ -60,7 +60,7 @@
                   <span v-else>
                     {{
                       key === "updatedAt"
-                        ? new Date(value).toDateString()
+                        ? $dayjs(value).format("DD MMM YYYY | HH:mm")
                         : typeof value === "number"
                         ? value.toLocaleString()
                         : key === "laporan"
@@ -112,20 +112,6 @@
                       Delete
                     </button>
                   </div>
-
-                  <NuxtLink
-                    v-else-if="
-                      $route.path.includes('laporan') &&
-                      !$route.path.includes('view')
-                    "
-                    class="text-blue-600 hover:text-red-900"
-                    :to="{
-                      path: $route.path + '/view',
-                      query: { data: items.laporan },
-                    }"
-                  >
-                    View
-                  </NuxtLink>
                 </td>
               </tr>
             </tbody>

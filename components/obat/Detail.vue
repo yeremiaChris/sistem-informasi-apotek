@@ -127,7 +127,7 @@ export default {
           ? this.dataTable.reduce((a, c) => a + c.total, 0)
           : this.dataTable.reduce((a, c) => a + c.total, 0) +
             this.data.purchasePrice * this.value;
-      return total;
+      return !total ? 0 : total;
     },
 
     dataTable() {
@@ -176,7 +176,11 @@ export default {
         if (!isFilled) {
           value = [obj, ...this.dataTable];
         } else {
-          value = this.dataTable;
+          value = this.dataTable.map((item) => ({
+            ...item,
+            total: obj.total,
+            jumlahBeli: parseInt(item.jumlahBeli) + parseInt(obj.jumlahBeli),
+          }));
         }
         const payload = {
           value: value.map((item, index) => {
@@ -192,7 +196,6 @@ export default {
         this.$emit("setProps", { data: {}, props: "detail" });
         this.$emit("setProps", { data: "", props: "product" });
         this.$emit("setProps", { data: "", props: "supplier" });
-        this.total = 0;
         this.uangBayar = 0;
         this.$refs.formPembelian.reset(); // This will clear that form
       } else {
@@ -211,63 +214,127 @@ export default {
           this.$store.commit("setProps", payload);
         }
       }
+      this.value = 1;
     },
 
     async buy() {
       if (
-        (this.isEmptyObject && isEmptyObject(this.supplier)) ||
-        this.uangBayar < this.total ||
-        this.uangBayar === 0
+        this.dataTable.length &&
+        (this.uangBayar > this.total || this.uangBayar === 0)
       ) {
+        if (this.uangBayar === 0) {
+          console.log(this.uangBayar);
+          this.error = {
+            ...this.error,
+            uangBayar:
+              "Field ini harus diisi dan harus lebih besar dari total harga.",
+          };
+        } else {
+          for (let index = 0; index < this.dataTable.length; index++) {
+            console.log(this.dataTable);
+
+            const body = {
+              ...this.dataTable[index],
+              jumlahBeli: parseInt(this.dataTable[index].jumlahBeli),
+              total: this.dataTable[index].total,
+            };
+            await this.$axios.post("/pembelian", body);
+          }
+
+          const supplierError = {
+            value: "",
+            props: "supplierError",
+          };
+          this.$store.commit("setProps", supplierError);
+          const productError = {
+            value: "",
+            props: "produkError",
+          };
+          this.$store.commit("setProps", productError);
+
+          window.scrollTo({ top: 0, behavior: "smooth" });
+
+          // reset form
+          this.$emit("setProps", { data: {}, props: "detail" });
+          this.$emit("setProps", { data: "", props: "product" });
+          this.$emit("setProps", { data: "", props: "supplier" });
+          this.$emit("setProps", { data: {}, props: "supplierData" });
+          const payload = {
+            value: [],
+            props: "dataTable",
+          };
+          this.$store.commit("setProps", payload);
+          const payload2 = {
+            value: true,
+            props: "success",
+          };
+          this.$store.commit("setProps", payload2);
+          setTimeout(() => {
+            const payload3 = {
+              value: false,
+              props: "success",
+            };
+            this.$store.commit("setProps", payload3);
+          }, 3000);
+          this.$refs.formPembelian.reset(); // This will clear that form
+          this.uangBayar = 0;
+          // last reset form
+        }
+      } else if (
+        this.dataTable.length &&
+        (this.uangBayar <= this.total || this.uangBayar === 0)
+      ) {
+        this.error = {
+          ...this.error,
+          uangBayar:
+            "Field ini harus diisi dan harus lebih besar dari total harga.",
+        };
+      } else if (
+        (this.isEmptyObject && isEmptyObject(this.supplier)) ||
+        this.uangBayar === 0 ||
+        !this.dataTable.length ||
+        this.uangBayar < this.total
+      ) {
+        // product empty
         if (this.isEmptyObject) {
           const payload = {
             value: "Field ini harus diisi",
-            props: "produk",
+            props: "produkError",
           };
           this.$store.commit("setProps", payload);
         }
+
+        // supplier empty
         if (isEmptyObject(this.supplier)) {
           const payload = {
             value: "Field ini harus diisi",
-            props: "supplier",
+            props: "supplierError",
           };
           this.$store.commit("setProps", payload);
         }
-        if (this.uangBayar < this.total || this.uangBayar === 0) {
-          console.log(this.uangBayar < this.total || this.uangBayar === 0);
-          if (this.uangBayar < this.total) {
-            this.error = { uangBayar: "This field must be more than total." };
-          } else {
-            this.error = { uangBayar: "Field ini harus diisi." };
-          }
-        }
-      } else {
-        const { total, supplier } = this;
-        const obj = {
-          ...this.data,
-          total,
-          jumlahBeli: this.value,
-          supplier,
-        };
 
-        // post data
-        const data = await this.$axios.post("/pembelian", {
-          laporan: this.dataTable.length ? this.dataTable : obj,
-          uangBayar: this.uangBayar,
+        // uang bayar empty
+        if (this.uangBayar === 0) {
+          console.log(this.uangBayar);
+          this.error = {
+            ...this.error,
+            uangBayar:
+              "Field ini harus diisi dan harus lebih besar dari total harga.",
+          };
+        }
+      } else if (
+        ((!this.isEmptyObject && !isEmptyObject(this.supplier)) ||
+          this.uangBayar > this.total) &&
+        !this.dataTable.length
+      ) {
+        const body = {
+          ...this.data,
+          jumlahBeli: parseInt(this.value),
           total: this.total,
-          kembalian: this.kembalian,
-          title: "Laporan " + this.$dayjs().format("DD MMM YYYY Pukul HH:mm"),
-        });
+        };
+        await this.$axios.post("/pembelian", body);
 
         window.scrollTo({ top: 0, behavior: "smooth" });
-
-        // const payloadPrint = {
-        //   props: "report",
-        //   value: data.data,
-        // };
-        // this.$store.commit("setProps", payloadPrint);
-
-        // this.$emit("print");
 
         // reset form
         this.$emit("setProps", { data: {}, props: "detail" });

@@ -46,8 +46,21 @@
       />
       <FormsSingleSelect label="Urutkan" :items="items" v-model="order" />
     </div>
-    <div class="flex justify-between">
-      <FormsSingleSelect label="Filter" :items="filter" v-model="filterData" />
+    <p class="mt-4">Filter by date</p>
+    <div v-if="$route.path.includes('laporan')" class="flex items-center gap-3">
+      <FormsInput
+        label="Start date"
+        name="startDate"
+        type="date"
+        v-model="startDate"
+      />
+      <FormsInput
+        label="End date"
+        name="startDate"
+        type="date"
+        v-model="endDate"
+      />
+      <FormsButton label="Filter" class="mt-4" />
     </div>
   </form>
 </template>
@@ -76,32 +89,33 @@ export default {
   data() {
     return {
       order: "",
-      filterData: "",
       search: "",
-      filter: [
-        {
-          title: "Minggu ini",
-          value: "thisWeek",
-        },
-        {
-          title: "Bulan ini",
-          value: "thisMonth",
-        },
-        {
-          title: "Tahun ini",
-          value: "thisYear",
-        },
-      ],
+      startDate: "",
+      endDate: "",
     };
+  },
+  mounted() {
+    const query = this.$route.query;
+
+    if (query.startDate) {
+      this.startDate = query.startDate;
+    }
+    if (query.endDate) {
+      this.endDate = query.endDate;
+    }
   },
   watch: {
     order() {
       const query = this.$route.query;
       this.$router.push({ query: { ...query, sortBy: this.order } });
     },
-    filterData() {
+    startDate() {
       const query = this.$route.query;
-      this.$router.push({ query: { ...query, filter: this.filterData } });
+      this.$router.push({ query: { ...query, startDate: this.startDate } });
+    },
+    endDate() {
+      const query = this.$route.query;
+      this.$router.push({ query: { ...query, endDate: this.endDate } });
     },
   },
   methods: {

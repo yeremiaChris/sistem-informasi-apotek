@@ -2,14 +2,15 @@
   <form class="text-gray-600">
     <Breadcrumbs url="Transaksi / Penjualan" class="mb-7" />
     <h1 class="text-3xl font-bold mb-6">Transaksi Penjualan</h1>
-    <FormsToggle :value="isRecipe" @toggle="toggle" />
-
+    <!-- <FormsToggle :value="isRecipe" @toggle="toggle" /> -->
     <!-- form dengan resep -->
-    <div v-if="isRecipe">
+    <div v-if="detail.type === 'keras'">
+      <h2 class="mb-2 font-bold">Obat dengan resep dokter</h2>
       <div v-for="(item, key, i) in recipiData" :key="i">
         <FormsTextarea
           :title="key.match(/[A-Z][a-z]+|[0-9]+/g).join(' ')"
           :error="recipiDataError[key]"
+          :value="recipiData[key]"
           v-model="recipiData[key]"
         />
       </div>
@@ -27,14 +28,12 @@
 
     <ObatDetailPenjualan
       :data="detail"
-      :isRecipe="isRecipe"
       :recipiDataError="recipiDataError"
       :recipiData="recipiData"
       @setProps="setProps"
       @setErrorRecipi="setErrorRecipi"
       @print="print"
     />
-
     <ObatTable
       class="mt-10"
       :headers="headersPrint"
@@ -67,13 +66,13 @@ export default {
       isRecipe: false,
       recipiData: {
         IdentitasDokter: "",
-        IdentitasPasien: "",
+        IdentitasCustomer: "",
         InformasiObat: "",
         Deskripsi: "",
       },
       recipiDataError: {
         IdentitasDokter: "",
-        IdentitasPasien: "",
+        IdentitasCustomer: "",
         InformasiObat: "",
         Deskripsi: "",
       },
@@ -89,11 +88,9 @@ export default {
         "Nama obat",
         "Tipe",
         "Satuan",
-        "Harga per satuan",
-        "Stok",
-        "Tanggal",
-        "Jumlah beli",
         "Resep dokter",
+        "Harga jual",
+        "Jumlah beli",
         "Total harga",
       ],
     };
@@ -107,8 +104,8 @@ export default {
     "$data.recipiData.IdentitasDokter"() {
       this.recipiDataError.IdentitasDokter = "";
     },
-    "$data.recipiData.IdentitasPasien"() {
-      this.recipiDataError.IdentitasPasien = "";
+    "$data.recipiData.IdentitasCustomer"() {
+      this.recipiDataError.IdentitasCustomer = "";
     },
     "$data.recipiData.InformasiObat"() {
       this.recipiDataError.InformasiObat = "";
@@ -124,7 +121,19 @@ export default {
     },
 
     dataTable() {
-      return this.$store.state.dataTable;
+      return this.$store.state.dataTable.map((item) => {
+        const { _id, name, type, unit, sellingPrice, jumlahBeli, total } = item;
+        return {
+          _id,
+          name,
+          type,
+          unit,
+          isRecipe: item.type === "keras",
+          sellingPrice,
+          jumlahBeli,
+          total,
+        };
+      });
     },
   },
 

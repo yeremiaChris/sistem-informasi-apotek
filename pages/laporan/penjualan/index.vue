@@ -5,6 +5,7 @@
       :items="itemsSelect"
       label="Laporan penjualan"
       @export="exportPdf"
+      @getData="getData('/penjualan', 'data')"
     />
     <ObatTable :headers="headers" :data="data" />
     <Pagination :data="pagination" />
@@ -20,7 +21,7 @@
         <PrintReport
           slot="pdf-content"
           :headers="headers"
-          :data="printData"
+          :data="data"
           title="LAPORAN PENJUALAN OBAT"
         />
       </vue-html2pdf>
@@ -38,7 +39,15 @@ export default {
         page: 1,
         totalPage: 2,
       },
-      headers: ["Nama", "Uang Bayar", "Total", "Kembalian", "Tanggal"],
+      headers: [
+        "Nama",
+        "Jenis",
+        "Satuan",
+        "Harga jual",
+        "Jumlah jual",
+        "Total harga",
+        "Tanggal",
+      ],
       printData: [],
       data: [],
       itemsSelect: [
@@ -112,19 +121,37 @@ export default {
     },
 
     async getData(endpoint, props) {
-      const { page, query, sortBy } = this.$route.query;
+      const { page, query, sortBy, startDate, endDate } = this.$route.query;
       const res = await this.$axios.get(endpoint, {
         params: {
           page,
           query,
           sortBy,
+          startDate,
+          endDate,
         },
       });
       const { data, pagination } = res.data;
       this[props] = data.map((item) => {
+        const {
+          _id,
+          name,
+          type,
+          unit,
+          sellingPrice,
+          jumlahBeli,
+          total,
+          updatedAt,
+        } = item;
         return {
-          ...item,
-          id: item._id,
+          _id,
+          name,
+          type,
+          unit,
+          sellingPrice,
+          jumlahBeli,
+          total,
+          updatedAt,
         };
       });
       this.pagination = pagination;

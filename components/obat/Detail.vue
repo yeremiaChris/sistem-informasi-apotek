@@ -179,7 +179,10 @@ export default {
           value = this.dataTable.map((item) => ({
             ...item,
             total: obj.total,
-            jumlahBeli: parseInt(item.jumlahBeli) + parseInt(obj.jumlahBeli),
+            jumlahBeli:
+              el._id === obj._id && el.supplier._id === obj.supplier._id
+                ? parseInt(item.jumlahBeli) + parseInt(obj.jumlahBeli)
+                : item.jumlahBeli,
           }));
         }
         const payload = {

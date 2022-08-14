@@ -27,7 +27,7 @@
     <div>
       <p class="my-1">Jumlah beli</p>
       <input
-        v-model="jumlah"
+        v-model="jumlahBeli"
         :disabled="isEmptyObject"
         type="number"
         min="0"
@@ -75,10 +75,6 @@ export default {
     },
     recipiData: {
       type: Object,
-      required: true,
-    },
-    isRecipe: {
-      type: Boolean,
       required: true,
     },
   },
@@ -153,17 +149,39 @@ export default {
     },
     add() {
       //
-      if (!this.isEmptyObject) {
-        if (this.jumlahBeli <= this.data.supply) {
-          const { name, _id, price } = this.data;
+      if (this.isEmptyObject) {
+        if (this.isEmptyObject) {
+          this.$store.commit("setProps", {
+            props: "produkError",
+            value: "Field product harus diisi.",
+          });
+        }
+      } else {
+        console.log();
+        const isRecipiValue = Object.values(this.recipiData).every(
+          (el) => el.length
+        );
+        if (this.data.type === "keras" && !isRecipiValue) {
+          for (const key in this.recipiData) {
+            if (Object.hasOwnProperty.call(this.recipiData, key)) {
+              if (this.data.type === "keras" && !this.recipiData[key].length) {
+                const payload = {
+                  props: key,
+                  data: "Field product tidak boleh kosong. ",
+                };
+                this.$emit("setErrorRecipi", payload);
+              }
+            }
+          }
+        } else {
           const obj = {
             ...this.data,
+            total: this.jumlahBeli * this.data.sellingPrice,
             jumlahBeli: this.jumlahBeli,
-            recipiData: this.recipiData,
-            isRecipe: this.isRecipe,
-            total: this.data.sellingPrice * this.jumlahBeli,
           };
+
           const isFilled = this.dataTable.some((el) => el._id === obj._id);
+
           let value = [];
           if (!isFilled) {
             value = [obj, ...this.dataTable];
@@ -171,9 +189,13 @@ export default {
             value = this.dataTable.map((item) => ({
               ...item,
               total: obj.total,
-              jumlahBeli: parseInt(item.jumlahBeli) + parseInt(obj.jumlahBeli),
+              jumlahBeli:
+                item._id === obj._id
+                  ? parseInt(item.jumlahBeli) + parseInt(obj.jumlahBeli)
+                  : item.jumlahBeli,
             }));
           }
+
           const payload = {
             value: value.map((item, index) => {
               return {
@@ -183,41 +205,20 @@ export default {
             }),
             props: "dataTable",
           };
+          this.$store.commit("setProps", payload);
+          const detailPayload = {
+            data: {},
+            props: "detail",
+          };
+          this.$emit("setProps", detailPayload);
 
-          if (this.isRecipe) {
-            for (const property in this.recipiData) {
-              if (!this.recipiData[property].length) {
-                this.$emit("setErrorRecipi", {
-                  props: property,
-                  data: "Field ini harus diisi.",
-                });
-              } else {
-                this.$store.commit("setProps", payload);
-                this.$emit("setProps", { props: "detail", data: {} });
-                this.$emit("setProps", { props: "product", data: "" });
-                this.$emit("setProps", { props: "isRecipe", data: false });
-                this.$refs.formPenjualan.reset(); // This will clear that form
-              }
-            }
-          } else {
-            this.$store.commit("setProps", payload);
-            this.$emit("setProps", { props: "detail", data: {} });
-            this.$emit("setProps", { props: "product", data: "" });
-            this.$emit("setProps", { props: "isRecipe", data: false });
-            this.$refs.formPenjualan.reset(); // This will clear that form
-          }
-        } else {
-          this.$store.commit("setProps", {
-            props: "produkError",
-            value: `The ${this.data.name} stock is empty`,
-          });
+          const payloadProduct = {
+            props: "product",
+            data: "",
+          };
+          this.$emit("setProps", payloadProduct);
+          this.jumlahBeli = 1;
         }
-      } else {
-        //
-        this.$store.commit("setProps", {
-          props: "produkError",
-          value: "Field ini harus diisi.",
-        });
       }
     },
 
@@ -237,6 +238,7 @@ export default {
             value: `The ${this.data.name} stock is empty`,
           });
         }
+
         if (this.isEmptyObject && !this.dataTable.length) {
           const payload = {
             props: "produkError",
@@ -244,46 +246,65 @@ export default {
           };
           this.$store.commit("setProps", payload);
         }
+
         if (this.uangBayar < this.total) {
           this.error.uangBayar =
             "Uang bayar harus lebih besar atau sama dengan total.";
         }
+
         if (!this.dataTable.length && this.isEmptyObject) {
           const payload = {
             props: "produkError",
-            value: "You should pick at least one product.",
+            value: "Field product tidak boleh kosong. ",
           };
           this.$store.commit("setProps", payload);
         }
+
+        for (const key in this.recipiData) {
+          if (Object.hasOwnProperty.call(this.recipiData, key)) {
+            if (
+              this.data &&
+              this.data.type === "keras" &&
+              !this.recipiData[key].length
+            ) {
+              const payload = {
+                props: key,
+                data: "Field product tidak boleh kosong. ",
+              };
+              this.$emit("setErrorRecipi", payload);
+            }
+          }
+        }
       } else {
+        if (!this.dataTable.length) {
+          let obj = {};
+          obj = {
+            ...this.data,
+            recipiData: this.recipiData,
+            jumlahBeli: this.jumlahBeli,
+            total: this.data.sellingPrice * this.jumlahBeli,
+          };
+
+          // post data
+          await this.$axios.post("/penjualan", obj);
+        } else {
+          for (let index = 0; index < this.dataTable.length; index++) {
+            const obj = {
+              ...this.dataTable[index],
+              recipiData: this.dataTable[index].recipiData,
+              jumlahBeli: this.dataTable[index].jumlahBeli,
+              total:
+                this.dataTable[index].sellingPrice *
+                this.dataTable[index].jumlahBeli,
+            };
+            await this.$axios.post("/penjualan", obj);
+          }
+        }
+
         this.$store.commit("setProps", payload);
         this.$emit("setProps", { props: "detail", data: {} });
         this.$emit("setProps", { props: "product", data: "" });
-        this.$emit("setProps", { props: "isRecipe", data: false });
         this.$refs.formPenjualan.reset(); // This will clear that form
-        const obj = {
-          ...this.data,
-          recipiData: this.recipiData,
-          jumlahBeli: this.jumlahBeli,
-          isRecipe: this.isRecipe,
-          total: this.data.sellingPrice * this.jumlahBeli,
-        };
-
-        // post data
-        const datas = [obj, ...this.dataTable];
-        console.log(this.dataTable);
-        const data = await this.$axios.post("/penjualan", {
-          laporan:
-            this.dataTable.length && !this.isEmptyObject
-              ? datas
-              : this.dataTable.length && this.isEmptyObject
-              ? this.dataTable
-              : obj,
-          uangBayar: this.uangBayar,
-          total: this.total,
-          kembalian: this.kembalian,
-          title: "Laporan " + this.$dayjs().format("DD MMM YYYY Pukul HH:mm"),
-        });
         const payload2 = {
           value: true,
           props: "success",

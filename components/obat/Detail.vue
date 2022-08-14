@@ -256,9 +256,9 @@ export default {
 
           // reset form
           this.$emit("setProps", { data: {}, props: "detail" });
+          this.$emit("setProps", { data: {}, props: "supplierData" });
           this.$emit("setProps", { data: "", props: "product" });
           this.$emit("setProps", { data: "", props: "supplier" });
-          this.$emit("setProps", { data: {}, props: "supplierData" });
           const payload = {
             value: [],
             props: "dataTable",
@@ -290,10 +290,9 @@ export default {
             "Field ini harus diisi dan harus lebih besar dari total harga.",
         };
       } else if (
-        (this.isEmptyObject && isEmptyObject(this.supplier)) ||
-        this.uangBayar === 0 ||
-        !this.dataTable.length ||
-        this.uangBayar < this.total
+        (this.isEmptyObject ||
+          (isEmptyObject(this.supplier) && this.uangBayar < this.total)) &&
+        !this.dataTable.length
       ) {
         // product empty
         if (this.isEmptyObject) {
@@ -315,16 +314,23 @@ export default {
 
         // uang bayar empty
         if (this.uangBayar === 0) {
-          console.log(this.uangBayar);
           this.error = {
             ...this.error,
             uangBayar:
               "Field ini harus diisi dan harus lebih besar dari total harga.",
           };
         }
-      } else if (
-        ((!this.isEmptyObject && !isEmptyObject(this.supplier)) ||
-          this.uangBayar > this.total) &&
+      }
+      console.log(
+        !this.isEmptyObject &&
+          !isEmptyObject(this.supplier) &&
+          this.uangBayar > this.total &&
+          !this.dataTable.length
+      );
+      if (
+        !this.isEmptyObject &&
+        !isEmptyObject(this.supplier) &&
+        this.uangBayar > this.total &&
         !this.dataTable.length
       ) {
         const body = {
@@ -338,6 +344,7 @@ export default {
 
         // reset form
         this.$emit("setProps", { data: {}, props: "detail" });
+        this.$emit("setProps", { data: {}, props: "supplierData" });
         this.$emit("setProps", { data: "", props: "product" });
         this.$emit("setProps", { data: "", props: "supplier" });
         const payload = {
@@ -359,6 +366,7 @@ export default {
         }, 3000);
         this.$refs.formPembelian.reset(); // This will clear that form
         this.uangBayar = 0;
+        this.temp = 1;
         // last reset form
       }
     },

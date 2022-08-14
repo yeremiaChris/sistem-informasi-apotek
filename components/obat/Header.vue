@@ -15,7 +15,7 @@
           class="flex gap-3 font-bold items-center px-4 py-4 uppercase border border-gray-300 shadow-sm text-base font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
           <img src="/export.svg" class="w-6" alt="export" />
-          Export
+          Cetak
         </button>
         <NuxtLink
           v-if="!$route.path.includes('laporan')"

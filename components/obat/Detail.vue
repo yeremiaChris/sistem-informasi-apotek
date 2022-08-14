@@ -218,25 +218,21 @@ export default {
     },
 
     async buy() {
-      if (
-        this.dataTable.length &&
-        (this.uangBayar > this.total || this.uangBayar === 0)
-      ) {
-        if (this.uangBayar === 0) {
-          console.log(this.uangBayar);
+      if (this.dataTable.length) {
+        if (this.uangBayar < this.total || this.uangBayar === 0) {
           this.error = {
             ...this.error,
             uangBayar:
-              "Field ini harus diisi dan harus lebih besar dari total harga.",
+              "Field ini harus diisi dan harus lebih besar atau sama dengan total harga.",
           };
         } else {
+          console.log(this.dataTable);
           for (let index = 0; index < this.dataTable.length; index++) {
-            console.log(this.dataTable);
-
             const body = {
               ...this.dataTable[index],
               jumlahBeli: parseInt(this.dataTable[index].jumlahBeli),
               total: this.dataTable[index].total,
+              supplier: this.dataTable[index].supplier,
             };
             await this.$axios.post("/pembelian", body);
           }
@@ -280,18 +276,17 @@ export default {
           this.uangBayar = 0;
           // last reset form
         }
-      } else if (
-        this.dataTable.length &&
-        (this.uangBayar <= this.total || this.uangBayar === 0)
-      ) {
+      } else if (this.dataTable.length && this.uangBayar < this.total) {
         this.error = {
           ...this.error,
           uangBayar:
-            "Field ini harus diisi dan harus lebih besar dari total harga.",
+            "Field ini harus diisi dan harus lebih besar atau samadengan total harga.",
         };
       } else if (
         (this.isEmptyObject ||
-          (isEmptyObject(this.supplier) && this.uangBayar < this.total)) &&
+          isEmptyObject(this.supplier) ||
+          this.uangBayar < this.total ||
+          this.uangBayar === 0) &&
         !this.dataTable.length
       ) {
         // product empty
@@ -313,7 +308,11 @@ export default {
         }
 
         // uang bayar empty
-        if (this.uangBayar === 0) {
+        console.log(parseInt(this.uangBayar) < parseInt(this.total));
+        if (
+          parseInt(this.uangBayar) < parseInt(this.total) ||
+          this.uangBayar === 0
+        ) {
           this.error = {
             ...this.error,
             uangBayar:
@@ -321,23 +320,20 @@ export default {
           };
         }
       }
-      console.log(
-        !this.isEmptyObject &&
-          !isEmptyObject(this.supplier) &&
-          this.uangBayar > this.total &&
-          !this.dataTable.length
-      );
+
       if (
         !this.isEmptyObject &&
         !isEmptyObject(this.supplier) &&
-        this.uangBayar > this.total &&
+        this.uangBayar >= this.total &&
         !this.dataTable.length
       ) {
         const body = {
           ...this.data,
           jumlahBeli: parseInt(this.value),
+          supplier: this.supplier,
           total: this.total,
         };
+        console.log(body);
         await this.$axios.post("/pembelian", body);
 
         window.scrollTo({ top: 0, behavior: "smooth" });
@@ -368,6 +364,69 @@ export default {
         this.uangBayar = 0;
         this.temp = 1;
         // last reset form
+      }
+
+      if (
+        !this.isEmptyObject &&
+        !isEmptyObject(this.supplier) &&
+        this.uangBayar >= this.total &&
+        this.dataTable.length
+      ) {
+        for (let index = 0; index < this.dataTable.length; index++) {
+          const body = {
+            ...this.dataTable[index],
+            jumlahBeli: parseInt(this.dataTable[index].jumlahBeli),
+            total: this.dataTable[index].total,
+            supplier: this.dataTable[index].supplier,
+          };
+          await this.$axios.post("/pembelian", body);
+        }
+
+        const body = {
+          ...this.data,
+          jumlahBeli: parseInt(this.value),
+          supplier: this.supplier,
+          total: this.total,
+        };
+        await this.$axios.post("/pembelian", body);
+
+        const supplierError = {
+          value: "",
+          props: "supplierError",
+        };
+        this.$store.commit("setProps", supplierError);
+        const productError = {
+          value: "",
+          props: "produkError",
+        };
+        this.$store.commit("setProps", productError);
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+
+        // reset form
+        this.$emit("setProps", { data: {}, props: "detail" });
+        this.$emit("setProps", { data: {}, props: "supplierData" });
+        this.$emit("setProps", { data: "", props: "product" });
+        this.$emit("setProps", { data: "", props: "supplier" });
+        const payload = {
+          value: [],
+          props: "dataTable",
+        };
+        this.$store.commit("setProps", payload);
+        const payload2 = {
+          value: true,
+          props: "success",
+        };
+        this.$store.commit("setProps", payload2);
+        setTimeout(() => {
+          const payload3 = {
+            value: false,
+            props: "success",
+          };
+          this.$store.commit("setProps", payload3);
+        }, 3000);
+        this.$refs.formPembelian.reset(); // This will clear that form
+        this.uangBayar = 0;
       }
     },
   },

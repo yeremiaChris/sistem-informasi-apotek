@@ -59,7 +59,9 @@
                   }}</span>
                   <span v-else>
                     {{
-                      key === "updatedAt"
+                      key === "supplier"
+                        ? value.title
+                        : key === "updatedAt"
                         ? $dayjs(value).format("DD MMM YYYY | HH:mm")
                         : typeof value === "number"
                         ? value.toLocaleString()

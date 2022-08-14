@@ -12,15 +12,15 @@
       <vue-html2pdf
         :paginate-elements-by-height="1400"
         :pdf-quality="2"
-        pdf-content-width="800px"
-        pdf-orientation="portrait"
+        pdf-content-width="100%"
+        pdf-orientation="landscape"
         filename="exportFilename"
         ref="html2Pdf"
       >
         <PrintReport
           slot="pdf-content"
           :headers="headers"
-          :data="printData"
+          :data="data"
           title="LAPORAN PEMBELIAN OBAT"
         />
       </vue-html2pdf>
@@ -47,6 +47,7 @@ export default {
         "Stok awal",
         "Jumlah beli",
         "Total harga",
+        "Supplier",
         "Tanggal transaksi",
         "Stok akhir",
       ],

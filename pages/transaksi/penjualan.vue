@@ -136,11 +136,6 @@ export default {
       const res = await this.$axios.get(endpoint);
       console.log(res);
       this[props] = res.data;
-      // const payload = {
-      //   props: "produkError",
-      //   value: "",
-      // };
-      // this.$store.commit("setProps", payload);
     },
 
     search(props2, props, key) {

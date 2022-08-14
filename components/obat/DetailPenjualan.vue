@@ -163,8 +163,24 @@ export default {
             isRecipe: this.isRecipe,
             total: this.data.sellingPrice * this.jumlahBeli,
           };
+          const isFilled = this.dataTable.some((el) => el._id === obj._id);
+          let value = [];
+          if (!isFilled) {
+            value = [obj, ...this.dataTable];
+          } else {
+            value = this.dataTable.map((item) => ({
+              ...item,
+              total: obj.total,
+              jumlahBeli: parseInt(item.jumlahBeli) + parseInt(obj.jumlahBeli),
+            }));
+          }
           const payload = {
-            value: [obj, ...this.dataTable],
+            value: value.map((item, index) => {
+              return {
+                ...item,
+                id: index,
+              };
+            }),
             props: "dataTable",
           };
 
@@ -230,7 +246,7 @@ export default {
         }
         if (this.uangBayar < this.total) {
           this.error.uangBayar =
-            "This field must be equall or more than total.";
+            "Uang bayar harus lebih besar atau sama dengan total.";
         }
         if (!this.dataTable.length && this.isEmptyObject) {
           const payload = {

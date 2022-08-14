@@ -44,12 +44,10 @@ export default {
         "Satuan",
         "Harga beli",
         "Harga jual",
-        "Stok awal",
         "Jumlah beli",
         "Total harga",
         "Supplier",
         "Tanggal transaksi",
-        "Stok akhir",
       ],
       data: [],
       printData: [],
@@ -129,9 +127,17 @@ export default {
       const { data, pagination } = res.data;
 
       this[props] = data.map((item) => ({
-        ...item,
+        name: item.name,
+        type: item.type,
+        unit: item.unit,
+        purchasePrice: item.purchasePrice,
+        sellingPrice: item.sellingPrice,
+        jumlahBeli: item.jumlahBeli,
+        total: item.total,
+        supplier: item.supplier,
+        createdAt: item.createdAt,
+        updatedAt: item.updatedAt,
         id: item._id,
-        stokTerbaru: item.supply + item.jumlahBeli,
       }));
       this.pagination = pagination;
     },

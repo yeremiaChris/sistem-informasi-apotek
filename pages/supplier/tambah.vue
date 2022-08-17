@@ -5,7 +5,6 @@
     <FormsTitle title="Form Tambah Supplier" />
     <FormsErrorMsg :msg="errorAbove" class="mb-4" />
     <!-- field name -->
-    {{ error }}
     <FormsErrorMsg :msg="error.name" />
     <FormsInput
       class="mb-4"

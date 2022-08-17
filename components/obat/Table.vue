@@ -68,7 +68,7 @@
                   <span v-else>
                     {{
                       key === "recepiData"
-                        ? !value && !value.IdentitasDokter
+                        ? !value.IdentitasDokter
                           ? "Tidak resep dokter"
                           : value.IdentitasDokter +
                             "," +

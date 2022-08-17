@@ -50,7 +50,7 @@
         />
         <FormsSingleSelect label="Urutkan" :items="items" v-model="order" />
       </div>
-      <p class="mt-4">Filter by date</p>
+      <p class="mt-4" v-if="$route.path.includes('laporan')">Filter by date</p>
     </form>
     <div v-if="$route.path.includes('laporan')" class="flex items-center gap-3">
       <FormsInput

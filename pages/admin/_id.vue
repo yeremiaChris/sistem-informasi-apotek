@@ -1,8 +1,8 @@
 <template>
   <form @submit.prevent="submit">
-    <Breadcrumbs url="Obat / Tambah / User" class="mb-7" />
+    <Breadcrumbs url="Obat / Edit / User" class="mb-7" />
     <!-- title -->
-    <FormsTitle title="Form Tambah User" />
+    <FormsTitle title="Form Edit User" />
     <FormsErrorMsg :msg="errorAbove" class="mb-4" />
 
     <!-- field name -->

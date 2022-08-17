@@ -1,8 +1,8 @@
 <template>
   <div>
-    <Breadcrumbs url="Supplier / Tambah" class="mb-7" />
+    <Breadcrumbs url="Supplier / Edit" class="mb-7" />
     <!-- title -->
-    <FormsTitle title="Form Tambah Supplier" />
+    <FormsTitle title="Form Edit Supplier" />
     <FormsErrorMsg :msg="errorAbove" class="mb-4" />
     <!-- field name -->
     <FormsErrorMsg :msg="error.name" />

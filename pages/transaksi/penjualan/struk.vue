@@ -4,7 +4,7 @@
       class="pdf-item px-10 mt-6"
       :is-button="true"
       @export="exportData"
-      title="LAPORAN PEMBELIAN OBAT"
+      title="NOTA PENJUALAN OBAT"
     />
     <div>
       <ObatTable class="mt-10" :headers="header" :data="data" />
@@ -25,7 +25,7 @@
           <StrukKop
             class="pdf-item text-sm px-10 mt-6"
             :is-button="false"
-            title="STRUK OBAT"
+            title="NOTA PENJUALAN OBAT"
           />
           <div>
             <ObatTable class="mt-10" :headers="header" :data="data" />

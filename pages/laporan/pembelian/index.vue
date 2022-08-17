@@ -7,13 +7,14 @@
       @export="exportPdf"
       @getData="getData('/pembelian', 'data')"
     />
-    <div class="my-4">
+    <div class="my-4 border flex flex-col gap-3 px-4 py-2 box">
       <p>
         Tanggal awal
         <span class="font-bold">
           {{
-            $dayjs($route.query.startDate).format("DD MMMM YYYY") ||
-            $dayjs().subtract(1, "year").format("DD MMMM YYYY")
+            $route.query.startDate
+              ? $dayjs($route.query.startDate).format("DD MMMM YYYY")
+              : $dayjs().subtract(1, "year").format("DD MMMM YYYY")
           }}
         </span>
       </p>
@@ -21,8 +22,9 @@
         Tanggal akhir
         <span class="font-bold">
           {{
-            $dayjs($route.query.endDate).format("DD MMMM YYYY") ||
-            $dayjs().format("DD MMM YYYY")
+            $route.query.endDate
+              ? $dayjs($route.query.endDate).format("DD MMMM YYYY")
+              : $dayjs().format("DD MMMM YYYY")
           }}
         </span>
       </p>
@@ -30,6 +32,19 @@
         Total pembelian
 
         <span class="font-bold"> Rp {{ total.toLocaleString() }} </span>
+      </p>
+      <p>
+        <span>
+          Total
+          <span v-if="!$route.query.query"
+            >semua produk yang telah di beli</span
+          >
+          <span v-else>produk {{ $route.query.query }} yang telah di beli</span>
+        </span>
+
+        <span class="font-bold">
+          {{ totalJumlahBeli.toLocaleString() }}
+        </span>
       </p>
     </div>
     <ObatTable :headers="headers" :data="data" />
@@ -49,13 +64,14 @@
             :is-button="false"
             title="LAPORAN PEMBELIAN OBAT"
           />
-          <div class="my-4 mx-6">
+          <div class="my-4 border flex flex-col gap-3 px-4 py-2 box mx-6">
             <p>
               Tanggal awal
               <span class="font-bold">
                 {{
-                  $dayjs($route.query.startDate).format("DD MMMM YYYY") ||
-                  $dayjs().subtract(1, "year").format("DD MMMM YYYY")
+                  $route.query.startDate
+                    ? $dayjs($route.query.startDate).format("DD MMMM YYYY")
+                    : $dayjs().subtract(1, "year").format("DD MMMM YYYY")
                 }}
               </span>
             </p>
@@ -63,8 +79,9 @@
               Tanggal akhir
               <span class="font-bold">
                 {{
-                  $dayjs($route.query.endDate).format("DD MMMM YYYY") ||
-                  $dayjs().format("DD MMM YYYY")
+                  $route.query.endDate
+                    ? $dayjs($route.query.endDate).format("DD MMMM YYYY")
+                    : $dayjs().format("DD MMMM YYYY")
                 }}
               </span>
             </p>
@@ -72,6 +89,21 @@
               Total pembelian
 
               <span class="font-bold"> Rp {{ total.toLocaleString() }} </span>
+            </p>
+            <p>
+              <span>
+                Total
+                <span v-if="!$route.query.query"
+                  >semua produk yang telah di beli</span
+                >
+                <span v-else
+                  >produk {{ $route.query.query }} yang telah di beli</span
+                >
+              </span>
+
+              <span class="font-bold">
+                {{ totalJumlahBeli.toLocaleString() }}
+              </span>
             </p>
           </div>
           <PrintReport
@@ -110,10 +142,20 @@ export default {
       printData: [],
       itemsSelect: [
         {
-          title: "Title",
-          value: "title",
+          title: "Nama obat",
+          value: "name",
+        },
+        {
+          title: "Harga beli",
+          value: "purchasePrice",
+        },
+        {
+          title: "Harga jual",
+          value: "sellingPrice",
         },
       ],
+      total: 0,
+      totalJumlahBeli: 0,
     };
   },
 
@@ -127,10 +169,6 @@ export default {
     },
     deleteId() {
       return this.$store.state.deleteId;
-    },
-    total() {
-      const total = this.data.reduce((a, c) => a + c.total, 0);
-      return total || 0;
     },
   },
   watch: {
@@ -187,8 +225,9 @@ export default {
           endDate,
         },
       });
-      const { data, pagination } = res.data;
-
+      const { totalPembelian, data, pagination, totalJumlahBeli } = res.data;
+      this.total = totalPembelian;
+      this.totalJumlahBeli = totalJumlahBeli;
       this[props] = data.map((item) => ({
         name: item.name,
         type: item.type,
@@ -207,3 +246,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+.box p {
+  @apply grid grid-cols-2;
+}
+</style>

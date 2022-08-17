@@ -7,13 +7,14 @@
       @export="exportPdf"
       @getData="getData('/penjualan', 'data')"
     />
-    <div class="my-4">
+    <div class="my-4 border flex flex-col gap-3 px-4 py-2 box">
       <p>
         Tanggal awal
         <span class="font-bold">
           {{
-            $dayjs($route.query.startDate).format("DD MMMM YYYY") ||
-            $dayjs().subtract(1, "year").format("DD MMMM YYYY")
+            $route.query.startDate
+              ? $dayjs($route.query.startDate).format("DD MMMM YYYY")
+              : $dayjs().subtract(1, "year").format("DD MMMM YYYY")
           }}
         </span>
       </p>
@@ -21,8 +22,9 @@
         Tanggal akhir
         <span class="font-bold">
           {{
-            $dayjs($route.query.endDate).format("DD MMMM YYYY") ||
-            $dayjs().format("DD MMM YYYY")
+            $route.query.endDate
+              ? $dayjs($route.query.endDate).format("DD MMMM YYYY")
+              : $dayjs().format("DD MMMM YYYY")
           }}
         </span>
       </p>
@@ -30,6 +32,19 @@
         Total penjualan
 
         <span class="font-bold"> Rp {{ total.toLocaleString() }} </span>
+      </p>
+      <p>
+        <span>
+          Total
+          <span v-if="!$route.query.query"
+            >semua produk yang telah di beli</span
+          >
+          <span v-else>produk {{ $route.query.query }} yang telah di beli</span>
+        </span>
+
+        <span class="font-bold">
+          {{ totalJumlahBeli.toLocaleString() }}
+        </span>
       </p>
     </div>
     <ObatTable :headers="headers" :data="data" />
@@ -116,6 +131,8 @@ export default {
           value: "type",
         },
       ],
+      total: 0,
+      totalJumlahBeli: 0,
     };
   },
 
@@ -191,8 +208,9 @@ export default {
           endDate,
         },
       });
-      const { data, pagination } = res.data;
-      console.log(data);
+      const { data, pagination, totalPenjualan, totalJumlahBeli } = res.data;
+      this.total = totalPenjualan;
+      this.totalJumlahBeli = totalJumlahBeli;
       this[props] = data.map((item) => {
         const {
           _id,
@@ -222,3 +240,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+.box p {
+  @apply grid grid-cols-2;
+}
+</style>

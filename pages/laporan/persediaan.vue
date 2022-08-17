@@ -9,13 +9,14 @@
       @export="exportPdf"
       @getData="$fetch()"
     />
-    <div class="my-4">
+    <div class="my-4 border flex flex-col gap-3 px-4 py-2 box">
       <p>
         Tanggal awal
         <span class="font-bold">
           {{
-            $dayjs($route.query.startDate).format("DD MMMM YYYY") ||
-            $dayjs().subtract(1, "year").format("DD MMMM YYYY")
+            $route.query.startDate
+              ? $dayjs($route.query.startDate).format("DD MMMM YYYY")
+              : $dayjs().subtract(1, "year").format("DD MMMM YYYY")
           }}
         </span>
       </p>
@@ -23,15 +24,23 @@
         Tanggal akhir
         <span class="font-bold">
           {{
-            $dayjs($route.query.endDate).format("DD MMMM YYYY") ||
-            $dayjs().format("DD MMM YYYY")
+            $route.query.endDate
+              ? $dayjs($route.query.endDate).format("DD MMMM YYYY")
+              : $dayjs().format("DD MMMM YYYY")
           }}
         </span>
       </p>
-      <p>
-        Total seluruh persediaan obat
 
-        <span class="font-bold"> Rp {{ total.toLocaleString() }} </span>
+      <p>
+        <span>
+          Total
+          <span v-if="!$route.query.query">persediaan semua produk</span>
+          <span v-else>persediaan produk {{ $route.query.query }}</span>
+        </span>
+
+        <span class="font-bold">
+          {{ total.toLocaleString() }}
+        </span>
       </p>
     </div>
     <ObatTable :headers="headers" :data="data" />
@@ -126,6 +135,7 @@ export default {
           value: "supply",
         },
       ],
+      total: 0,
     };
   },
 
@@ -141,7 +151,7 @@ export default {
       },
     });
 
-    const { data, pagination } = res.data;
+    const { data, pagination, totalPersediaan } = res.data;
     const datas = data.map((item) => {
       return {
         _id: item._id,
@@ -157,6 +167,7 @@ export default {
     });
     this.data = datas;
     this.pagination = pagination;
+    this.total = totalPersediaan;
   },
 
   watch: {
@@ -177,10 +188,6 @@ export default {
     },
     deleteId() {
       return this.$store.state.deleteId;
-    },
-    total() {
-      const total = this.data.reduce((a, c) => a + c.supply, 0);
-      return total || 0;
     },
   },
 
@@ -222,3 +229,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+.box p {
+  @apply grid grid-cols-2;
+}
+</style>

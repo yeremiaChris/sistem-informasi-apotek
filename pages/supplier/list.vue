@@ -71,6 +71,10 @@ export default {
           title: "Name",
           value: "name",
         },
+        {
+          title: "Terbaru",
+          value: "-createdAt",
+        },
       ],
 
       pagination: {

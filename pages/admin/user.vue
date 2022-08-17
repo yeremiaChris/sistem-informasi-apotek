@@ -47,6 +47,10 @@ export default {
           title: "Email",
           value: "email",
         },
+        {
+          title: "Terbaru",
+          value: "-createdAt",
+        },
       ],
     };
   },

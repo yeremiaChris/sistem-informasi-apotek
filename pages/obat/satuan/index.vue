@@ -52,6 +52,10 @@ export default {
           title: "Description",
           value: "description",
         },
+        {
+          title: "Terbaru",
+          value: "-createdAt",
+        },
       ],
     };
   },

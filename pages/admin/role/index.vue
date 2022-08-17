@@ -48,6 +48,10 @@ export default {
           title: "Role Name",
           value: "roleName",
         },
+        {
+          title: "Terbaru",
+          value: "-createdAt",
+        },
       ],
     };
   },

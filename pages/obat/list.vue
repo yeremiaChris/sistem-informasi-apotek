@@ -41,9 +41,9 @@ export default {
         "Nama",
         "Jenis",
         "Satuan",
-        "Tanggal",
         "Harga beli",
         "Harga jual",
+        "Tanggal",
       ],
       data: [],
       itemsSelect: [
@@ -58,6 +58,10 @@ export default {
         {
           title: "Harga jual",
           value: "sellingPrice",
+        },
+        {
+          title: "Terbaru",
+          value: "-createdAt",
         },
       ],
     };

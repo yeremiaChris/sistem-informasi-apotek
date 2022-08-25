@@ -1,64 +1,69 @@
 <template>
-  <form @submit.prevent="submit">
-    <Breadcrumbs url="Obat / Tambah" class="mb-7" />
-    <!-- title -->
-    <FormsTitle title="Form Tambah obat" />
-    <FormsErrorMsg :msg="errorAbove" class="mb-4" />
-    <!-- field name -->
-    <FormsErrorMsg :msg="errors.name" />
-    <FormsInput
-      class="mb-4"
-      label="Nama obat"
-      name="name"
-      v-model="form['name']"
-      @setError="setError('name')"
-      placeholder="Nama obat..."
-    />
+  <form @submit.prevent="submit" class="grid grid-cols-2">
+    <div>
+      <Breadcrumbs url="Obat / Tambah" class="mb-7" />
+      <!-- title -->
+      <FormsTitle title="Form Tambah obat" />
+      <FormsErrorMsg :msg="errorAbove" class="mb-4" />
+      <!-- field name -->
+      <FormsErrorMsg :msg="errors.name" />
+      <FormsInput
+        class="mb-4"
+        label="Nama obat"
+        name="name"
+        v-model="form['name']"
+        @setError="setError('name')"
+        placeholder="Nama obat..."
+      />
 
-    <!-- field price -->
-    <FormsErrorMsg :msg="errors.purchasePrice" />
-    <FormsInputNumber
-      class="mb-4"
-      label="Harga beli"
-      name="purchasePrice"
-      v-model="form['purchasePrice']"
-      @setError="setError('purchasePrice')"
-      placeholder="0"
-    />
+      <div class="grid grid-cols-4">
+        <div>
+          <!-- field price -->
+          <FormsErrorMsg :msg="errors.purchasePrice" />
+          <FormsInputNumber
+            class="mb-4"
+            label="Harga beli"
+            name="purchasePrice"
+            v-model="form['purchasePrice']"
+            @setError="setError('purchasePrice')"
+            placeholder="0"
+          />
+          <FormsErrorMsg :msg="errors.sellingPrice" />
+          <FormsInputNumber
+            class="mb-4"
+            label="Harga jual"
+            name="sellingPrice"
+            @setError="setError('sellingPrice')"
+            v-model="form['sellingPrice']"
+            placeholder="0"
+          />
 
-    <FormsErrorMsg :msg="errors.sellingPrice" />
-    <FormsInputNumber
-      class="mb-4"
-      label="Harga jual"
-      name="sellingPrice"
-      @setError="setError('sellingPrice')"
-      v-model="form['sellingPrice']"
-      placeholder="0"
-    />
+          <!-- field type -->
+          <FormsErrorMsg :msg="errors.type" />
+          <FormsSingleSelect
+            v-model="form['type']"
+            class="mb-4"
+            label="Jenis"
+            @setError="setError('type')"
+            :items="types"
+          />
 
-    <!-- field type -->
-    <FormsErrorMsg :msg="errors.type" />
-    <FormsSingleSelect
-      v-model="form['type']"
-      class="mb-4"
-      label="Jenis"
-      @setError="setError('type')"
-      :items="types"
-    />
+          <!-- field unit -->
+          <FormsErrorMsg :msg="errors.unit" />
+          <FormsSingleSelect
+            v-model="form['unit']"
+            class="mb-4"
+            @setError="setError('unit')"
+            label="Satuan"
+            :items="unitItems"
+          />
+        </div>
+      </div>
 
-    <!-- field unit -->
-    <FormsErrorMsg :msg="errors.unit" />
-    <FormsSingleSelect
-      v-model="form['unit']"
-      class="mb-4"
-      @setError="setError('unit')"
-      label="Satuan"
-      :items="unitItems"
-    />
-
-    <!-- button submit -->
-    <div class="flex justify-end gap-3">
-      <FormsButton label="Submit" type="submit" />
+      <!-- button submit -->
+      <div class="flex gap-3">
+        <FormsButton label="Submit" type="submit" />
+      </div>
     </div>
   </form>
 </template>

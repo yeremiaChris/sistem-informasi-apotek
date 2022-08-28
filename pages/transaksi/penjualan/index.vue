@@ -6,7 +6,7 @@
     <!-- form dengan resep -->
     <div v-if="detail.type === 'keras'">
       <h2 class="mb-2 font-bold">Obat dengan resep dokter</h2>
-      <div v-for="(item, key, i) in recipiData" :key="i">
+      <div v-for="(item, key, i) in recipiDatas" :key="i">
         <FormsTextarea
           :title="key.match(/[A-Z][a-z]+|[0-9]+/g).join(' ')"
           :error="recipiDataError[key]"
@@ -65,6 +65,12 @@ export default {
       product: "",
       isRecipe: false,
       recipiData: {
+        IdentitasDokter: "",
+        IdentitasCustomer: "",
+        InformasiObat: "",
+        Deskripsi: "",
+      },
+      recipiDatas: {
         IdentitasDokter: "",
         IdentitasCustomer: "",
         InformasiObat: "",

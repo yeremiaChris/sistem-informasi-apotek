@@ -6,6 +6,10 @@
       alt="Workflow"
     />
     <h2 class="mt-6 text-center text-3xl font-extrabold">Apotek Pontjol</h2>
+    <p class="text-center mt-6 font-bold">
+      Jl. Imam Bonjol No.31, Purwosari, Kec. Semarang Utara, Kota Semarang, Jawa
+      Tengah 50172
+    </p>
     <h2 class="mt-6 text-center text-3xl font-extrabold">
       {{ $route.path.includes("register") ? "Sign up" : "Sign in" }} to your
       account

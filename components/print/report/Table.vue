@@ -20,7 +20,7 @@
           v-show="
             key !== '_id' &&
             key !== 'media' &&
-            key !== 'recipiData' &&
+            key !== 'recepiData' &&
             key !== 'supplierId' &&
             key !== '__v' &&
             key !== 'createdAt' &&
@@ -41,6 +41,38 @@
                 : "Tidak"
               : item
           }}
+        </td>
+        <td
+          v-for="(value, key, idx) in person"
+          v-show="key === 'recepiData'"
+          :key="idx + 'recepiData'"
+          class="px-6 py-4 text-gray-900"
+          :class="{
+            'text-xs': $route.path.includes('struk'),
+            'text-sm': !$route.path.includes('struk'),
+          }"
+        >
+          <div v-if="value && value.IdentitasDokter">
+            <span
+              >Identitas dokter :
+              <span class="font-bold">{{ value.IdentitasDokter }} </span>
+            </span>
+            <br />
+            <span
+              >Identitas customer :
+              <span class="font-bold">{{ value.IdentitasCustomer }}</span>
+            </span>
+            <br />
+            <span
+              >Informasi obat :
+              <span class="font-bold">{{ value.InformasiObat }}</span> </span
+            ><br />
+            <span
+              >Deskripsi :
+              <span class="font-bold">{{ value.Deskripsi }}</span>
+            </span>
+          </div>
+          <p v-else>Tidak dengan resep dokter</p>
         </td>
 
         <td

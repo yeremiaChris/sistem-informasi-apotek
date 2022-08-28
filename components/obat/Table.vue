@@ -53,9 +53,10 @@
                     key !== 'createdAt' &&
                     key !== 'recipiData' &&
                     key !== '__v' &&
+                    key !== 'recepiData' &&
                     key !== 'laporan'
                   "
-                  :key="idx"
+                  :key="idx + 'recepiData'"
                   class="px-6 py-4 font-medium text-gray-900"
                   :class="{
                     'text-xs': $route.path.includes('struk'),
@@ -67,18 +68,8 @@
                   }}</span>
                   <span v-else>
                     {{
-                      key === "recepiData"
-                        ? !value.IdentitasDokter
-                          ? "Tidak resep dokter"
-                          : value.IdentitasDokter +
-                            "," +
-                            value.IdentitasCustomer +
-                            "," +
-                            value.InformasiObat +
-                            "," +
-                            value.Deskripsi
-                        : key === "supplier"
-                        ? value.title
+                      key === "supplier"
+                        ? value && value.title
                         : key === "updatedAt"
                         ? $dayjs(value).format("DD MMM YYYY | HH:mm")
                         : typeof value === "number"
@@ -92,6 +83,45 @@
 
                 <td
                   v-for="(value, key, idx) in items"
+                  v-show="key === 'recepiData'"
+                  :key="idx"
+                  class="px-6 py-4 text-gray-900"
+                  :class="{
+                    'text-xs': $route.path.includes('struk'),
+                    'text-sm': !$route.path.includes('struk'),
+                  }"
+                >
+                  <div v-if="value && value.IdentitasDokter">
+                    <span
+                      >Identitas dokter :
+                      <span class="font-bold"
+                        >{{ value.IdentitasDokter }}
+                      </span>
+                    </span>
+                    <br />
+                    <span
+                      >Identitas customer :
+                      <span class="font-bold">{{
+                        value.IdentitasCustomer
+                      }}</span>
+                    </span>
+                    <br />
+                    <span
+                      >Informasi obat :
+                      <span class="font-bold">{{
+                        value.InformasiObat
+                      }}</span> </span
+                    ><br />
+                    <span
+                      >Deskripsi :
+                      <span class="font-bold">{{ value.Deskripsi }}</span>
+                    </span>
+                  </div>
+                  <p v-else>Tidak dengan resep dokter</p>
+                </td>
+
+                <td
+                  v-for="(value, key, idx) in items"
                   v-show="key === 'media'"
                   :key="idx + 'media'"
                   class="px-6 py-4 font-medium text-gray-900"
@@ -101,8 +131,12 @@
                   }"
                 >
                   <img
-                    :src="$config.imageURL + value.defaultImage"
-                    :alt="value.defaultImage"
+                    :src="
+                      value && value.defaultImage
+                        ? $config.imageURL + value.defaultImage
+                        : ''
+                    "
+                    :alt="(value && value.defaultImage) || ''"
                     style="width: 150px"
                   />
                 </td>

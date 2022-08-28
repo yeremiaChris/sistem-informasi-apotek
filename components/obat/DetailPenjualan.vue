@@ -13,6 +13,10 @@
       <p class="font-bold">
         {{ data.sellingPrice ? data.sellingPrice.toLocaleString() : "-" }}
       </p>
+      <p>Stok</p>
+      <p class="font-bold">
+        {{ data.supply ? data.supply.toLocaleString() : 0 }}
+      </p>
       <p class="text-xl mt-5 font-bold">
         Uang bayar Rp {{ uangBayar.toLocaleString() }}
       </p>
@@ -25,7 +29,7 @@
     </div>
 
     <div>
-      <p class="my-1">Jumlah beli</p>
+      <p class="my-1">Jumlah jual</p>
       <input
         v-model="jumlahBeli"
         :disabled="isEmptyObject"
@@ -37,6 +41,7 @@
         placeholder="Quantity..."
         @keypress="onlyNumber"
       />
+      <p class="text-red-500">{{ jumlahBeliError }}</p>
       <p class="mt-3">Uang bayar</p>
       <input
         v-model="uangBayar"
@@ -82,8 +87,17 @@ export default {
     return {
       uangBayar: 0,
       jumlahBeli: 1,
+      jumlahBeliError: "",
       error: { uangBayar: "" },
     };
+  },
+
+  mounted() {
+    const payload = {
+      value: [],
+      props: "dataTable",
+    };
+    this.$store.commit("setProps", payload);
   },
 
   watch: {
@@ -91,6 +105,9 @@ export default {
       if (this.uangBayar >= this.total) {
         this.error.uangBayar = "";
       }
+    },
+    jumlahBeli() {
+      this.jumlahBeliError = "";
     },
   },
 
@@ -156,8 +173,10 @@ export default {
             value: "Field product harus diisi.",
           });
         }
+      } else if (this.jumlahBeli > this.data.supply || this.data.supply === 0) {
+        console.log("gk bisa beli");
+        this.jumlahBeliError = "Persediaan yang tersedia tidak cukup.";
       } else {
-        console.log();
         const isRecipiValue = Object.values(this.recipiData).every(
           (el) => el.length
         );
@@ -176,6 +195,7 @@ export default {
         } else {
           const obj = {
             ...this.data,
+            recepiData: this.recipiData,
             total: this.jumlahBeli * this.data.sellingPrice,
             jumlahBeli: this.jumlahBeli,
           };
@@ -228,10 +248,13 @@ export default {
         value: this.dataTable,
         props: "dataTable",
       };
+      const isRecipiValue = Object.values(this.recipiData).every(
+        (el) => el.length
+      );
       if (
         (this.isEmptyObject && !this.dataTable.length) ||
         this.uangBayar < this.total ||
-        this.data.jumlahBeli > this.data.supply
+        parseInt(this.data.jumlahBeli) > parseInt(this.data.supply)
       ) {
         if (this.data.jumlahBeli > this.data.supply) {
           this.$store.commit("setProps", {
@@ -278,27 +301,79 @@ export default {
         }
       } else {
         if (!this.dataTable.length) {
-          let obj = {};
-          obj = {
-            ...this.data,
-            recepiData: this.recipiData,
-            jumlahBeli: this.jumlahBeli,
-            total: this.data.sellingPrice * this.jumlahBeli,
-          };
+          if (this.jumlahBeli > this.data.supply || this.data.supply === 0) {
+            console.log("gk bisa beli");
+            this.jumlahBeliError = "Persediaan yang tersedia tidak cukup.";
+          } else if (this.data.type === "keras" && !isRecipiValue) {
+            for (const key in this.recipiData) {
+              if (Object.hasOwnProperty.call(this.recipiData, key)) {
+                if (
+                  this.data.type === "keras" &&
+                  !this.recipiData[key].length
+                ) {
+                  const payload = {
+                    props: key,
+                    data: "Field product tidak boleh kosong. ",
+                  };
+                  this.$emit("setErrorRecipi", payload);
+                }
+              }
+            }
+          } else {
+            let obj = {};
+            obj = {
+              ...this.data,
+              recepiData: this.recipiData,
+              jumlahBeli: this.jumlahBeli,
+              total: this.data.sellingPrice * this.jumlahBeli,
+            };
 
-          // post data
-          const data = await this.$axios.post("/penjualan", obj);
+            // post data
+            const data = await this.$axios.post("/penjualan", obj);
+            this.$store.commit("setProps", payload);
+            this.$emit("setProps", { props: "detail", data: {} });
+            this.$emit("setProps", { props: "product", data: "" });
+            this.$refs.formPenjualan.reset(); // This will clear that form
+            const payload2 = {
+              value: true,
+              props: "success",
+            };
+            window.scrollTo({ top: 0, behavior: "smooth" });
 
-          arr.push(data.data);
-          this.$router.push({
-            path: "/transaksi/penjualan/struk",
-            query: { arr },
-          });
+            this.$store.commit("setProps", payload2);
+            const payload3 = {
+              value: [],
+              props: "dataTable",
+            };
+            this.$store.commit("setProps", payload3);
+            // const payloadPrint = {
+            //   props: "report",
+            //   value: data.data,
+            // };
+            // this.$store.commit("setProps", payloadPrint);
+            // this.$emit("print");
+            setTimeout(() => {
+              const payload3 = {
+                value: false,
+                props: "success",
+              };
+              this.$store.commit("setProps", payload3);
+            }, 3000);
+            this.$refs.formPenjualan.reset(); // This will clear that form
+            this.uangBayar = 0;
+            arr.push(data.data);
+            this.$router.push({
+              path: "/transaksi/penjualan/struk",
+              query: { arr },
+            });
+          }
         } else {
+          console.log(this.dataTable);
           for (let index = 0; index < this.dataTable.length; index++) {
+            const recepiData = this.dataTable[index].recepiData;
             const obj = {
               ...this.dataTable[index],
-              recepiData: this.dataTable[index].recipiData,
+              recepiData,
               jumlahBeli: this.dataTable[index].jumlahBeli,
               total:
                 this.dataTable[index].sellingPrice *
@@ -307,43 +382,43 @@ export default {
             const data = await this.$axios.post("/penjualan", obj);
             arr.push(data.data);
           }
+          this.$store.commit("setProps", payload);
+          this.$emit("setProps", { props: "detail", data: {} });
+          this.$emit("setProps", { props: "product", data: "" });
+          this.$refs.formPenjualan.reset(); // This will clear that form
+          const payload2 = {
+            value: true,
+            props: "success",
+          };
+          window.scrollTo({ top: 0, behavior: "smooth" });
+
+          this.$store.commit("setProps", payload2);
+          const payload3 = {
+            value: [],
+            props: "dataTable",
+          };
+          this.$store.commit("setProps", payload3);
+          // const payloadPrint = {
+          //   props: "report",
+          //   value: data.data,
+          // };
+          // this.$store.commit("setProps", payloadPrint);
+          // this.$emit("print");
+          setTimeout(() => {
+            const payload3 = {
+              value: false,
+              props: "success",
+            };
+            this.$store.commit("setProps", payload3);
+          }, 3000);
+          this.$refs.formPenjualan.reset(); // This will clear that form
+          this.uangBayar = 0;
           this.$router.push({
             path: "/transaksi/penjualan/struk",
             query: { arr },
           });
         }
 
-        this.$store.commit("setProps", payload);
-        this.$emit("setProps", { props: "detail", data: {} });
-        this.$emit("setProps", { props: "product", data: "" });
-        this.$refs.formPenjualan.reset(); // This will clear that form
-        const payload2 = {
-          value: true,
-          props: "success",
-        };
-        window.scrollTo({ top: 0, behavior: "smooth" });
-
-        this.$store.commit("setProps", payload2);
-        const payload3 = {
-          value: [],
-          props: "dataTable",
-        };
-        this.$store.commit("setProps", payload3);
-        // const payloadPrint = {
-        //   props: "report",
-        //   value: data.data,
-        // };
-        // this.$store.commit("setProps", payloadPrint);
-        // this.$emit("print");
-        setTimeout(() => {
-          const payload3 = {
-            value: false,
-            props: "success",
-          };
-          this.$store.commit("setProps", payload3);
-        }, 3000);
-        this.$refs.formPenjualan.reset(); // This will clear that form
-        this.uangBayar = 0;
         // last reset form
       }
     },

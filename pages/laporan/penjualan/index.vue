@@ -53,8 +53,8 @@
       <vue-html2pdf
         :paginate-elements-by-height="1400"
         :pdf-quality="2"
-        pdf-content-width="800px"
-        pdf-orientation="portrait"
+        pdf-content-width="100%"
+        pdf-orientation="landscape"
         filename="exportFilename"
         ref="html2Pdf"
         ><div slot="pdf-content">
@@ -63,13 +63,14 @@
             :is-button="false"
             title="LAPORAN PENJUALAN OBAT"
           />
-          <div class="my-4 mx-6">
+          <div class="my-4 mx-6 border flex flex-col gap-3 px-4 py-2 box">
             <p>
               Tanggal awal
               <span class="font-bold">
                 {{
-                  $dayjs($route.query.startDate).format("DD MMMM YYYY") ||
-                  $dayjs().subtract(1, "year").format("DD MMMM YYYY")
+                  $route.query.startDate
+                    ? $dayjs($route.query.startDate).format("DD MMMM YYYY")
+                    : $dayjs().subtract(1, "year").format("DD MMMM YYYY")
                 }}
               </span>
             </p>
@@ -77,8 +78,9 @@
               Tanggal akhir
               <span class="font-bold">
                 {{
-                  $dayjs($route.query.endDate).format("DD MMMM YYYY") ||
-                  $dayjs().format("DD MMM YYYY")
+                  $route.query.endDate
+                    ? $dayjs($route.query.endDate).format("DD MMMM YYYY")
+                    : $dayjs().format("DD MMMM YYYY")
                 }}
               </span>
             </p>
@@ -87,12 +89,27 @@
 
               <span class="font-bold"> Rp {{ total.toLocaleString() }} </span>
             </p>
+            <p>
+              <span>
+                Total
+                <span v-if="!$route.query.query"
+                  >semua produk yang telah di beli</span
+                >
+                <span v-else
+                  >produk {{ $route.query.query }} yang telah di beli</span
+                >
+              </span>
+
+              <span class="font-bold">
+                {{ totalJumlahBeli.toLocaleString() }}
+              </span>
+            </p>
           </div>
-          <PrintReport
+          <!-- <PrintReport
             :headers="headers"
             :data="data"
             title="LAPORAN PENJUALAN OBAT"
-          />
+          /> -->
         </div>
       </vue-html2pdf>
     </client-only>
@@ -147,10 +164,10 @@ export default {
     deleteId() {
       return this.$store.state.deleteId;
     },
-    total() {
-      const total = this.data.reduce((a, c) => a + c.total, 0);
-      return total || 0;
-    },
+    // total() {
+    //   const total = this.data.reduce((a, c) => a + c.total, 0);
+    //   return total || 0;
+    // },
   },
 
   watch: {

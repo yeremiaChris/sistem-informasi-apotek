@@ -43,7 +43,7 @@ export default {
         "Satuan",
         "Harga beli",
         "Harga jual",
-        "Tanggal",
+        "Expired At",
       ],
       data: [],
       itemsSelect: [
@@ -87,7 +87,7 @@ export default {
         unit: item.unit,
         purchasePrice: item.purchasePrice,
         sellingPrice: item.sellingPrice,
-        updatedAt: item.updatedAt,
+        updatedAt: item.expiredAt,
       };
     });
     this.data = datas;

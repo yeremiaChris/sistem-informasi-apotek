@@ -105,11 +105,11 @@
               </span>
             </p>
           </div>
-          <!-- <PrintReport
+          <PrintReport
             :headers="headers"
             :data="data"
             title="LAPORAN PENJUALAN OBAT"
-          /> -->
+          />
         </div>
       </vue-html2pdf>
     </client-only>

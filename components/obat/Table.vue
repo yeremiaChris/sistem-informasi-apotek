@@ -31,10 +31,14 @@
               <tr
                 v-for="(items, index) in data"
                 :key="index"
-                :class="index % 2 === 0 ? 'bg-white' : 'bg-gray-50'"
+                :class="{
+                  'bg-white': index % 2 === 0,
+                  'bg-gray-50': index % 2 !== 0,
+                  'text-red-600': $dayjs() > $dayjs(items.updatedAt),
+                }"
               >
                 <td
-                  class="px-6 py-4 font-medium text-gray-900"
+                  class="px-6 py-4 font-medium"
                   :class="{
                     'text-xs': $route.path.includes('struk'),
                     'text-sm': !$route.path.includes('struk'),
@@ -57,7 +61,7 @@
                     key !== 'laporan'
                   "
                   :key="idx + 'recepiData'"
-                  class="px-6 py-4 font-medium text-gray-900"
+                  class="px-6 py-4 font-medium"
                   :class="{
                     'text-xs': $route.path.includes('struk'),
                     'text-sm': !$route.path.includes('struk'),
@@ -71,7 +75,10 @@
                       key === "supplier"
                         ? value && value.title
                         : key === "updatedAt"
-                        ? $dayjs(value).format("DD MMM YYYY | HH:mm")
+                        ? $dayjs() > $dayjs(value)
+                          ? $dayjs(value).format("DD MMM YYYY | HH:mm") +
+                            " (expired)"
+                          : $dayjs(value).format("DD MMM YYYY | HH:mm")
                         : typeof value === "number"
                         ? value.toLocaleString()
                         : key === "laporan"

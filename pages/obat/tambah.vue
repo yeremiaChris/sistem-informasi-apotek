@@ -15,6 +15,16 @@
         @setError="setError('name')"
         placeholder="Nama obat..."
       />
+      <FormsErrorMsg :msg="errors.expiredAt" />
+      <FormsInput
+        class="mb-4"
+        label="Expired at"
+        type="date"
+        name="expiredAt"
+        v-model="form['expiredAt']"
+        @setError="setError('expiredAt')"
+        placeholder="Expired At"
+      />
 
       <div>
         <!-- field price -->
@@ -79,10 +89,12 @@ export default {
         purchasePrice: "",
         sellingPrice: "",
         type: "",
+        expiredAt: new Date().toDateString(),
         unit: "",
       },
       errors: {
         name: "",
+        expiredAt: "",
         purchasePrice: "",
         sellingPrice: "",
         type: "",
